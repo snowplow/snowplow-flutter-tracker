@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.snowplowanalytics.snowplow_flutter_tracker_example">
    <application
+        android:usesCleartextTraffic="true"
         android:label="snowplow_flutter_tracker_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

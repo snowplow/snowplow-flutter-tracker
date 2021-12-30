@@ -119,7 +119,7 @@ class EmitterConfiguration {
       'emitRange': emitRange,
       'threadPoolSize': threadPoolSize,
       'byteLimitPost': byteLimitPost,
-      'byteLimitGet': byteLimitGet,
+      'byteLimitGet': byteLimitGet
     };
   }
 }

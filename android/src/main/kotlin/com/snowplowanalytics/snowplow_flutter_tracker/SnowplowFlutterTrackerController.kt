@@ -130,6 +130,7 @@ object SnowplowFlutterTrackerController {
     fun setUseragent(values: Map<String, Any>) {
         val messageReader = SetUseragentMessageReader(values)
         val trackerController = Snowplow.getTracker(messageReader.tracker)
+        trackerController?.emitter?.eventStore?.getEmittableEvents(10)
 
         trackerController?.subject?.useragent = messageReader.useragent
     }
@@ -209,6 +210,21 @@ object SnowplowFlutterTrackerController {
         val trackerController = Snowplow.getTracker(messageReader.tracker)
 
         return trackerController?.session?.foregroundIndex
+    }
+
+    fun getEmittableEvents(values: Map<String, Any>): List<Map<Any?, Any?>>? {
+        val messageReader = GetParameterMessageReader(values)
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+        val emittableEvents = trackerController?.emitter?.eventStore?.getEmittableEvents(150)
+
+        return emittableEvents?.map { e -> e.payload.map }
+    }
+
+    fun removeAllEventStoreEvents(values: Map<String, Any>) {
+        val messageReader = GetParameterMessageReader(values)
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+
+        trackerController?.emitter?.eventStore?.removeAllEvents()
     }
 
 }

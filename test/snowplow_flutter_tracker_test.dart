@@ -9,7 +9,7 @@ void main() {
 
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
+      return 10;
     });
   });
 
@@ -17,7 +17,7 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await Snowplow.platformVersion, '42');
+  test('mockedMethodCall', () async {
+    expect(await Snowplow.getSessionIndex(tracker: 'test'), 10);
   });
 }

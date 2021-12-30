@@ -133,13 +133,15 @@ class ConsentGranted implements Event {
   final String version;
   final String? name;
   final String? documentDescription;
+  final List<ConsentDocument>? consentDocuments;
 
   const ConsentGranted(
       {required this.expiry,
       required this.documentId,
       required this.version,
       this.name,
-      this.documentDescription});
+      this.documentDescription,
+      this.consentDocuments});
 
   @override
   String endpoint() {
@@ -154,6 +156,7 @@ class ConsentGranted implements Event {
       'version': version,
       'name': name,
       'documentDescription': documentDescription,
+      'consentDocuments': consentDocuments?.map((d) => d.toMap()).toList()
     };
   }
 }
@@ -165,13 +168,15 @@ class ConsentWithdrawn implements Event {
   final String version;
   final String? name;
   final String? documentDescription;
+  final List<ConsentDocument>? consentDocuments;
 
   const ConsentWithdrawn(
       {required this.all,
       required this.documentId,
       required this.version,
       this.name,
-      this.documentDescription});
+      this.documentDescription,
+      this.consentDocuments});
 
   @override
   String endpoint() {
@@ -185,6 +190,30 @@ class ConsentWithdrawn implements Event {
       'documentId': documentId,
       'version': version,
       'name': name,
+      'documentDescription': documentDescription,
+      'consentDocuments': consentDocuments?.map((d) => d.toMap()).toList()
+    };
+  }
+}
+
+@immutable
+class ConsentDocument {
+  final String documentId;
+  final String documentVersion;
+  final String? documentName;
+  final String? documentDescription;
+
+  const ConsentDocument(
+      {required this.documentId,
+      required this.documentVersion,
+      this.documentName,
+      this.documentDescription});
+
+  Map<String, Object?> toMap() {
+    return <String, Object?>{
+      'documentId': documentId,
+      'documentName': documentName,
+      'documentVersion': documentVersion,
       'documentDescription': documentDescription,
     };
   }
