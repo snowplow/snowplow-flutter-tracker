@@ -13,8 +13,7 @@ class Tracker {
     await Snowplow.removeTracker(namespace);
   }
 
-  Future<void> track(Event event,
-      {List<Map<String, Object?>>? contexts}) async {
+  Future<void> track(Event event, {List<SelfDescribing>? contexts}) async {
     await Snowplow.track(event, tracker: namespace, contexts: contexts);
   }
 

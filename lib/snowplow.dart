@@ -29,11 +29,11 @@ class Snowplow {
   }
 
   static Future<void> track(Event event,
-      {required String tracker, List<Map<String, Object?>>? contexts}) async {
+      {required String tracker, List<SelfDescribing>? contexts}) async {
     var message = {
       'tracker': tracker,
       'eventData': event.toMap(),
-      'contexts': contexts
+      'contexts': contexts?.map((c) => c.toMap()).toList()
     };
     await _channel.invokeMethod(event.endpoint(), message);
   }
