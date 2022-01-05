@@ -8,7 +8,6 @@ import 'dart:html' as html;
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:snowplow_flutter_tracker/configurations.dart';
-import 'package:snowplow_flutter_tracker/events.dart';
 import 'package:snowplow_flutter_tracker/web/readers/messages.dart';
 import 'package:snowplow_flutter_tracker/web/snowplow_flutter_tracker_controller.dart';
 
@@ -27,7 +26,7 @@ class SnowplowFlutterTrackerPlugin {
     // Add JS dynamically if not already imported (this is needed to prevent hot reload or refresh to import it again and again)
     var foundSpJs = false;
     for (html.ScriptElement script
-        in html.document.body!.querySelectorAll('script')) {
+        in html.document.head!.querySelectorAll('script')) {
       if (script.src.contains('snowplow_flutter_tracker/assets/sp.js')) {
         foundSpJs = true;
       }
@@ -54,13 +53,22 @@ class SnowplowFlutterTrackerPlugin {
         return onCreateTracker(call);
       case 'trackStructured':
         return onTrackStructured(call);
+      case 'trackSelfDescribing':
+        return onTrackSelfDescribing(call);
+      case 'trackScreenView':
+        return onTrackScreenView(call);
+      case 'trackTiming':
+        return onTrackTiming(call);
+      case 'trackConsentGranted':
+        return onTrackConsentGranted(call);
+      case 'trackConsentWithdrawn':
+        return onTrackConsentWithdrawn(call);
       default:
-        return null;
-      // throw PlatformException(
-      //   code: 'Unimplemented',
-      //   details:
-      //       'snowplow_flutter_tracker for web doesn\'t implement \'${call.method}\'',
-      // );
+        throw PlatformException(
+          code: 'Unimplemented',
+          details:
+              'snowplow_flutter_tracker for web doesn\'t implement \'${call.method}\'',
+        );
     }
   }
 
@@ -78,5 +86,30 @@ class SnowplowFlutterTrackerPlugin {
   void onTrackStructured(MethodCall call) {
     var message = EventMessageReader.fromMapStructured(call.arguments);
     SnowplowFlutterTrackerController.trackStructured(message);
+  }
+
+  void onTrackSelfDescribing(MethodCall call) {
+    var message = EventMessageReader.fromMapSelfDescribing(call.arguments);
+    SnowplowFlutterTrackerController.trackSelfDescribing(message);
+  }
+
+  void onTrackScreenView(MethodCall call) {
+    var message = EventMessageReader.fromMapScreenView(call.arguments);
+    SnowplowFlutterTrackerController.trackScreenView(message);
+  }
+
+  void onTrackTiming(MethodCall call) {
+    var message = EventMessageReader.fromMapTiming(call.arguments);
+    SnowplowFlutterTrackerController.trackTiming(message);
+  }
+
+  void onTrackConsentGranted(MethodCall call) {
+    var message = EventMessageReader.fromMapConsentGranted(call.arguments);
+    SnowplowFlutterTrackerController.trackConsentGranted(message);
+  }
+
+  void onTrackConsentWithdrawn(MethodCall call) {
+    var message = EventMessageReader.fromMapConsentWithdrawn(call.arguments);
+    SnowplowFlutterTrackerController.trackConsentWithdrawn(message);
   }
 }

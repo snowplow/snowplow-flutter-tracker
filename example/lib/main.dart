@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:async';
 
 import 'package:snowplow_flutter_tracker/snowplow.dart';
@@ -51,26 +50,30 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   Future<void> updateState() async {
-    String sessionId;
-    String sessionUserId;
+    String? sessionId;
+    String? sessionUserId;
     int? sessionIndex;
     bool? isInBackground;
     int? foregroundIndex;
     int? backgroundIndex;
 
-    sessionId = await Snowplow.getSessionId(tracker: 'ns1') ?? 'Unknown';
-    sessionUserId =
-        await Snowplow.getSessionUserId(tracker: 'ns1') ?? 'Unknown';
-    sessionIndex = await Snowplow.getSessionIndex(tracker: 'ns1');
-    isInBackground = await Snowplow.getIsInBackground(tracker: 'ns1');
-    backgroundIndex = await Snowplow.getBackgroundIndex(tracker: 'ns1');
-    foregroundIndex = await Snowplow.getForegroundIndex(tracker: 'ns1');
+    try {
+      sessionId = await Snowplow.getSessionId(tracker: 'ns1') ?? 'Unknown';
+      sessionUserId =
+          await Snowplow.getSessionUserId(tracker: 'ns1') ?? 'Unknown';
+      sessionIndex = await Snowplow.getSessionIndex(tracker: 'ns1');
+      isInBackground = await Snowplow.getIsInBackground(tracker: 'ns1');
+      backgroundIndex = await Snowplow.getBackgroundIndex(tracker: 'ns1');
+      foregroundIndex = await Snowplow.getForegroundIndex(tracker: 'ns1');
+    } on PlatformException catch (err) {
+      print(err);
+    }
 
     if (!mounted) return;
 
     setState(() {
-      _sessionId = sessionId;
-      _sessionUserId = sessionUserId;
+      _sessionId = sessionId ?? 'Unknown';
+      _sessionUserId = sessionUserId ?? 'Unknown';
       _sessionIndex = sessionIndex;
       _isInBackground = isInBackground;
       _backgroundIndex = backgroundIndex;
@@ -131,7 +134,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ElevatedButton(
                 onPressed: () {
                   const event = ScreenView(
-                      name: 'home', type: 'full', transitionType: 'none');
+                      id: '2c295365-eae9-4243-a3ee-5c4b7baccc8f',
+                      name: 'home',
+                      type: 'full',
+                      transitionType: 'none');
                   trackEvent(event);
                 },
                 child: const Text('Send Screen View Event'),
@@ -151,18 +157,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ElevatedButton(
                 onPressed: () {
                   const event = ConsentGranted(
-                      expiry: '2021-12-30T09:03:51.196111Z',
-                      documentId: '1234',
-                      version: '5',
-                      name: 'name1',
-                      documentDescription: 'description1',
-                      consentDocuments: [
-                        ConsentDocument(
-                            documentId: '124',
-                            documentVersion: '3',
-                            documentName: 'name2',
-                            documentDescription: 'description2')
-                      ]);
+                    expiry: '2021-12-30T09:03:51.196111Z',
+                    documentId: '1234',
+                    version: '5',
+                    name: 'name1',
+                    documentDescription: 'description1',
+                  );
                   trackEvent(event);
                 },
                 child: const Text('Send Consent Granted Event'),
@@ -170,18 +170,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ElevatedButton(
                 onPressed: () {
                   const event = ConsentWithdrawn(
-                      all: false,
-                      documentId: '1234',
-                      version: '5',
-                      name: 'name1',
-                      documentDescription: 'description1',
-                      consentDocuments: [
-                        ConsentDocument(
-                            documentId: '124',
-                            documentVersion: '3',
-                            documentName: 'name2',
-                            documentDescription: 'description2')
-                      ]);
+                    all: false,
+                    documentId: '1234',
+                    version: '5',
+                    name: 'name1',
+                    documentDescription: 'description1',
+                  );
                   trackEvent(event);
                 },
                 child: const Text('Send Consent Withdrawn Event'),

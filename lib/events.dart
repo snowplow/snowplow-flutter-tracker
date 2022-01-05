@@ -48,7 +48,7 @@ class Structured implements Event {
 @immutable
 class SelfDescribing implements Event {
   final String schema;
-  final Map<String, Object?> data;
+  final dynamic data;
 
   const SelfDescribing({required this.schema, required this.data});
 
@@ -56,6 +56,10 @@ class SelfDescribing implements Event {
   String endpoint() {
     return 'trackSelfDescribing';
   }
+
+  SelfDescribing.fromMap(dynamic map)
+      : schema = map['schema'],
+        data = map['data'];
 
   @override
   Map<String, Object?> toMap() {
@@ -69,7 +73,7 @@ class SelfDescribing implements Event {
 @immutable
 class ScreenView implements Event {
   final String name;
-  final String? id;
+  final String id;
   final String? type;
   final String? previousName;
   final String? previousType;
@@ -78,7 +82,7 @@ class ScreenView implements Event {
 
   const ScreenView(
       {required this.name,
-      this.id,
+      required this.id,
       this.type,
       this.previousName,
       this.previousType,
@@ -89,6 +93,15 @@ class ScreenView implements Event {
   String endpoint() {
     return 'trackScreenView';
   }
+
+  ScreenView.fromMap(dynamic map)
+      : name = map['name'],
+        id = map['id'],
+        type = map['type'],
+        previousName = map['previousName'],
+        previousType = map['previousType'],
+        previousId = map['previousId'],
+        transitionType = map['transitionType'];
 
   @override
   Map<String, Object?> toMap() {
@@ -122,6 +135,12 @@ class Timing implements Event {
     return 'trackTiming';
   }
 
+  Timing.fromMap(dynamic map)
+      : category = map['category'],
+        variable = map['variable'],
+        timing = map['timing'],
+        label = map['label'];
+
   @override
   Map<String, Object?> toMap() {
     return <String, Object?>{
@@ -140,20 +159,25 @@ class ConsentGranted implements Event {
   final String version;
   final String? name;
   final String? documentDescription;
-  final List<ConsentDocument>? consentDocuments;
 
   const ConsentGranted(
       {required this.expiry,
       required this.documentId,
       required this.version,
       this.name,
-      this.documentDescription,
-      this.consentDocuments});
+      this.documentDescription});
 
   @override
   String endpoint() {
     return 'trackConsentGranted';
   }
+
+  ConsentGranted.fromMap(dynamic map)
+      : expiry = map['expiry'],
+        documentId = map['documentId'],
+        version = map['version'],
+        name = map['name'],
+        documentDescription = map['documentDescription'];
 
   @override
   Map<String, Object?> toMap() {
@@ -162,8 +186,7 @@ class ConsentGranted implements Event {
       'documentId': documentId,
       'version': version,
       'name': name,
-      'documentDescription': documentDescription,
-      'consentDocuments': consentDocuments?.map((d) => d.toMap()).toList()
+      'documentDescription': documentDescription
     };
   }
 }
@@ -175,20 +198,25 @@ class ConsentWithdrawn implements Event {
   final String version;
   final String? name;
   final String? documentDescription;
-  final List<ConsentDocument>? consentDocuments;
 
   const ConsentWithdrawn(
       {required this.all,
       required this.documentId,
       required this.version,
       this.name,
-      this.documentDescription,
-      this.consentDocuments});
+      this.documentDescription});
 
   @override
   String endpoint() {
     return 'trackConsentWithdrawn';
   }
+
+  ConsentWithdrawn.fromMap(dynamic map)
+      : all = map['all'],
+        documentId = map['documentId'],
+        version = map['version'],
+        name = map['name'],
+        documentDescription = map['documentDescription'];
 
   @override
   Map<String, Object?> toMap() {
@@ -197,31 +225,7 @@ class ConsentWithdrawn implements Event {
       'documentId': documentId,
       'version': version,
       'name': name,
-      'documentDescription': documentDescription,
-      'consentDocuments': consentDocuments?.map((d) => d.toMap()).toList()
-    };
-  }
-}
-
-@immutable
-class ConsentDocument {
-  final String documentId;
-  final String documentVersion;
-  final String? documentName;
-  final String? documentDescription;
-
-  const ConsentDocument(
-      {required this.documentId,
-      required this.documentVersion,
-      this.documentName,
-      this.documentDescription});
-
-  Map<String, Object?> toMap() {
-    return <String, Object?>{
-      'documentId': documentId,
-      'documentName': documentName,
-      'documentVersion': documentVersion,
-      'documentDescription': documentDescription,
+      'documentDescription': documentDescription
     };
   }
 }

@@ -138,12 +138,10 @@ void main() {
 
   test('tracks consent granted event', () async {
     Event event = const ConsentGranted(
-        expiry: '2021-10-10',
-        documentId: 'd1',
-        version: '10',
-        consentDocuments: [
-          ConsentDocument(documentId: 'd2', documentVersion: '9')
-        ]);
+      expiry: '2021-10-10',
+      documentId: 'd1',
+      version: '10',
+    );
     await Snowplow.track(event, tracker: 'tns1');
 
     expect(method, equals('trackConsentGranted'));
@@ -151,21 +149,14 @@ void main() {
     expect(arguments['eventData']['expiry'], equals('2021-10-10'));
     expect(arguments['eventData']['documentId'], equals('d1'));
     expect(arguments['eventData']['version'], equals('10'));
-    expect(arguments['eventData']['consentDocuments'].length, equals(1));
-    expect(arguments['eventData']['consentDocuments'][0]['documentId'],
-        equals('d2'));
-    expect(arguments['eventData']['consentDocuments'][0]['documentVersion'],
-        equals('9'));
   });
 
   test('tracks consent withdrawn event', () async {
     Event event = const ConsentWithdrawn(
-        all: true,
-        documentId: 'd1',
-        version: '10',
-        consentDocuments: [
-          ConsentDocument(documentId: 'd3', documentVersion: '8')
-        ]);
+      all: true,
+      documentId: 'd1',
+      version: '10',
+    );
     await Snowplow.track(event, tracker: 'tns1');
 
     expect(method, equals('trackConsentWithdrawn'));
@@ -173,11 +164,6 @@ void main() {
     expect(arguments['eventData']['all'], equals(true));
     expect(arguments['eventData']['documentId'], equals('d1'));
     expect(arguments['eventData']['version'], equals('10'));
-    expect(arguments['eventData']['consentDocuments'].length, equals(1));
-    expect(arguments['eventData']['consentDocuments'][0]['documentId'],
-        equals('d3'));
-    expect(arguments['eventData']['consentDocuments'][0]['documentVersion'],
-        equals('8'));
   });
 
   test('sets user ID', () async {
