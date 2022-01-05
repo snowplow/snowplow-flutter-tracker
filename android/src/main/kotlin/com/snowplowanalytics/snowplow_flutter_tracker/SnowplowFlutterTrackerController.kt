@@ -130,7 +130,6 @@ object SnowplowFlutterTrackerController {
     fun setUseragent(values: Map<String, Any>) {
         val messageReader = SetUseragentMessageReader(values)
         val trackerController = Snowplow.getTracker(messageReader.tracker)
-        trackerController?.emitter?.eventStore?.getEmittableEvents(10)
 
         trackerController?.subject?.useragent = messageReader.useragent
     }
