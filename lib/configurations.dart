@@ -22,6 +22,16 @@ class Configuration {
       this.gdprConfig,
       this.gcConfig});
 
+  Configuration.fromMap(dynamic map)
+      : namespace = map['namespace'],
+        networkConfig = NetworkConfiguration.fromMap(map['networkConfig']),
+        trackerConfig = null,
+        emitterConfig = null,
+        sessionConfig = null,
+        subjectConfig = null,
+        gdprConfig = null,
+        gcConfig = null;
+
   Map<String, Object?> toMap() {
     return <String, Object?>{
       'namespace': namespace,
@@ -43,6 +53,10 @@ class NetworkConfiguration {
 
   const NetworkConfiguration({required this.endpoint, this.method});
 
+  NetworkConfiguration.fromMap(dynamic map)
+      : endpoint = map['endpoint'],
+        method = map['method'];
+
   Map<String, Object?> toMap() {
     return <String, Object?>{'endpoint': endpoint, 'method': method};
   }
@@ -50,6 +64,7 @@ class NetworkConfiguration {
 
 @immutable
 class TrackerConfiguration {
+  final String? appId;
   final String? devicePlatform;
   final String? logLevel;
   final bool? base64Encoding;
@@ -65,7 +80,8 @@ class TrackerConfiguration {
   final bool? diagnosticAutotracking;
 
   const TrackerConfiguration(
-      {this.devicePlatform,
+      {this.appId,
+      this.devicePlatform,
       this.logLevel,
       this.base64Encoding,
       this.applicationContext,
@@ -81,6 +97,7 @@ class TrackerConfiguration {
 
   Map<String, Object?> toMap() {
     return <String, Object?>{
+      'appId': appId,
       'devicePlatform': devicePlatform,
       'logLevel': logLevel,
       'base64Encoding': base64Encoding,

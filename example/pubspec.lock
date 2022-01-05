@@ -100,6 +100,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -110,6 +115,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.3"
   lints:
     dependency: transitive
     description:

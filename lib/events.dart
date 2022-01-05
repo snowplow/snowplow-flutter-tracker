@@ -26,6 +26,13 @@ class Structured implements Event {
     return 'trackStructured';
   }
 
+  Structured.fromMap(dynamic map)
+      : category = map['category'],
+        action = map['action'],
+        label = map['label'],
+        property = map['property'],
+        value = map['value'];
+
   @override
   Map<String, Object?> toMap() {
     return <String, Object?>{
