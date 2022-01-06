@@ -7,7 +7,7 @@ import 'dart:html' as html;
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:snowplow_flutter_tracker/configurations.dart';
+import 'package:snowplow_flutter_tracker/web/readers/configurations.dart';
 import 'package:snowplow_flutter_tracker/web/readers/messages.dart';
 import 'package:snowplow_flutter_tracker/web/snowplow_flutter_tracker_controller.dart';
 
@@ -79,37 +79,37 @@ class SnowplowFlutterTrackerPlugin {
   }
 
   void onCreateTracker(MethodCall call) {
-    var configuration = Configuration.fromMap(call.arguments);
+    var configuration = ConfigurationReader(call.arguments);
     SnowplowFlutterTrackerController.createTracker(configuration);
   }
 
   void onTrackStructured(MethodCall call) {
-    var message = EventMessageReader.fromMapStructured(call.arguments);
+    var message = EventMessageReader.withStructured(call.arguments);
     SnowplowFlutterTrackerController.trackStructured(message);
   }
 
   void onTrackSelfDescribing(MethodCall call) {
-    var message = EventMessageReader.fromMapSelfDescribing(call.arguments);
+    var message = EventMessageReader.withSelfDescribing(call.arguments);
     SnowplowFlutterTrackerController.trackSelfDescribing(message);
   }
 
   void onTrackScreenView(MethodCall call) {
-    var message = EventMessageReader.fromMapScreenView(call.arguments);
+    var message = EventMessageReader.withScreenView(call.arguments);
     SnowplowFlutterTrackerController.trackScreenView(message);
   }
 
   void onTrackTiming(MethodCall call) {
-    var message = EventMessageReader.fromMapTiming(call.arguments);
+    var message = EventMessageReader.withTiming(call.arguments);
     SnowplowFlutterTrackerController.trackTiming(message);
   }
 
   void onTrackConsentGranted(MethodCall call) {
-    var message = EventMessageReader.fromMapConsentGranted(call.arguments);
+    var message = EventMessageReader.withConsentGranted(call.arguments);
     SnowplowFlutterTrackerController.trackConsentGranted(message);
   }
 
   void onTrackConsentWithdrawn(MethodCall call) {
-    var message = EventMessageReader.fromMapConsentWithdrawn(call.arguments);
+    var message = EventMessageReader.withConsentWithdrawn(call.arguments);
     SnowplowFlutterTrackerController.trackConsentWithdrawn(message);
   }
 }

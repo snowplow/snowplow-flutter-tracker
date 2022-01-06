@@ -26,13 +26,6 @@ class Structured implements Event {
     return 'trackStructured';
   }
 
-  Structured.fromMap(dynamic map)
-      : category = map['category'],
-        action = map['action'],
-        label = map['label'],
-        property = map['property'],
-        value = map['value'];
-
   @override
   Map<String, Object?> toMap() {
     return <String, Object?>{
@@ -56,10 +49,6 @@ class SelfDescribing implements Event {
   String endpoint() {
     return 'trackSelfDescribing';
   }
-
-  SelfDescribing.fromMap(dynamic map)
-      : schema = map['schema'],
-        data = map['data'];
 
   @override
   Map<String, Object?> toMap() {
@@ -94,15 +83,6 @@ class ScreenView implements Event {
     return 'trackScreenView';
   }
 
-  ScreenView.fromMap(dynamic map)
-      : name = map['name'],
-        id = map['id'],
-        type = map['type'],
-        previousName = map['previousName'],
-        previousType = map['previousType'],
-        previousId = map['previousId'],
-        transitionType = map['transitionType'];
-
   @override
   Map<String, Object?> toMap() {
     return <String, Object?>{
@@ -135,12 +115,6 @@ class Timing implements Event {
     return 'trackTiming';
   }
 
-  Timing.fromMap(dynamic map)
-      : category = map['category'],
-        variable = map['variable'],
-        timing = map['timing'],
-        label = map['label'];
-
   @override
   Map<String, Object?> toMap() {
     return <String, Object?>{
@@ -171,13 +145,6 @@ class ConsentGranted implements Event {
   String endpoint() {
     return 'trackConsentGranted';
   }
-
-  ConsentGranted.fromMap(dynamic map)
-      : expiry = map['expiry'],
-        documentId = map['documentId'],
-        version = map['version'],
-        name = map['name'],
-        documentDescription = map['documentDescription'];
 
   @override
   Map<String, Object?> toMap() {
@@ -210,13 +177,6 @@ class ConsentWithdrawn implements Event {
   String endpoint() {
     return 'trackConsentWithdrawn';
   }
-
-  ConsentWithdrawn.fromMap(dynamic map)
-      : all = map['all'],
-        documentId = map['documentId'],
-        version = map['version'],
-        name = map['name'],
-        documentDescription = map['documentDescription'];
 
   @override
   Map<String, Object?> toMap() {

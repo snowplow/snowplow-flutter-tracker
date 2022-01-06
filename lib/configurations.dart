@@ -22,16 +22,6 @@ class Configuration {
       this.gdprConfig,
       this.gcConfig});
 
-  Configuration.fromMap(dynamic map)
-      : namespace = map['namespace'],
-        networkConfig = NetworkConfiguration.fromMap(map['networkConfig']),
-        trackerConfig = null,
-        emitterConfig = null,
-        sessionConfig = null,
-        subjectConfig = null,
-        gdprConfig = null,
-        gcConfig = null;
-
   Map<String, Object?> toMap() {
     return <String, Object?>{
       'namespace': namespace,
@@ -52,10 +42,6 @@ class NetworkConfiguration {
   final String? method;
 
   const NetworkConfiguration({required this.endpoint, this.method});
-
-  NetworkConfiguration.fromMap(dynamic map)
-      : endpoint = map['endpoint'],
-        method = map['method'];
 
   Map<String, Object?> toMap() {
     return <String, Object?>{'endpoint': endpoint, 'method': method};

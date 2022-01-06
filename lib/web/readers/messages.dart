@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
-import 'package:snowplow_flutter_tracker/events.dart';
+import 'package:snowplow_flutter_tracker/web/readers/events.dart';
 
 @immutable
 class EventMessageReader {
   final String tracker;
-  final Structured? structured;
-  final SelfDescribing? selfDescribing;
-  final ScreenView? screenView;
-  final Timing? timing;
-  final ConsentGranted? consentGranted;
-  final ConsentWithdrawn? consentWithdrawn;
+  final StructuredReader? structured;
+  final SelfDescribingReader? selfDescribing;
+  final ScreenViewReader? screenView;
+  final TimingReader? timing;
+  final ConsentGrantedReader? consentGranted;
+  final ConsentWithdrawnReader? consentWithdrawn;
 
   const EventMessageReader(
       {required this.tracker,
@@ -20,57 +20,57 @@ class EventMessageReader {
       this.consentGranted,
       this.consentWithdrawn});
 
-  EventMessageReader.fromMapStructured(dynamic map)
+  EventMessageReader.withStructured(dynamic map)
       : tracker = map['tracker'],
-        structured = Structured.fromMap(map['eventData']),
+        structured = StructuredReader(map['eventData']),
         selfDescribing = null,
         screenView = null,
         timing = null,
         consentGranted = null,
         consentWithdrawn = null;
 
-  EventMessageReader.fromMapSelfDescribing(dynamic map)
+  EventMessageReader.withSelfDescribing(dynamic map)
       : tracker = map['tracker'],
-        selfDescribing = SelfDescribing.fromMap(map['eventData']),
+        selfDescribing = SelfDescribingReader(map['eventData']),
         structured = null,
         screenView = null,
         timing = null,
         consentGranted = null,
         consentWithdrawn = null;
 
-  EventMessageReader.fromMapScreenView(dynamic map)
+  EventMessageReader.withScreenView(dynamic map)
       : tracker = map['tracker'],
         selfDescribing = null,
         structured = null,
-        screenView = ScreenView.fromMap(map['eventData']),
+        screenView = ScreenViewReader(map['eventData']),
         timing = null,
         consentGranted = null,
         consentWithdrawn = null;
 
-  EventMessageReader.fromMapTiming(dynamic map)
+  EventMessageReader.withTiming(dynamic map)
       : tracker = map['tracker'],
         selfDescribing = null,
         structured = null,
         screenView = null,
-        timing = Timing.fromMap(map['eventData']),
+        timing = TimingReader(map['eventData']),
         consentGranted = null,
         consentWithdrawn = null;
 
-  EventMessageReader.fromMapConsentGranted(dynamic map)
-      : tracker = map['tracker'],
-        selfDescribing = null,
-        structured = null,
-        screenView = null,
-        timing = null,
-        consentGranted = ConsentGranted.fromMap(map['eventData']),
-        consentWithdrawn = null;
-
-  EventMessageReader.fromMapConsentWithdrawn(dynamic map)
+  EventMessageReader.withConsentGranted(dynamic map)
       : tracker = map['tracker'],
         selfDescribing = null,
         structured = null,
         screenView = null,
         timing = null,
+        consentGranted = ConsentGrantedReader(map['eventData']),
+        consentWithdrawn = null;
+
+  EventMessageReader.withConsentWithdrawn(dynamic map)
+      : tracker = map['tracker'],
+        selfDescribing = null,
+        structured = null,
+        screenView = null,
+        timing = null,
         consentGranted = null,
-        consentWithdrawn = ConsentWithdrawn.fromMap(map['eventData']);
+        consentWithdrawn = ConsentWithdrawnReader(map['eventData']);
 }
