@@ -4,6 +4,7 @@ import 'package:snowplow_flutter_tracker/configurations.dart';
 import 'package:snowplow_flutter_tracker/events.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
 import 'package:snowplow_flutter_tracker/helpers.dart';
+import 'package:uuid/uuid.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('snowplow_flutter_tracker');
@@ -116,13 +117,14 @@ void main() {
   });
 
   test('tracks screen view event', () async {
-    Event event = const ScreenView(name: 'screen1', id: 's1');
+    String id = const Uuid().v4();
+    Event event = ScreenView(name: 'screen1', id: id);
     await Snowplow.track(event, tracker: 'tns2');
 
     expect(method, equals('trackScreenView'));
     expect(arguments['tracker'], equals('tns2'));
     expect(arguments['eventData']['name'], equals('screen1'));
-    expect(arguments['eventData']['id'], equals('s1'));
+    expect(arguments['eventData']['id'], equals(id));
   });
 
   test('tracks timing event', () async {
