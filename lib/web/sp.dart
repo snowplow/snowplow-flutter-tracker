@@ -11,3 +11,6 @@ external void snowplow(String method,
     dynamic arg4,
     dynamic arg5,
     dynamic arg6]);
+
+@JS('addSessionContextPlugin')
+external void addSessionContextPlugin(String tracker);

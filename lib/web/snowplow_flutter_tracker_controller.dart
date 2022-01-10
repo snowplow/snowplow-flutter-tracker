@@ -13,6 +13,7 @@ class SnowplowFlutterTrackerController {
         configuration.networkConfig.endpoint,
         configuration.getTrackerOptions());
     configuration.networkConfig.endpoint;
+    addSessionContextPlugin(configuration.namespace);
   }
 
   static void trackStructured(EventMessageReader message) {
