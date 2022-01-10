@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -11,10 +13,11 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool? testing;
+  const MyApp({Key? key, this.testing}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState(testing: testing);
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
@@ -25,6 +28,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool? _isInBackground;
   int? _backgroundIndex;
   int? _foregroundIndex;
+  final bool? testing;
+
+  _MyAppState({this.testing}) : super();
 
   @override
   void initState() {
@@ -32,19 +38,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     initPlatformState();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    Configuration configuration = const Configuration(
-        namespace: "ns1",
-        emitterConfig: EmitterConfiguration(bufferOption: "single"),
-        networkConfig:
-            NetworkConfiguration(endpoint: "http://192.168.100.127:9090"),
-        trackerConfig: TrackerConfiguration(
-            logLevel: "verbose", lifecycleAutotracking: true));
-    await Snowplow.createTracker(configuration);
-    updateState();
+    if (testing == null || testing == false) {
+      Configuration configuration = const Configuration(
+          namespace: "ns1",
+          emitterConfig: EmitterConfiguration(bufferOption: "single"),
+          networkConfig:
+              NetworkConfiguration(endpoint: "http://192.168.100.127:9090"),
+          trackerConfig: TrackerConfiguration(
+              logLevel: "verbose", lifecycleAutotracking: true));
+      await Snowplow.createTracker(configuration);
+      updateState();
+    }
 
     WidgetsBinding.instance?.addObserver(this);
   }

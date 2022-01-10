@@ -60,10 +60,6 @@ public class SwiftSnowplowFlutterTrackerPlugin: NSObject, FlutterPlugin {
             onSetScreenViewport(call, result: result)
         case "setColorDepth":
             onSetColorDepth(call, result: result)
-        case "getEmittableEvents":
-            onGetEmittableEvents(call, result: result)
-        case "removeAllEventStoreEvents":
-            onRemoveAllEventStoreEvents(call, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -252,20 +248,6 @@ public class SwiftSnowplowFlutterTrackerPlugin: NSObject, FlutterPlugin {
         if let (message, _): (SetColorDepthMessageReader, Any) = decodeCall(call) {
             SnowplowFlutterTrackerController.setColorDepth(message)
         }
-        result(nil)
-    }
-    
-    private func onGetEmittableEvents(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-//        if let (message, _): (GetEmittableEventsMessageReader, Any) = decodeCall(call) {
-//            SnowplowFlutterTrackerController.getEmittableEvents(message)
-//        }
-        result(nil)
-    }
-
-    private func onRemoveAllEventStoreEvents(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-//        if let (message, _): (RemoveAllEventStoreEventsMessageReader, Any) = decodeCall(call) {
-//            SnowplowFlutterTrackerController.removeAllEventStoreEvents(message)
-//        }
         result(nil)
     }
     

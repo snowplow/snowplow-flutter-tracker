@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:snowplow_flutter_tracker/configurations.dart';
@@ -16,14 +18,47 @@ class TestEmitterConfiguration extends EmitterConfiguration {
 }
 
 class SnowplowTests {
+  static const microEndpoint = 'http://192.168.100.127:9090';
+
   static const MethodChannel _channel =
       MethodChannel('snowplow_flutter_tracker');
 
   static Future<void> createTracker() async {
     await Snowplow.createTracker(const Configuration(
         namespace: 'test',
-        networkConfig: NetworkConfiguration(endpoint: 'http://localhost'),
+        networkConfig: NetworkConfiguration(endpoint: microEndpoint),
+        trackerConfig: TrackerConfiguration(
+            installAutotracking: false,
+            lifecycleAutotracking: false,
+            screenViewAutotracking: false),
         emitterConfig: TestEmitterConfiguration()));
+  }
+
+  static Future<void> resetMicro() async {
+    await http.get(Uri.parse(microEndpoint + '/micro/reset'));
+    await Future.delayed(const Duration(seconds: 1), () {});
+  }
+
+  static Future<bool> checkMicroCounts(
+      bool Function(dynamic body) validation) async {
+    return checkMicroResponse('/micro/all', validation);
+  }
+
+  static Future<bool> checkMicroGood(
+      bool Function(dynamic body) validation) async {
+    return checkMicroResponse('/micro/good', validation);
+  }
+
+  static Future<bool> checkMicroResponse(
+      String api, bool Function(dynamic body) validation) async {
+    for (int i = 0; i < 5; i++) {
+      final response = await http.get(Uri.parse(microEndpoint + api));
+      if (validation(jsonDecode(response.body))) {
+        return true;
+      }
+      await Future.delayed(const Duration(seconds: 1), () {});
+    }
+    return false;
   }
 
   static Future<List<Map>> getEmittableEvents({required String tracker}) async {

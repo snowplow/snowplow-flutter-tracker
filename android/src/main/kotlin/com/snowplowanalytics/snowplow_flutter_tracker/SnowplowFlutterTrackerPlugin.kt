@@ -52,8 +52,6 @@ class SnowplowFlutterTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "getIsInBackground" -> onGetIsInBackground(call, result)
             "getBackgroundIndex" -> onGetBackgroundIndex(call, result)
             "getForegroundIndex" -> onGetForegroundIndex(call, result)
-            "getEmittableEvents" -> onGetEmittableEvents(call, result)
-            "removeAllEventStoreEvents" -> onRemoveAllEventStoreEvents(call, result)
             else -> result.notImplemented()
         }
     }
@@ -236,20 +234,6 @@ class SnowplowFlutterTrackerPlugin: FlutterPlugin, MethodCallHandler {
             SnowplowFlutterTrackerController.getForegroundIndex(it)
         }
         result.success(foregroundIndex)
-    }
-
-    private fun onGetEmittableEvents(call: MethodCall, result: MethodChannel.Result) {
-        val foregroundIndex = (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.getEmittableEvents(it)
-        }
-        result.success(foregroundIndex)
-    }
-
-    private fun onRemoveAllEventStoreEvents(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.removeAllEventStoreEvents(it)
-        }
-        result.success(null)
     }
 
 }

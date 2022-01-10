@@ -14,7 +14,6 @@ struct EmitterConfigurationReader: Decodable {
     let threadPoolSize: Double?
     let byteLimitPost: Double?
     let byteLimitGet: Double?
-//    let mockEventStore: Bool?
     
     var bufferOptionType: BufferOption? {
         if let bufferOption = self.bufferOption {

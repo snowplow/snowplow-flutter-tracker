@@ -2,7 +2,6 @@ package com.snowplowanalytics.snowplow_flutter_tracker.readers.configurations
 
 import com.snowplowanalytics.snowplow.configuration.EmitterConfiguration
 import com.snowplowanalytics.snowplow.emitter.BufferOption
-import com.snowplowanalytics.snowplow_flutter_tracker.helpers.MockEventStore
 
 class EmitterConfigurationReader(val values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
@@ -12,7 +11,6 @@ class EmitterConfigurationReader(val values: Map<String, Any>) {
     val threadPoolSize: Double? by valuesDefault
     val byteLimitPost: Double? by valuesDefault
     val byteLimitGet: Double? by valuesDefault
-    val mockEventStore: Boolean? by valuesDefault
 
     fun toConfiguration(): EmitterConfiguration {
         val emitterConfig = EmitterConfiguration()
@@ -28,7 +26,6 @@ class EmitterConfigurationReader(val values: Map<String, Any>) {
         threadPoolSize?.let { emitterConfig.threadPoolSize(it.toInt()) }
         byteLimitPost?.let { emitterConfig.byteLimitPost(it.toInt()) }
         byteLimitGet?.let { emitterConfig.byteLimitGet(it.toInt()) }
-        mockEventStore?.let { if (it) { emitterConfig.eventStore(MockEventStore()) } }
 
         return emitterConfig
     }

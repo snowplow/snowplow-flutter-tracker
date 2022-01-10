@@ -211,19 +211,4 @@ object SnowplowFlutterTrackerController {
         return trackerController?.session?.foregroundIndex
     }
 
-    fun getEmittableEvents(values: Map<String, Any>): List<Map<Any?, Any?>>? {
-        val messageReader = GetParameterMessageReader(values)
-        val trackerController = Snowplow.getTracker(messageReader.tracker)
-        val emittableEvents = trackerController?.emitter?.eventStore?.getEmittableEvents(150)
-
-        return emittableEvents?.map { e -> e.payload.map }
-    }
-
-    fun removeAllEventStoreEvents(values: Map<String, Any>) {
-        val messageReader = GetParameterMessageReader(values)
-        val trackerController = Snowplow.getTracker(messageReader.tracker)
-
-        trackerController?.emitter?.eventStore?.removeAllEvents()
-    }
-
 }
