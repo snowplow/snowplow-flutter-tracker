@@ -59,6 +59,7 @@ class TrackerConfiguration {
   final bool? geoLocationContext;
   final bool? sessionContext;
   final bool? screenContext;
+  final bool? webPageContext;
   final bool? screenViewAutotracking;
   final bool? lifecycleAutotracking;
   final bool? installAutotracking;
@@ -75,6 +76,7 @@ class TrackerConfiguration {
       this.geoLocationContext,
       this.sessionContext,
       this.screenContext,
+      this.webPageContext,
       this.screenViewAutotracking,
       this.lifecycleAutotracking,
       this.installAutotracking,
@@ -92,6 +94,7 @@ class TrackerConfiguration {
       'geoLocationContext': geoLocationContext,
       'sessionContext': sessionContext,
       'screenContext': screenContext,
+      'webPageContext': webPageContext,
       'screenViewAutotracking': screenViewAutotracking,
       'lifecycleAutotracking': lifecycleAutotracking,
       'installAutotracking': installAutotracking,

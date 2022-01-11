@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -46,7 +44,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           networkConfig:
               NetworkConfiguration(endpoint: "http://192.168.100.127:9090"),
           trackerConfig: TrackerConfiguration(
-              logLevel: "verbose", lifecycleAutotracking: true),
+              webPageContext: false,
+              logLevel: "verbose",
+              lifecycleAutotracking: true),
+          gdprConfig: GdprConfiguration(
+              basisForProcessing: 'consent',
+              documentId: 'consentDoc-abc123',
+              documentVersion: '0.1.0',
+              documentDescription:
+                  'this document describes consent basis for processing'),
           subjectConfig: SubjectConfiguration(userId: 'XYZ'));
       await Snowplow.createTracker(configuration);
       // await Snowplow.setUserId('XYZ', tracker: 'ns1');

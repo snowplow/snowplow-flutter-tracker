@@ -47,8 +47,6 @@ class SnowplowFlutterTrackerPlugin {
   /// https://flutter.dev/go/federated-plugins
   Future<dynamic> handleMethodCall(MethodCall call) async {
     switch (call.method) {
-      case 'getPlatformVersion':
-        return getPlatformVersion();
       case 'createTracker':
         return onCreateTracker(call);
       case 'trackStructured':
@@ -65,6 +63,12 @@ class SnowplowFlutterTrackerPlugin {
         return onTrackConsentWithdrawn(call);
       case 'setUserId':
         return onSetUserId(call);
+      case "getSessionUserId":
+        return onGetSessionUserId(call);
+      case "getSessionId":
+        return onGetSessionId(call);
+      case "getSessionIndex":
+        return onGetSessionIndex(call);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -72,12 +76,6 @@ class SnowplowFlutterTrackerPlugin {
               'snowplow_flutter_tracker for web doesn\'t implement \'${call.method}\'',
         );
     }
-  }
-
-  /// Returns a [String] containing the version of the platform.
-  Future<String> getPlatformVersion() {
-    final version = html.window.navigator.userAgent;
-    return Future.value(version);
   }
 
   void onCreateTracker(MethodCall call) {
@@ -118,5 +116,17 @@ class SnowplowFlutterTrackerPlugin {
   void onSetUserId(MethodCall call) {
     var message = SetUserIdMessageReader(call.arguments);
     SnowplowFlutterTrackerController.setUserId(message);
+  }
+
+  String? onGetSessionUserId(MethodCall call) {
+    return SnowplowFlutterTrackerController.getSessionUserId();
+  }
+
+  String? onGetSessionId(MethodCall call) {
+    return SnowplowFlutterTrackerController.getSessionId();
+  }
+
+  int? onGetSessionIndex(MethodCall call) {
+    return SnowplowFlutterTrackerController.getSessionIndex();
   }
 }

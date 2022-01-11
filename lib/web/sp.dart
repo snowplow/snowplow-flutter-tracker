@@ -14,3 +14,12 @@ external void snowplow(String method,
 
 @JS('addSessionContextPlugin')
 external void addSessionContextPlugin(String tracker);
+
+@JS('getSnowplowDuid')
+external String? getSnowplowDuid();
+
+@JS('getSnowplowSid')
+external String? getSnowplowSid();
+
+@JS('getSnowplowVid')
+external int? getSnowplowVid();

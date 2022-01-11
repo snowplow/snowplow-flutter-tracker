@@ -23,6 +23,7 @@ class TrackerConfigurationReader extends TrackerConfiguration {
             geoLocationContext: map['geoLocationContext'],
             sessionContext: map['sessionContext'],
             screenContext: map['screenContext'],
+            webPageContext: map['webPageContext'],
             screenViewAutotracking: map['screenViewAutotracking'],
             lifecycleAutotracking: map['lifecycleAutotracking'],
             installAutotracking: map['installAutotracking'],
@@ -42,6 +43,9 @@ class TrackerConfigurationReader extends TrackerConfiguration {
     var contexts = {};
     if (geoLocationContext != null) {
       contexts['geolocation'] = geoLocationContext;
+    }
+    if (webPageContext != null) {
+      contexts['webPage'] = webPageContext;
     }
     if (contexts.isNotEmpty) {
       options['contexts'] = contexts;
@@ -78,6 +82,15 @@ class SubjectConfigurationReader extends SubjectConfiguration {
             colorDepth: map['colorDepth']);
 }
 
+class GdprConfigurationReader extends GdprConfiguration {
+  GdprConfigurationReader(dynamic map)
+      : super(
+            basisForProcessing: map['basisForProcessing'],
+            documentId: map['documentId'],
+            documentVersion: map['documentVersion'],
+            documentDescription: map['documentDescription']);
+}
+
 class ConfigurationReader extends Configuration {
   ConfigurationReader(dynamic map)
       : super(
@@ -93,7 +106,9 @@ class ConfigurationReader extends Configuration {
             subjectConfig: map['subjectConfig'] != null
                 ? SubjectConfigurationReader(map['subjectConfig'])
                 : null,
-            gdprConfig: null,
+            gdprConfig: map['gdprConfig'] != null
+                ? GdprConfigurationReader(map['gdprConfig'])
+                : null,
             gcConfig: null);
 
   dynamic getTrackerOptions() {
