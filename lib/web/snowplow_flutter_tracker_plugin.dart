@@ -63,6 +63,8 @@ class SnowplowFlutterTrackerPlugin {
         return onTrackConsentGranted(call);
       case 'trackConsentWithdrawn':
         return onTrackConsentWithdrawn(call);
+      case 'setUserId':
+        return onSetUserId(call);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -111,5 +113,10 @@ class SnowplowFlutterTrackerPlugin {
   void onTrackConsentWithdrawn(MethodCall call) {
     var message = EventMessageReader.withConsentWithdrawn(call.arguments);
     SnowplowFlutterTrackerController.trackConsentWithdrawn(message);
+  }
+
+  void onSetUserId(MethodCall call) {
+    var message = SetUserIdMessageReader(call.arguments);
+    SnowplowFlutterTrackerController.setUserId(message);
   }
 }

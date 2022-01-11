@@ -5,17 +5,6 @@ import 'package:snowplow_flutter_tracker/configurations.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
 import 'dart:convert';
 
-class TestEmitterConfiguration extends EmitterConfiguration {
-  const TestEmitterConfiguration() : super(bufferOption: 'single');
-
-  @override
-  Map<String, Object?> toMap() {
-    var map = super.toMap();
-    map['mockEventStore'] = true;
-    return map;
-  }
-}
-
 class SnowplowTests {
   static const microEndpoint = 'http://192.168.100.127:9090';
 
@@ -26,8 +15,7 @@ class SnowplowTests {
         trackerConfig: TrackerConfiguration(
             installAutotracking: false,
             lifecycleAutotracking: false,
-            screenViewAutotracking: false),
-        emitterConfig: TestEmitterConfiguration()));
+            screenViewAutotracking: false)));
   }
 
   static Future<void> resetMicro() async {

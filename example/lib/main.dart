@@ -46,8 +46,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           networkConfig:
               NetworkConfiguration(endpoint: "http://192.168.100.127:9090"),
           trackerConfig: TrackerConfiguration(
-              logLevel: "verbose", lifecycleAutotracking: true));
+              logLevel: "verbose", lifecycleAutotracking: true),
+          subjectConfig: SubjectConfiguration(userId: 'XYZ'));
       await Snowplow.createTracker(configuration);
+      // await Snowplow.setUserId('XYZ', tracker: 'ns1');
       updateState();
     }
 

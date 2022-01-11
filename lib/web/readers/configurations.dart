@@ -65,6 +65,19 @@ class EmitterConfigurationReader extends EmitterConfiguration {
   }
 }
 
+class SubjectConfigurationReader extends SubjectConfiguration {
+  SubjectConfigurationReader(dynamic map)
+      : super(
+            userId: map['userId'],
+            networkUserId: map['networkUserId'],
+            domainUserId: map['domainUserId'],
+            userAgent: map['userAgent'],
+            ipAddress: map['ipAddress'],
+            timezone: map['timezone'],
+            language: map['language'],
+            colorDepth: map['colorDepth']);
+}
+
 class ConfigurationReader extends Configuration {
   ConfigurationReader(dynamic map)
       : super(
@@ -77,7 +90,9 @@ class ConfigurationReader extends Configuration {
                 ? EmitterConfigurationReader(map['emitterConfig'])
                 : null,
             sessionConfig: null,
-            subjectConfig: null,
+            subjectConfig: map['subjectConfig'] != null
+                ? SubjectConfigurationReader(map['subjectConfig'])
+                : null,
             gdprConfig: null,
             gcConfig: null);
 

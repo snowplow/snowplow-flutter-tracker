@@ -12,7 +12,11 @@ class SnowplowFlutterTrackerController {
         configuration.namespace,
         configuration.networkConfig.endpoint,
         configuration.getTrackerOptions());
-    configuration.networkConfig.endpoint;
+
+    if (configuration.subjectConfig != null &&
+        configuration.subjectConfig?.userId != null) {
+      _setUserId(configuration.namespace, configuration.subjectConfig?.userId);
+    }
     addSessionContextPlugin(configuration.namespace);
   }
 
@@ -42,5 +46,13 @@ class SnowplowFlutterTrackerController {
 
   static void trackEvent(EventReader event, String tracker) {
     snowplow('${event.endpoint()}:$tracker', jsify(event.eventData()));
+  }
+
+  static void setUserId(SetUserIdMessageReader message) {
+    _setUserId(message.tracker, message.userId);
+  }
+
+  static void _setUserId(String tracker, String? userId) {
+    snowplow('setUserId:$tracker', userId);
   }
 }
