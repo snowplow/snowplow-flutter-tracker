@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_flutter_tracker/configurations.dart';
 import 'package:snowplow_flutter_tracker/events.dart';
 import 'package:snowplow_flutter_tracker/tracker.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
@@ -23,8 +22,7 @@ void main() {
       return returnValue;
     });
 
-    tracker = await Snowplow.createTracker(const Configuration(
-        namespace: 'ns1', networkConfig: NetworkConfiguration(endpoint: 'e1')));
+    tracker = await Snowplow.createTracker(namespace: 'ns1', endpoint: 'e1');
     method = null;
     arguments = null;
   });

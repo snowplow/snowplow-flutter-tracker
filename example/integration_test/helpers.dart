@@ -1,7 +1,6 @@
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_flutter_tracker/configurations.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
 import 'dart:convert';
 
@@ -9,10 +8,7 @@ class SnowplowTests {
   static const microEndpoint = 'http://192.168.100.127:9090';
 
   static Future<void> createTracker() async {
-    await Snowplow.createTracker(const Configuration(
-        namespace: 'test',
-        networkConfig: NetworkConfiguration(endpoint: microEndpoint),
-        trackerConfig: TrackerConfiguration()));
+    await Snowplow.createTracker(namespace: 'test', endpoint: microEndpoint);
   }
 
   static Future<void> resetMicro() async {

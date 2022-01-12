@@ -14,7 +14,23 @@ class Snowplow {
     return version;
   }
 
-  static Future<Tracker> createTracker(Configuration configuration) async {
+  static Future<Tracker> createTracker(
+      {required String namespace,
+      required String endpoint,
+      String? method,
+      TrackerConfiguration? trackerConfig,
+      SubjectConfiguration? subjectConfig,
+      GdprConfiguration? gdprConfig}) async {
+    return await createTrackerWithConfiguration(Configuration(
+        namespace: namespace,
+        networkConfig: NetworkConfiguration(endpoint: endpoint, method: method),
+        trackerConfig: trackerConfig,
+        subjectConfig: subjectConfig,
+        gdprConfig: gdprConfig));
+  }
+
+  static Future<Tracker> createTrackerWithConfiguration(
+      Configuration configuration) async {
     await _channel.invokeMethod('createTracker', configuration.toMap());
     return Tracker(namespace: configuration.namespace);
   }

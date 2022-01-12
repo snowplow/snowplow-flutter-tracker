@@ -36,7 +36,7 @@ void main() {
             documentId: 'd',
             documentVersion: 'v',
             documentDescription: 'e'));
-    await Snowplow.createTracker(config);
+    await Snowplow.createTrackerWithConfiguration(config);
 
     expect(
         methodCall,

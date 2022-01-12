@@ -1,4 +1,5 @@
 import 'package:snowplow_flutter_tracker/events.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class EventReader {
   String endpoint();
@@ -42,11 +43,13 @@ class SelfDescribingReader extends SelfDescribing implements EventReader {
     return 'trackSelfDescribingEvent';
   }
 
+  Map json() {
+    return {'schema': schema, 'data': data};
+  }
+
   @override
   Map eventData() {
-    return {
-      'event': {'schema': schema, 'data': data}
-    };
+    return {'event': json()};
   }
 }
 
@@ -162,4 +165,13 @@ class ConsentWithdrawnReader extends ConsentWithdrawn implements EventReader {
       'description': documentDescription
     };
   }
+}
+
+@immutable
+class ContextsReader {
+  final Iterable<SelfDescribingReader> selfDescribingJsons;
+
+  ContextsReader(List jsons)
+      : selfDescribingJsons =
+            jsons.map((x) => SelfDescribingReader(x)).toList();
 }

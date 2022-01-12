@@ -85,32 +85,32 @@ class SnowplowFlutterTrackerPlugin {
 
   void onTrackStructured(MethodCall call) {
     var message = EventMessageReader.withStructured(call.arguments);
-    SnowplowFlutterTrackerController.trackStructured(message);
+    SnowplowFlutterTrackerController.trackEvent(message);
   }
 
   void onTrackSelfDescribing(MethodCall call) {
     var message = EventMessageReader.withSelfDescribing(call.arguments);
-    SnowplowFlutterTrackerController.trackSelfDescribing(message);
+    SnowplowFlutterTrackerController.trackEvent(message);
   }
 
   void onTrackScreenView(MethodCall call) {
     var message = EventMessageReader.withScreenView(call.arguments);
-    SnowplowFlutterTrackerController.trackScreenView(message);
+    SnowplowFlutterTrackerController.trackEvent(message);
   }
 
   void onTrackTiming(MethodCall call) {
     var message = EventMessageReader.withTiming(call.arguments);
-    SnowplowFlutterTrackerController.trackTiming(message);
+    SnowplowFlutterTrackerController.trackEvent(message);
   }
 
   void onTrackConsentGranted(MethodCall call) {
     var message = EventMessageReader.withConsentGranted(call.arguments);
-    SnowplowFlutterTrackerController.trackConsentGranted(message);
+    SnowplowFlutterTrackerController.trackEvent(message);
   }
 
   void onTrackConsentWithdrawn(MethodCall call) {
     var message = EventMessageReader.withConsentWithdrawn(call.arguments);
-    SnowplowFlutterTrackerController.trackConsentWithdrawn(message);
+    SnowplowFlutterTrackerController.trackEvent(message);
   }
 
   void onSetUserId(MethodCall call) {

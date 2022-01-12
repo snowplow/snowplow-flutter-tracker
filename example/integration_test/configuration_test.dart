@@ -18,12 +18,10 @@ void main() {
   testWidgets("sets and changes user id", (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp(testing: true));
 
-    await Snowplow.createTracker(const Configuration(
+    await Snowplow.createTracker(
         namespace: 'test',
-        networkConfig:
-            NetworkConfiguration(endpoint: SnowplowTests.microEndpoint),
-        trackerConfig: TrackerConfiguration(),
-        subjectConfig: SubjectConfiguration(userId: 'XYZ')));
+        endpoint: SnowplowTests.microEndpoint,
+        subjectConfig: const SubjectConfiguration(userId: 'XYZ'));
 
     await Snowplow.track(
         const Structured(category: 'category', action: 'action'),
@@ -54,17 +52,15 @@ void main() {
     }
     await tester.pumpWidget(const MyApp(testing: true));
 
-    await Snowplow.createTracker(const Configuration(
+    await Snowplow.createTracker(
         namespace: 'withoutContext',
-        networkConfig:
-            NetworkConfiguration(endpoint: SnowplowTests.microEndpoint),
-        trackerConfig: TrackerConfiguration(webPageContext: false)));
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(webPageContext: false));
 
-    await Snowplow.createTracker(const Configuration(
+    await Snowplow.createTracker(
         namespace: 'withContext',
-        networkConfig:
-            NetworkConfiguration(endpoint: SnowplowTests.microEndpoint),
-        trackerConfig: TrackerConfiguration(webPageContext: true)));
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(webPageContext: true));
 
     await Snowplow.track(
         const Structured(category: 'category', action: 'action'),
@@ -92,17 +88,16 @@ void main() {
   testWidgets("attaches gdpr context to events", (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp(testing: true));
 
-    await Snowplow.createTracker(const Configuration(
+    await Snowplow.createTracker(
         namespace: 'test',
-        networkConfig:
-            NetworkConfiguration(endpoint: SnowplowTests.microEndpoint),
-        trackerConfig: TrackerConfiguration(),
-        gdprConfig: GdprConfiguration(
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(),
+        gdprConfig: const GdprConfiguration(
             basisForProcessing: 'consent',
             documentId: 'consentDoc-abc123',
             documentVersion: '0.1.0',
             documentDescription:
-                'this document describes consent basis for processing')));
+                'this document describes consent basis for processing'));
 
     await Snowplow.track(
         const Structured(category: 'category', action: 'action'),

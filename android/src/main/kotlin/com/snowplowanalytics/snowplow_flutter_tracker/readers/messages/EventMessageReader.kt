@@ -5,9 +5,11 @@ import com.snowplowanalytics.snowplow.payload.SelfDescribingJson
 import com.snowplowanalytics.snowplow_flutter_tracker.readers.events.*
 
 class EventMessageReader(val values: Map<String, Any>) {
+    private val valuesDefault = values.withDefault { null }
+
     val tracker: String by values
     private val eventData: Map<String, Any> by values
-    private val contexts: List<Map<String, Any>>? by values
+    private val contexts: List<Map<String, Any>>? by valuesDefault
     private val contextsJsons: List<SelfDescribingJson>? by lazy {
         contexts?.let { it.map { item -> SelfDescribingJsonReader(item).toSelfDescribingJson() } }
     }

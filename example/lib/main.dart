@@ -35,19 +35,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   Future<void> initPlatformState() async {
     if (testing == null || testing == false) {
-      Configuration configuration = const Configuration(
+      await Snowplow.createTracker(
           namespace: "ns1",
-          networkConfig:
-              NetworkConfiguration(endpoint: "http://192.168.100.127:9090"),
-          trackerConfig: TrackerConfiguration(webPageContext: false),
-          gdprConfig: GdprConfiguration(
+          endpoint: "http://192.168.100.127:9090",
+          trackerConfig: const TrackerConfiguration(webPageContext: false),
+          gdprConfig: const GdprConfiguration(
               basisForProcessing: 'consent',
               documentId: 'consentDoc-abc123',
               documentVersion: '0.1.0',
               documentDescription:
                   'this document describes consent basis for processing'),
-          subjectConfig: SubjectConfiguration(userId: 'XYZ'));
-      await Snowplow.createTracker(configuration);
+          subjectConfig: const SubjectConfiguration(userId: 'XYZ'));
       // await Snowplow.setUserId('XYZ', tracker: 'ns1');
       updateState();
     }
@@ -83,8 +81,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     updateState();
   }
 
-  Future<void> trackEvent(event) async {
-    Snowplow.track(event, tracker: "ns1");
+  Future<void> trackEvent(event, {List<SelfDescribing>? contexts}) async {
+    Snowplow.track(event, tracker: "ns1", contexts: contexts);
 
     setState(() {
       _numberOfEventsSent += 1;
@@ -176,6 +174,25 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   trackEvent(event);
                 },
                 child: const Text('Send Consent Withdrawn Event'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  const structured = Structured(
+                    category: 'shop',
+                    action: 'add-to-basket',
+                    label: 'Add To Basket',
+                    property: 'pcs',
+                    value: 2.00,
+                  );
+                  trackEvent(structured, contexts: [
+                    const SelfDescribing(
+                      schema:
+                          'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',
+                      data: {'targetUrl': 'http://a-target-url.com'},
+                    )
+                  ]);
+                },
+                child: const Text('Send Structured Event With Context'),
               ),
               const SizedBox(height: 24.0),
               Text('Session ID: $_sessionId'),
