@@ -21,7 +21,7 @@ class StructuredReader extends Structured implements EventReader {
 
   @override
   Map eventData() {
-    var data = {
+    final data = {
       'category': category,
       'action': action,
       'label': label,

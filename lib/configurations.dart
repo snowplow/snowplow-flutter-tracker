@@ -17,13 +17,15 @@ class Configuration {
       this.gdprConfig});
 
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final conf = <String, Object?>{
       'namespace': namespace,
       'networkConfig': networkConfig.toMap(),
       'trackerConfig': trackerConfig?.toMap(),
       'subjectConfig': subjectConfig?.toMap(),
       'gdprConfig': gdprConfig?.toMap()
     };
+    conf.removeWhere((key, value) => value == null);
+    return conf;
   }
 }
 
@@ -35,7 +37,9 @@ class NetworkConfiguration {
   const NetworkConfiguration({required this.endpoint, this.method});
 
   Map<String, Object?> toMap() {
-    return <String, Object?>{'endpoint': endpoint, 'method': method};
+    final conf = <String, Object?>{'endpoint': endpoint, 'method': method};
+    conf.removeWhere((key, value) => value == null);
+    return conf;
   }
 }
 
@@ -59,7 +63,7 @@ class TrackerConfiguration {
       this.webPageContext});
 
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final conf = <String, Object?>{
       'appId': appId,
       'devicePlatform': devicePlatform,
       'base64Encoding': base64Encoding,
@@ -68,6 +72,8 @@ class TrackerConfiguration {
       'sessionContext': sessionContext,
       'webPageContext': webPageContext,
     };
+    conf.removeWhere((key, value) => value == null);
+    return conf;
   }
 }
 
@@ -97,7 +103,7 @@ class SubjectConfiguration {
       this.colorDepth});
 
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final conf = <String, Object?>{
       'userId': userId,
       'networkUserId': networkUserId,
       'domainUserId': domainUserId,
@@ -109,6 +115,8 @@ class SubjectConfiguration {
       'screenViewport': screenViewport?.toList(),
       'colorDepth': colorDepth
     };
+    conf.removeWhere((key, value) => value == null);
+    return conf;
   }
 }
 
@@ -126,11 +134,13 @@ class GdprConfiguration {
       required this.documentDescription});
 
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final conf = <String, Object?>{
       'basisForProcessing': basisForProcessing,
       'documentId': documentId,
       'documentVersion': documentVersion,
       'documentDescription': documentDescription,
     };
+    conf.removeWhere((key, value) => value == null);
+    return conf;
   }
 }

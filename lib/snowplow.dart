@@ -26,6 +26,7 @@ class Snowplow {
       'eventData': event.toMap(),
       'contexts': contexts?.map((c) => c.toMap()).toList()
     };
+    message.removeWhere((key, value) => value == null);
     await _channel.invokeMethod(event.endpoint(), message);
   }
 

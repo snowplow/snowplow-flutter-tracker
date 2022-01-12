@@ -28,13 +28,15 @@ class Structured implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final data = <String, Object?>{
       'category': category,
       'action': action,
       'label': label,
       'property': property,
       'value': value,
     };
+    data.removeWhere((key, value) => value == null);
+    return data;
   }
 }
 
@@ -52,10 +54,12 @@ class SelfDescribing implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final map = <String, Object?>{
       'schema': schema,
       'data': data,
     };
+    map.removeWhere((key, value) => value == null);
+    return map;
   }
 }
 
@@ -85,7 +89,7 @@ class ScreenView implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final data = <String, Object?>{
       'name': name,
       'id': id,
       'type': type,
@@ -94,6 +98,8 @@ class ScreenView implements Event {
       'previousId': previousId,
       'transitionType': transitionType,
     };
+    data.removeWhere((key, value) => value == null);
+    return data;
   }
 }
 
@@ -117,12 +123,14 @@ class Timing implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final data = <String, Object?>{
       'category': category,
       'variable': variable,
       'timing': timing,
       'label': label,
     };
+    data.removeWhere((key, value) => value == null);
+    return data;
   }
 }
 
@@ -148,13 +156,15 @@ class ConsentGranted implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final data = <String, Object?>{
       'expiry': expiry,
       'documentId': documentId,
       'version': version,
       'name': name,
       'documentDescription': documentDescription
     };
+    data.removeWhere((key, value) => value == null);
+    return data;
   }
 }
 
@@ -180,12 +190,14 @@ class ConsentWithdrawn implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    return <String, Object?>{
+    final data = <String, Object?>{
       'all': all,
       'documentId': documentId,
       'version': version,
       'name': name,
       'documentDescription': documentDescription
     };
+    data.removeWhere((key, value) => value == null);
+    return data;
   }
 }
