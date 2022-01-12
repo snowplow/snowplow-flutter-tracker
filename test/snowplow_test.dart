@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:snowplow_flutter_tracker/configurations.dart';
 import 'package:snowplow_flutter_tracker/events.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
-import 'package:snowplow_flutter_tracker/helpers.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
@@ -34,53 +33,20 @@ void main() {
         namespace: 'tns1',
         networkConfig:
             NetworkConfiguration(endpoint: 'https://snowplowanalytics.com'),
-        trackerConfig: TrackerConfiguration(logLevel: 'verbose'),
-        emitterConfig: EmitterConfiguration(threadPoolSize: 10),
-        sessionConfig: SessionConfiguration(backgroundTimeout: 10.01),
+        trackerConfig: TrackerConfiguration(base64Encoding: true),
         gdprConfig: GdprConfiguration(
             basisForProcessing: 'b',
             documentId: 'd',
             documentVersion: 'v',
-            documentDescription: 'e'),
-        gcConfig: [
-          GlobalContextsConfiguration(tag: 't1', globalContexts: [
-            {'c': 100},
-            {'t': 200}
-          ]),
-          GlobalContextsConfiguration(tag: 't2', globalContexts: [
-            {'x': 0}
-          ])
-        ]);
+            documentDescription: 'e'));
     await Snowplow.createTracker(config);
 
     expect(method, equals('createTracker'));
     expect(arguments['namespace'], equals('tns1'));
     expect(arguments['networkConfig']['endpoint'],
         equals('https://snowplowanalytics.com'));
-    expect(arguments['trackerConfig']['logLevel'], equals('verbose'));
-    expect(arguments['emitterConfig']['threadPoolSize'], equals(10));
-    expect(arguments['emitterConfig']['byteLimitGet'], isNull);
-    expect(arguments['sessionConfig']['backgroundTimeout'], equals(10.01));
+    expect(arguments['trackerConfig']['base64Encoding'], isTrue);
     expect(arguments['gdprConfig']['documentId'], equals('d'));
-    expect(arguments['gcConfig'].length, equals(2));
-    expect(arguments['gcConfig'][0]['globalContexts'].length, equals(2));
-    expect(arguments['gcConfig'][0]['tag'], equals('t1'));
-    expect(arguments['gcConfig'][1]['globalContexts'].length, equals(1));
-    expect(arguments['gcConfig'][1]['tag'], equals('t2'));
-  });
-
-  test('removes tracker', () async {
-    await Snowplow.removeTracker('tns2');
-
-    expect(method, equals('removeTracker'));
-    expect(arguments['tracker'], equals('tns2'));
-  });
-
-  test('removes all trackers', () async {
-    await Snowplow.removeAllTrackers();
-
-    expect(method, equals('removeAllTrackers'));
-    expect(arguments, isNull);
   });
 
   test('tracks structured event', () async {
@@ -176,80 +142,6 @@ void main() {
     expect(arguments['userId'], equals('u1'));
   });
 
-  test('sets network user ID', () async {
-    await Snowplow.setNetworkUserId('n1', tracker: 'tns1');
-
-    expect(method, equals('setNetworkUserId'));
-    expect(arguments['tracker'], equals('tns1'));
-    expect(arguments['networkUserId'], equals('n1'));
-  });
-
-  test('sets domain user ID', () async {
-    await Snowplow.setDomainUserId('d1', tracker: 'tns1');
-
-    expect(method, equals('setDomainUserId'));
-    expect(arguments['tracker'], equals('tns1'));
-    expect(arguments['domainUserId'], equals('d1'));
-  });
-
-  test('sets IP address', () async {
-    await Snowplow.setIpAddress('192.150.112.10', tracker: 'tns1');
-
-    expect(method, equals('setIpAddress'));
-    expect(arguments['tracker'], equals('tns1'));
-    expect(arguments['ipAddress'], equals('192.150.112.10'));
-  });
-
-  test('sets useragent', () async {
-    await Snowplow.setUseragent('iOS 11', tracker: 'tns1');
-
-    expect(method, equals('setUseragent'));
-    expect(arguments['tracker'], equals('tns1'));
-    expect(arguments['useragent'], equals('iOS 11'));
-  });
-
-  test('sets timezone', () async {
-    await Snowplow.setTimezone('GMT+2', tracker: 'tns1');
-
-    expect(method, equals('setTimezone'));
-    expect(arguments['tracker'], equals('tns1'));
-    expect(arguments['timezone'], equals('GMT+2'));
-  });
-
-  test('sets language', () async {
-    await Snowplow.setLanguage('sk_SK', tracker: 'tns1');
-
-    expect(method, equals('setLanguage'));
-    expect(arguments['tracker'], equals('tns1'));
-    expect(arguments['language'], equals('sk_SK'));
-  });
-
-  test('sets screen resolution', () async {
-    await Snowplow.setScreenResolution(const Size(width: 800, height: 600),
-        tracker: 'tns1');
-
-    expect(method, equals('setScreenResolution'));
-    expect(arguments['tracker'], equals('tns1'));
-    expect(arguments['screenResolution'], equals([800, 600]));
-  });
-
-  test('sets screen viewport', () async {
-    await Snowplow.setScreenViewport(const Size(width: 400, height: 200),
-        tracker: 'tns1');
-
-    expect(method, equals('setScreenViewport'));
-    expect(arguments['tracker'], equals('tns1'));
-    expect(arguments['screenViewport'], equals([400, 200]));
-  });
-
-  test('sets color depth', () async {
-    await Snowplow.setColorDepth(20, tracker: 'tns1');
-
-    expect(method, equals('setColorDepth'));
-    expect(arguments['tracker'], equals('tns1'));
-    expect(arguments['colorDepth'], equals(20));
-  });
-
   test('gets session user ID', () async {
     returnValue = 'u1';
     String? sessionUserId = await Snowplow.getSessionUserId(tracker: 'tns1');
@@ -275,32 +167,5 @@ void main() {
     expect(method, equals('getSessionIndex'));
     expect(arguments['tracker'], 'tns1');
     expect(sessionIndex, equals(10));
-  });
-
-  test('gets in background status', () async {
-    returnValue = false;
-    bool? isInBackground = await Snowplow.getIsInBackground(tracker: 'tns1');
-
-    expect(method, equals('getIsInBackground'));
-    expect(arguments['tracker'], 'tns1');
-    expect(isInBackground, equals(false));
-  });
-
-  test('gets background index', () async {
-    returnValue = 5;
-    int? backgroundIndex = await Snowplow.getBackgroundIndex(tracker: 'tns1');
-
-    expect(method, equals('getBackgroundIndex'));
-    expect(arguments['tracker'], 'tns1');
-    expect(backgroundIndex, equals(5));
-  });
-
-  test('gets foreground index', () async {
-    returnValue = 7;
-    int? foregroundIndex = await Snowplow.getForegroundIndex(tracker: 'tns1');
-
-    expect(method, equals('getForegroundIndex'));
-    expect(arguments['tracker'], 'tns1');
-    expect(foregroundIndex, equals(7));
   });
 }

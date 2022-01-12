@@ -12,10 +12,7 @@ class SnowplowTests {
     await Snowplow.createTracker(const Configuration(
         namespace: 'test',
         networkConfig: NetworkConfiguration(endpoint: microEndpoint),
-        trackerConfig: TrackerConfiguration(
-            installAutotracking: false,
-            lifecycleAutotracking: false,
-            screenViewAutotracking: false)));
+        trackerConfig: TrackerConfiguration()));
   }
 
   static Future<void> resetMicro() async {

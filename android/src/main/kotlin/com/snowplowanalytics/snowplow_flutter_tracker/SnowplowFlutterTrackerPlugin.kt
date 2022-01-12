@@ -28,8 +28,6 @@ class SnowplowFlutterTrackerPlugin: FlutterPlugin, MethodCallHandler {
         when (call.method) {
             "getPlatformVersion" -> result.success("Android ${android.os.Build.VERSION.RELEASE}")
             "createTracker" -> onCreateTracker(call, result)
-            "removeTracker" -> onRemoveTracker(call, result)
-            "removeAllTrackers" -> onRemoveAllTrackers(result)
             "trackStructured" -> onTrackStructured(call, result)
             "trackSelfDescribing" -> onTrackSelfDescribing(call, result)
             "trackScreenView" -> onTrackScreenView(call, result)
@@ -37,21 +35,9 @@ class SnowplowFlutterTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "trackConsentGranted" -> onTrackConsentGranted(call, result)
             "trackConsentWithdrawn" -> onTrackConsentWithdrawn(call, result)
             "setUserId" -> onSetUserId(call, result)
-            "setNetworkUserId" -> onSetNetworkUserId(call, result)
-            "setDomainUserId" -> onSetDomainUserId(call, result)
-            "setIpAddress" -> onSetIpAddress(call, result)
-            "setUseragent" -> onSetUseragent(call, result)
-            "setTimezone" -> onSetTimezone(call, result)
-            "setLanguage" -> onSetLanguage(call, result)
-            "setScreenResolution" -> onSetScreenResolution(call, result)
-            "setScreenViewport" -> onSetScreenViewport(call, result)
-            "setColorDepth" -> onSetColorDepth(call, result)
             "getSessionUserId" -> onGetSessionUserId(call, result)
             "getSessionId" -> onGetSessionId(call, result)
             "getSessionIndex" -> onGetSessionIndex(call, result)
-            "getIsInBackground" -> onGetIsInBackground(call, result)
-            "getBackgroundIndex" -> onGetBackgroundIndex(call, result)
-            "getForegroundIndex" -> onGetForegroundIndex(call, result)
             else -> result.notImplemented()
         }
     }
@@ -67,18 +53,6 @@ class SnowplowFlutterTrackerPlugin: FlutterPlugin, MethodCallHandler {
                 SnowplowFlutterTrackerController.createTracker(values, ctxt)
             }
         }
-        result.success(null)
-    }
-
-    private fun onRemoveTracker(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.removeTracker(it)
-        }
-        result.success(null)
-    }
-
-    private fun onRemoveAllTrackers(result: MethodChannel.Result) {
-        SnowplowFlutterTrackerController.removeAllTrackers()
         result.success(null)
     }
 
@@ -131,69 +105,6 @@ class SnowplowFlutterTrackerPlugin: FlutterPlugin, MethodCallHandler {
         result.success(null)
     }
 
-    private fun onSetNetworkUserId(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.setNetworkUserId(it)
-        }
-        result.success(null)
-    }
-
-    private fun onSetDomainUserId(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.setDomainUserId(it)
-        }
-        result.success(null)
-    }
-
-    private fun onSetIpAddress(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.setIpAddress(it)
-        }
-        result.success(null)
-    }
-
-    private fun onSetUseragent(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.setUseragent(it)
-        }
-        result.success(null)
-    }
-
-    private fun onSetTimezone(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.setTimezone(it)
-        }
-        result.success(null)
-    }
-
-    private fun onSetLanguage(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.setLanguage(it)
-        }
-        result.success(null)
-    }
-
-    private fun onSetScreenResolution(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.setScreenResolution(it)
-        }
-        result.success(null)
-    }
-
-    private fun onSetScreenViewport(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.setScreenViewport(it)
-        }
-        result.success(null)
-    }
-
-    private fun onSetColorDepth(call: MethodCall, result: MethodChannel.Result) {
-        (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.setColorDepth(it)
-        }
-        result.success(null)
-    }
-
     private fun onGetSessionUserId(call: MethodCall, result: MethodChannel.Result) {
         val sessionUserId = (call.arguments as? Map<String, Any>)?.let {
             SnowplowFlutterTrackerController.getSessionUserId(it)
@@ -213,27 +124,6 @@ class SnowplowFlutterTrackerPlugin: FlutterPlugin, MethodCallHandler {
             SnowplowFlutterTrackerController.getSessionIndex(it)
         }
         result.success(sessionIndex)
-    }
-
-    private fun onGetIsInBackground(call: MethodCall, result: MethodChannel.Result) {
-        val isInBackground = (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.getIsInBackground(it)
-        }
-        result.success(isInBackground)
-    }
-
-    private fun onGetBackgroundIndex(call: MethodCall, result: MethodChannel.Result) {
-        val backgroundIndex = (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.getBackgroundIndex(it)
-        }
-        result.success(backgroundIndex)
-    }
-
-    private fun onGetForegroundIndex(call: MethodCall, result: MethodChannel.Result) {
-        val foregroundIndex = (call.arguments as? Map<String, Any>)?.let {
-            SnowplowFlutterTrackerController.getForegroundIndex(it)
-        }
-        result.success(foregroundIndex)
     }
 
 }

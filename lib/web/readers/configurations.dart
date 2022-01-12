@@ -16,19 +16,11 @@ class TrackerConfigurationReader extends TrackerConfiguration {
       : super(
             appId: map['appId'],
             devicePlatform: map['devicePlatform'],
-            logLevel: map['logLevel'],
             base64Encoding: map['base64Encoding'],
-            applicationContext: map['applicationContext'],
             platformContext: map['platformContext'],
             geoLocationContext: map['geoLocationContext'],
             sessionContext: map['sessionContext'],
-            screenContext: map['screenContext'],
-            webPageContext: map['webPageContext'],
-            screenViewAutotracking: map['screenViewAutotracking'],
-            lifecycleAutotracking: map['lifecycleAutotracking'],
-            installAutotracking: map['installAutotracking'],
-            exceptionAutotracking: map['exceptionAutotracking'],
-            diagnosticAutotracking: map['diagnosticAutotracking']);
+            webPageContext: map['webPageContext']);
 
   void addTrackerOptions(dynamic options) {
     if (appId != null) {
@@ -49,22 +41,6 @@ class TrackerConfigurationReader extends TrackerConfiguration {
     }
     if (contexts.isNotEmpty) {
       options['contexts'] = contexts;
-    }
-  }
-}
-
-class EmitterConfigurationReader extends EmitterConfiguration {
-  EmitterConfigurationReader(dynamic map)
-      : super(
-            bufferOption: map['bufferOption'],
-            emitRange: map['emitRange'],
-            threadPoolSize: map['threadPoolSize'],
-            byteLimitGet: map['byteLimitGet'],
-            byteLimitPost: map['byteLimitPost']);
-
-  void addTrackerOptions(dynamic options) {
-    if (byteLimitPost != null) {
-      options['maxPostBytes'] = byteLimitPost;
     }
   }
 }
@@ -99,17 +75,12 @@ class ConfigurationReader extends Configuration {
             trackerConfig: map['trackerConfig'] != null
                 ? TrackerConfigurationReader(map['trackerConfig'])
                 : null,
-            emitterConfig: map['emitterConfig'] != null
-                ? EmitterConfigurationReader(map['emitterConfig'])
-                : null,
-            sessionConfig: null,
             subjectConfig: map['subjectConfig'] != null
                 ? SubjectConfigurationReader(map['subjectConfig'])
                 : null,
             gdprConfig: map['gdprConfig'] != null
                 ? GdprConfigurationReader(map['gdprConfig'])
-                : null,
-            gcConfig: null);
+                : null);
 
   dynamic getTrackerOptions() {
     var options = {};
@@ -117,9 +88,6 @@ class ConfigurationReader extends Configuration {
     (networkConfig as NetworkConfigurationReader).addTrackerOptions(options);
     if (trackerConfig != null) {
       (trackerConfig as TrackerConfigurationReader).addTrackerOptions(options);
-    }
-    if (emitterConfig != null) {
-      (emitterConfig as EmitterConfigurationReader).addTrackerOptions(options);
     }
 
     return options;

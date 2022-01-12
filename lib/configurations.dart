@@ -6,32 +6,23 @@ class Configuration {
   final String namespace;
   final NetworkConfiguration networkConfig;
   final TrackerConfiguration? trackerConfig;
-  final EmitterConfiguration? emitterConfig;
-  final SessionConfiguration? sessionConfig;
   final SubjectConfiguration? subjectConfig;
   final GdprConfiguration? gdprConfig;
-  final List<GlobalContextsConfiguration>? gcConfig;
 
   const Configuration(
       {required this.namespace,
       required this.networkConfig,
       this.trackerConfig,
-      this.emitterConfig,
-      this.sessionConfig,
       this.subjectConfig,
-      this.gdprConfig,
-      this.gcConfig});
+      this.gdprConfig});
 
   Map<String, Object?> toMap() {
     return <String, Object?>{
       'namespace': namespace,
       'networkConfig': networkConfig.toMap(),
       'trackerConfig': trackerConfig?.toMap(),
-      'emitterConfig': emitterConfig?.toMap(),
-      'sessionConfig': sessionConfig?.toMap(),
       'subjectConfig': subjectConfig?.toMap(),
-      'gdprConfig': gdprConfig?.toMap(),
-      'gcConfig': gcConfig?.map((e) => e.toMap()).toList()
+      'gdprConfig': gdprConfig?.toMap()
     };
   }
 }
@@ -52,95 +43,30 @@ class NetworkConfiguration {
 class TrackerConfiguration {
   final String? appId;
   final String? devicePlatform;
-  final String? logLevel;
   final bool? base64Encoding;
-  final bool? applicationContext;
   final bool? platformContext;
   final bool? geoLocationContext;
   final bool? sessionContext;
-  final bool? screenContext;
   final bool? webPageContext;
-  final bool? screenViewAutotracking;
-  final bool? lifecycleAutotracking;
-  final bool? installAutotracking;
-  final bool? exceptionAutotracking;
-  final bool? diagnosticAutotracking;
 
   const TrackerConfiguration(
       {this.appId,
       this.devicePlatform,
-      this.logLevel,
       this.base64Encoding,
-      this.applicationContext,
       this.platformContext,
       this.geoLocationContext,
       this.sessionContext,
-      this.screenContext,
-      this.webPageContext,
-      this.screenViewAutotracking,
-      this.lifecycleAutotracking,
-      this.installAutotracking,
-      this.exceptionAutotracking,
-      this.diagnosticAutotracking});
+      this.webPageContext});
 
   Map<String, Object?> toMap() {
     return <String, Object?>{
       'appId': appId,
       'devicePlatform': devicePlatform,
-      'logLevel': logLevel,
       'base64Encoding': base64Encoding,
-      'applicationContext': applicationContext,
       'platformContext': platformContext,
       'geoLocationContext': geoLocationContext,
       'sessionContext': sessionContext,
-      'screenContext': screenContext,
       'webPageContext': webPageContext,
-      'screenViewAutotracking': screenViewAutotracking,
-      'lifecycleAutotracking': lifecycleAutotracking,
-      'installAutotracking': installAutotracking,
-      'exceptionAutotracking': exceptionAutotracking,
-      'diagnosticAutotracking': diagnosticAutotracking,
-    };
-  }
-}
-
-@immutable
-class EmitterConfiguration {
-  final String? bufferOption;
-  final double? emitRange;
-  final double? threadPoolSize;
-  final double? byteLimitPost;
-  final double? byteLimitGet;
-
-  const EmitterConfiguration(
-      {this.bufferOption,
-      this.emitRange,
-      this.threadPoolSize,
-      this.byteLimitPost,
-      this.byteLimitGet});
-
-  Map<String, Object?> toMap() {
-    return <String, Object?>{
-      'bufferOption': bufferOption,
-      'emitRange': emitRange,
-      'threadPoolSize': threadPoolSize,
-      'byteLimitPost': byteLimitPost,
-      'byteLimitGet': byteLimitGet
-    };
-  }
-}
-
-@immutable
-class SessionConfiguration {
-  final double? foregroundTimeout;
-  final double? backgroundTimeout;
-
-  const SessionConfiguration({this.foregroundTimeout, this.backgroundTimeout});
-
-  Map<String, Object?> toMap() {
-    return <String, Object?>{
-      'foregroundTimeout': foregroundTimeout,
-      'backgroundTimeout': backgroundTimeout,
     };
   }
 }
@@ -206,18 +132,5 @@ class GdprConfiguration {
       'documentVersion': documentVersion,
       'documentDescription': documentDescription,
     };
-  }
-}
-
-@immutable
-class GlobalContextsConfiguration {
-  final String tag;
-  final List<Map<String, Object?>> globalContexts;
-
-  const GlobalContextsConfiguration(
-      {required this.tag, required this.globalContexts});
-
-  Map<String, Object?> toMap() {
-    return <String, Object?>{'tag': tag, 'globalContexts': globalContexts};
   }
 }

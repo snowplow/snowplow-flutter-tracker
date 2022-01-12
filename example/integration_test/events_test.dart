@@ -71,8 +71,9 @@ void main() {
     expect(
         await SnowplowTests.checkMicroGood((events) =>
             (events.length == 1) &&
-            (events[0]['event']['unstruct_event']['data']['data']['id'] ==
-                id) &&
+            (events[0]['event']['unstruct_event']['data']['data']['id']
+                    .toLowerCase() ==
+                id.toLowerCase()) &&
             (events[0]['event']['unstruct_event']['data']['data']['name'] ==
                 'name')),
         isTrue);

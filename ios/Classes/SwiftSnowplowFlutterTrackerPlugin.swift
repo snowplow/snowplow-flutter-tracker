@@ -12,10 +12,6 @@ public class SwiftSnowplowFlutterTrackerPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "createTracker":
             onCreateTracker(call, result: result)
-        case "removeTracker":
-            onRemoveTracker(call, result: result)
-        case "removeAllTrackers":
-            onRemoveAllTrackers(result: result)
         case "trackStructured":
             onTrackStructured(call, result: result)
         case "trackSelfDescribing":
@@ -34,36 +30,11 @@ public class SwiftSnowplowFlutterTrackerPlugin: NSObject, FlutterPlugin {
             onGetSessionId(call, result: result)
         case "getSessionIndex":
             onGetSessionIndex(call, result: result)
-        case "getIsInBackground":
-            onGetIsInBackground(call, result: result)
-        case "getBackgroundIndex":
-            onGetBackgroundIndex(call, result: result)
-        case "getForegroundIndex":
-            onGetForegroundIndex(call, result: result)
         case "setUserId":
             onSetUserId(call, result: result)
-        case "setNetworkUserId":
-            onSetNetworkUserId(call, result: result)
-        case "setDomainUserId":
-            onSetDomainUserId(call, result: result)
-        case "setIpAddress":
-            onSetIpAddress(call, result: result)
-        case "setUseragent":
-            onSetUseragent(call, result: result)
-        case "setTimezone":
-            onSetTimezone(call, result: result)
-        case "setLanguage":
-            onSetLanguage(call, result: result)
-        case "setScreenResolution":
-            onSetScreenResolution(call, result: result)
-        case "setScreenViewport":
-            onSetScreenViewport(call, result: result)
-        case "setColorDepth":
-            onSetColorDepth(call, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }
-
     }
     
     private func onCreateTracker(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -73,18 +44,6 @@ public class SwiftSnowplowFlutterTrackerPlugin: NSObject, FlutterPlugin {
         result(nil)
     }
     
-    private func onRemoveTracker(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (RemoveTrackerMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.removeTracker(message)
-        }
-        result(nil)
-    }
-    
-    private func onRemoveAllTrackers(result: @escaping FlutterResult) {
-        SnowplowFlutterTrackerController.removeAllTrackers()
-        result(nil)
-    }
-
     private func onTrackStructured(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if let (message, arguments): (TrackStructuredMessageReader, [String: Any]) = decodeCall(call),
            let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
@@ -157,96 +116,9 @@ public class SwiftSnowplowFlutterTrackerPlugin: NSObject, FlutterPlugin {
         }
     }
     
-    private func onGetIsInBackground(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (GetParameterMessageReader, Any) = decodeCall(call) {
-            result(SnowplowFlutterTrackerController.isInBackground(message))
-        } else {
-            result(nil)
-        }
-    }
-    
-    private func onGetBackgroundIndex(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (GetParameterMessageReader, Any) = decodeCall(call) {
-            result(SnowplowFlutterTrackerController.backgroundIndex(message))
-        } else {
-            result(nil)
-        }
-    }
-    
-    private func onGetForegroundIndex(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (GetParameterMessageReader, Any) = decodeCall(call) {
-            result(SnowplowFlutterTrackerController.foregroundIndex(message))
-        } else {
-            result(nil)
-        }
-    }
-    
     private func onSetUserId(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if let (message, _): (SetUserIdMessageReader, Any) = decodeCall(call) {
             SnowplowFlutterTrackerController.setUserId(message)
-        }
-        result(nil)
-    }
-    
-    private func onSetNetworkUserId(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (SetNetworkUserIdMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.setNetworkUserId(message)
-        }
-        result(nil)
-    }
-    
-    private func onSetDomainUserId(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (SetDomainUserIdMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.setDomainUserId(message)
-        }
-        result(nil)
-    }
-    
-    private func onSetIpAddress(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (SetIpAddressMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.setIpAddress(message)
-        }
-        result(nil)
-    }
-    
-    private func onSetUseragent(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (SetUseragentMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.setUseragent(message)
-        }
-        result(nil)
-    }
-    
-    private func onSetTimezone(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (SetTimezoneMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.setTimezone(message)
-        }
-        result(nil)
-    }
-    
-    private func onSetLanguage(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (SetLanguageMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.setLanguage(message)
-        }
-        result(nil)
-    }
-    
-    private func onSetScreenResolution(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (SetScreenResolutionMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.setScreenResolution(message)
-        }
-        result(nil)
-    }
-    
-    private func onSetScreenViewport(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (SetScreenViewportMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.setScreenViewport(message)
-        }
-        result(nil)
-    }
-    
-    private func onSetColorDepth(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (SetColorDepthMessageReader, Any) = decodeCall(call) {
-            SnowplowFlutterTrackerController.setColorDepth(message)
         }
         result(nil)
     }

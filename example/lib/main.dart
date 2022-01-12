@@ -23,9 +23,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   String _sessionId = 'Unknown';
   String _sessionUserId = 'Unknown';
   int? _sessionIndex;
-  bool? _isInBackground;
-  int? _backgroundIndex;
-  int? _foregroundIndex;
   final bool? testing;
 
   _MyAppState({this.testing}) : super();
@@ -40,13 +37,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (testing == null || testing == false) {
       Configuration configuration = const Configuration(
           namespace: "ns1",
-          emitterConfig: EmitterConfiguration(bufferOption: "single"),
           networkConfig:
               NetworkConfiguration(endpoint: "http://192.168.100.127:9090"),
-          trackerConfig: TrackerConfiguration(
-              webPageContext: false,
-              logLevel: "verbose",
-              lifecycleAutotracking: true),
+          trackerConfig: TrackerConfiguration(webPageContext: false),
           gdprConfig: GdprConfiguration(
               basisForProcessing: 'consent',
               documentId: 'consentDoc-abc123',
@@ -66,18 +59,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     String? sessionId;
     String? sessionUserId;
     int? sessionIndex;
-    bool? isInBackground;
-    int? foregroundIndex;
-    int? backgroundIndex;
 
     try {
       sessionId = await Snowplow.getSessionId(tracker: 'ns1') ?? 'Unknown';
       sessionUserId =
           await Snowplow.getSessionUserId(tracker: 'ns1') ?? 'Unknown';
       sessionIndex = await Snowplow.getSessionIndex(tracker: 'ns1');
-      isInBackground = await Snowplow.getIsInBackground(tracker: 'ns1');
-      backgroundIndex = await Snowplow.getBackgroundIndex(tracker: 'ns1');
-      foregroundIndex = await Snowplow.getForegroundIndex(tracker: 'ns1');
     } on PlatformException catch (err) {
       print(err);
     }
@@ -88,9 +75,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       _sessionId = sessionId ?? 'Unknown';
       _sessionUserId = sessionUserId ?? 'Unknown';
       _sessionIndex = sessionIndex;
-      _isInBackground = isInBackground;
-      _backgroundIndex = backgroundIndex;
-      _foregroundIndex = foregroundIndex;
     });
   }
 
@@ -199,12 +183,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               Text('Session user ID: $_sessionUserId'),
               const SizedBox(height: 5.0),
               Text('Session index: $_sessionIndex'),
-              const SizedBox(height: 5.0),
-              Text('Is in background: $_isInBackground'),
-              const SizedBox(height: 5.0),
-              Text('Background index: $_backgroundIndex'),
-              const SizedBox(height: 5.0),
-              Text('Foreground index: $_foregroundIndex'),
+              const SizedBox(height: 5.0)
             ]),
           ),
         ),

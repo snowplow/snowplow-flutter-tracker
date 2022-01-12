@@ -42,12 +42,12 @@ void main() {
     expect(arguments['eventData']['category'], equals('category'));
   });
 
-  test('sets color depth', () async {
-    await tracker?.setColorDepth(20);
+  test('sets user ID', () async {
+    await tracker?.setUserId('XYZ');
 
-    expect(method, equals('setColorDepth'));
+    expect(method, equals('setUserId'));
     expect(arguments['tracker'], equals('ns1'));
-    expect(arguments['colorDepth'], equals(20));
+    expect(arguments['userId'], equals('XYZ'));
   });
 
   test('gets session ID', () async {

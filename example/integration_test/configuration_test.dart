@@ -22,10 +22,7 @@ void main() {
         namespace: 'test',
         networkConfig:
             NetworkConfiguration(endpoint: SnowplowTests.microEndpoint),
-        trackerConfig: TrackerConfiguration(
-            installAutotracking: false,
-            lifecycleAutotracking: false,
-            screenViewAutotracking: false),
+        trackerConfig: TrackerConfiguration(),
         subjectConfig: SubjectConfiguration(userId: 'XYZ')));
 
     await Snowplow.track(
@@ -99,10 +96,7 @@ void main() {
         namespace: 'test',
         networkConfig:
             NetworkConfiguration(endpoint: SnowplowTests.microEndpoint),
-        trackerConfig: TrackerConfiguration(
-            installAutotracking: false,
-            lifecycleAutotracking: false,
-            screenViewAutotracking: false),
+        trackerConfig: TrackerConfiguration(),
         gdprConfig: GdprConfiguration(
             basisForProcessing: 'consent',
             documentId: 'consentDoc-abc123',
