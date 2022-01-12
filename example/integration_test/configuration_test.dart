@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
-import 'package:snowplow_flutter_tracker/events.dart';
+import 'package:snowplow_flutter_tracker/events/structured.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:snowplow_flutter_tracker/configurations.dart';
+import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_flutter_tracker/configurations/subject_configuration.dart';
+import 'package:snowplow_flutter_tracker/configurations/gdpr_configuration.dart';
 
 import 'helpers.dart';
 import 'package:snowplow_flutter_tracker_example/main.dart';

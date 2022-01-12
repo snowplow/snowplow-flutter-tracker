@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_flutter_tracker/events.dart';
+import 'package:snowplow_flutter_tracker/events/structured.dart';
 import 'package:snowplow_flutter_tracker/tracker.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
 

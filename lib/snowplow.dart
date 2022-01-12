@@ -1,9 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:snowplow_flutter_tracker/events.dart';
+import 'package:snowplow_flutter_tracker/configurations/configuration.dart';
+import 'package:snowplow_flutter_tracker/configurations/gdpr_configuration.dart';
+import 'package:snowplow_flutter_tracker/configurations/network_configuration.dart';
+import 'package:snowplow_flutter_tracker/configurations/subject_configuration.dart';
+import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_flutter_tracker/events/event.dart';
+import 'package:snowplow_flutter_tracker/events/self_describing.dart';
 import 'package:snowplow_flutter_tracker/tracker.dart';
-import 'package:snowplow_flutter_tracker/configurations.dart';
 
 class Snowplow {
   static const MethodChannel _channel =

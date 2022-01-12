@@ -1,5 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:snowplow_flutter_tracker/web/readers/events.dart';
+import 'package:snowplow_flutter_tracker/web/readers/events/consent_granted_reader.dart';
+import 'package:snowplow_flutter_tracker/web/readers/events/consent_withdrawn.dart';
+import 'package:snowplow_flutter_tracker/web/readers/events/contexts_reader.dart';
+import 'package:snowplow_flutter_tracker/web/readers/events/event_reader.dart';
+import 'package:snowplow_flutter_tracker/web/readers/events/screen_view_reader.dart';
+import 'package:snowplow_flutter_tracker/web/readers/events/self_describing_reader.dart';
+import 'package:snowplow_flutter_tracker/web/readers/events/structured_reader.dart';
+import 'package:snowplow_flutter_tracker/web/readers/events/timing_reader.dart';
 
 @immutable
 class EventMessageReader {
@@ -106,14 +113,4 @@ class EventMessageReader {
     }
     return data;
   }
-}
-
-@immutable
-class SetUserIdMessageReader {
-  final String tracker;
-  final String? userId;
-
-  SetUserIdMessageReader(dynamic map)
-      : tracker = map['tracker'],
-        userId = map['userId'];
 }

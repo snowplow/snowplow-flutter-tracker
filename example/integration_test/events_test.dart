@@ -1,7 +1,12 @@
 import 'package:uuid/uuid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
-import 'package:snowplow_flutter_tracker/events.dart';
+import 'package:snowplow_flutter_tracker/events/structured.dart';
+import 'package:snowplow_flutter_tracker/events/self_describing.dart';
+import 'package:snowplow_flutter_tracker/events/screen_view.dart';
+import 'package:snowplow_flutter_tracker/events/timing.dart';
+import 'package:snowplow_flutter_tracker/events/consent_granted.dart';
+import 'package:snowplow_flutter_tracker/events/consent_withdrawn.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'helpers.dart';

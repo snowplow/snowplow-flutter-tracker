@@ -3,8 +3,15 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 
 import 'package:snowplow_flutter_tracker/snowplow.dart';
-import 'package:snowplow_flutter_tracker/events.dart';
-import 'package:snowplow_flutter_tracker/configurations.dart';
+import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_flutter_tracker/configurations/subject_configuration.dart';
+import 'package:snowplow_flutter_tracker/configurations/gdpr_configuration.dart';
+import 'package:snowplow_flutter_tracker/events/self_describing.dart';
+import 'package:snowplow_flutter_tracker/events/structured.dart';
+import 'package:snowplow_flutter_tracker/events/screen_view.dart';
+import 'package:snowplow_flutter_tracker/events/timing.dart';
+import 'package:snowplow_flutter_tracker/events/consent_granted.dart';
+import 'package:snowplow_flutter_tracker/events/consent_withdrawn.dart';
 
 void main() {
   runApp(const MyApp());

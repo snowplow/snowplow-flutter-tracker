@@ -7,8 +7,9 @@ import 'dart:html' as html;
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:snowplow_flutter_tracker/web/readers/configurations.dart';
-import 'package:snowplow_flutter_tracker/web/readers/messages.dart';
+import 'package:snowplow_flutter_tracker/web/readers/configurations/configuration_reader.dart';
+import 'package:snowplow_flutter_tracker/web/readers/messages/event_message_reader.dart';
+import 'package:snowplow_flutter_tracker/web/readers/messages/set_user_id_message_reader.dart';
 import 'package:snowplow_flutter_tracker/web/snowplow_flutter_tracker_controller.dart';
 
 /// A web implementation of the SnowplowFlutterTracker plugin.
