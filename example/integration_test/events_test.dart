@@ -135,4 +135,31 @@ void main() {
                 false)),
         isTrue);
   });
+
+  testWidgets("tracks an event with custom context",
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp(testing: true));
+
+    await Snowplow.track(
+        const Structured(category: 'category', action: 'action'),
+        tracker: "test",
+        contexts: [
+          const SelfDescribing(
+            schema:
+                'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',
+            data: {'targetUrl': 'http://a-target-url.com'},
+          )
+        ]);
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          dynamic context = events[0]['event']['contexts']['data']
+              .firstWhere((x) => x['schema'].toString().contains('link_click'));
+          return context['data']['targetUrl'] == 'http://a-target-url.com';
+        }),
+        isTrue);
+  });
 }
