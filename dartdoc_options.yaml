@@ -1,0 +1,19 @@
+dartdoc:
+  categories:
+    "Initialization":
+      markdown: doc/initialization.md
+      name: Initialization
+    "Configuration":
+      markdown: doc/configuration.md
+      name: Configuration
+    "Events":
+      markdown: doc/events.md
+      name: Events
+  categoryOrder: ["Initialization", "Configuration", "Events"]
+  showUndocumentedCategories: true
+  ignore:
+    - ambiguous-doc-reference
+  errors:
+    - unresolved-doc-reference
+  warnings:
+    - tool-error

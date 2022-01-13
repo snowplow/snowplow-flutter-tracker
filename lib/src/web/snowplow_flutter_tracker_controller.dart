@@ -11,6 +11,8 @@
 
 import 'dart:js_util';
 
+import 'package:snowplow_flutter_tracker/tracker.dart';
+
 import 'readers/configurations/configuration_reader.dart';
 import 'readers/messages/event_message_reader.dart';
 import 'readers/messages/set_user_id_message_reader.dart';
@@ -38,7 +40,9 @@ class SnowplowFlutterTrackerController {
           }));
     }
 
-    addSessionContextPlugin(configuration.namespace);
+    if (configuration.addSessionContext) {
+      addSessionContextPlugin(configuration.namespace);
+    }
   }
 
   static void trackEvent(EventMessageReader message) {

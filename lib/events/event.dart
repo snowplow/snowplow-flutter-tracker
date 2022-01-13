@@ -11,6 +11,7 @@
 
 import 'package:flutter/foundation.dart';
 
+/// Base class for all tracked events.
 @immutable
 abstract class Event {
   String endpoint();

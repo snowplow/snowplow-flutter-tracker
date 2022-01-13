@@ -11,16 +11,27 @@
 
 import 'package:flutter/foundation.dart';
 
+/// Configuration of the collector network endpoint.
+///
+/// {@category Configuration}
 @immutable
 class NetworkConfiguration {
+  /// Endpoint of the collector, e.g. `http://localhost:9090`
   final String endpoint;
-  final String? method;
+
+  /// Choice of GET or POST (default) HTTP method used to send events to the collector.
+  final Method? method;
 
   const NetworkConfiguration({required this.endpoint, this.method});
 
   Map<String, Object?> toMap() {
-    final conf = <String, Object?>{'endpoint': endpoint, 'method': method};
+    final conf = <String, Object?>{
+      'endpoint': endpoint,
+      'method': method == null ? null : (method == Method.get ? 'get' : 'post')
+    };
     conf.removeWhere((key, value) => value == null);
     return conf;
   }
 }
+
+enum Method { get, post }

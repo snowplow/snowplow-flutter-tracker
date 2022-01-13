@@ -13,12 +13,25 @@ import 'package:flutter/foundation.dart';
 
 import 'package:snowplow_flutter_tracker/events/event.dart';
 
+/// Event used to track a user opting into data collection.
+///
+/// A consent document context will be attached to the event using the [documentId] and [version] arguments supplied.
+/// {@category Events}
 @immutable
 class ConsentGranted implements Event {
+  /// The expiry (date-time string, e.g.: "2022-01-01T00:00:00Z")
   final String expiry;
+
+  /// The consent document ID.
   final String documentId;
+
+  /// The consent document version.
   final String version;
+
+  /// Optional consent document name.
   final String? name;
+
+  /// Optional consent document description.
   final String? documentDescription;
 
   const ConsentGranted(

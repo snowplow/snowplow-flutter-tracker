@@ -15,12 +15,24 @@ import 'package:snowplow_flutter_tracker/configurations/network_configuration.da
 import 'package:snowplow_flutter_tracker/configurations/subject_configuration.dart';
 import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
 
+/// Wraps configuration used to initialize a tracker.
+///
+/// {@category Configuration}
 @immutable
 class Configuration {
+  /// Unique namespace to identify the tracker.
   final String namespace;
+
+  /// Network configuration.
   final NetworkConfiguration networkConfig;
+
+  /// Configuration of tracker features.
   final TrackerConfiguration? trackerConfig;
+
+  /// Configuration of subject information added to events.
   final SubjectConfiguration? subjectConfig;
+
+  /// Configuration of GDPR context attached to events.
   final GdprConfiguration? gdprConfig;
 
   const Configuration(

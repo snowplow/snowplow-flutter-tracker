@@ -13,11 +13,20 @@ import 'package:flutter/foundation.dart';
 
 import 'package:snowplow_flutter_tracker/events/event.dart';
 
+/// Event used to track user timing events such as how long resources take to load.
+/// {@category Events}
 @immutable
 class Timing implements Event {
+  /// Defines the timing category.
   final String category;
+
+  /// Defines the timing variable measured.
   final String variable;
+
+  /// Represents the time.
   final int timing;
+
+  /// An optional string to further identify the timing event.
   final String? label;
 
   const Timing(

@@ -37,7 +37,6 @@ class SnowplowFlutterTrackerPlugin: FlutterPlugin, MethodCallHandler {
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
-            "getPlatformVersion" -> result.success("Android ${android.os.Build.VERSION.RELEASE}")
             "createTracker" -> onCreateTracker(call, result)
             "trackStructured" -> onTrackStructured(call, result)
             "trackSelfDescribing" -> onTrackSelfDescribing(call, result)

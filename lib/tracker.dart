@@ -15,27 +15,40 @@ import 'package:snowplow_flutter_tracker/events/event.dart';
 import 'package:snowplow_flutter_tracker/events/self_describing.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
 
+/// Instance of an initialized Snowplow tracker identified by [namespace].
 class Tracker {
+  /// Unique tracker namespace.
   final String namespace;
 
   const Tracker({required this.namespace});
 
+  /// Tracks the given event with optional context entities.
   Future<void> track(Event event, {List<SelfDescribing>? contexts}) async {
     await Snowplow.track(event, tracker: namespace, contexts: contexts);
   }
 
+  /// Sets the business user ID to the string.
   Future<void> setUserId(String? userId) async {
     await Snowplow.setUserId(userId, tracker: namespace);
   }
 
+  /// Returns the identifier (string UUIDv4) for the user of the session.
+  ///
+  /// All trackers on Web share the same session.
   Future<String?> get sessionUserId async {
     return await Snowplow.getSessionUserId(tracker: namespace);
   }
 
+  /// Returns the identifier (string UUIDv4) for the session.
+  ///
+  /// All trackers on Web share the same session.
   Future<String?> get sessionId async {
     return await Snowplow.getSessionId(tracker: namespace);
   }
 
+  /// Returns the index (number) of the current session for this user.
+  ///
+  /// All trackers on Web share the same session.
   Future<int?> get sessionIndex async {
     return await Snowplow.getSessionIndex(tracker: namespace);
   }

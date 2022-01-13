@@ -30,6 +30,8 @@ class ConfigurationReader extends Configuration {
                 ? GdprConfigurationReader(map['gdprConfig'])
                 : null);
 
+  bool get addSessionContext => trackerConfig?.sessionContext ?? true;
+
   dynamic getTrackerOptions() {
     var options = {};
 

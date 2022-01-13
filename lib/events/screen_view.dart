@@ -13,14 +13,30 @@ import 'package:flutter/foundation.dart';
 
 import 'package:snowplow_flutter_tracker/events/event.dart';
 
+/// Event to track user viewing a screen within the application.
+///
+/// {@category Events}
 @immutable
 class ScreenView implements Event {
+  /// The name of the screen viewed.
   final String name;
+
+  /// The id (UUID v4) of screen that was viewed.
   final String id;
+
+  /// The type of screen that was viewed.
   final String? type;
+
+  /// The name of the previous screen that was viewed.
   final String? previousName;
+
+  /// The type of screen that was viewed.
   final String? previousType;
+
+  /// The id (UUID v4) of the previous screen that was viewed.
   final String? previousId;
+
+  /// The type of transition that led to the screen being viewed.
   final String? transitionType;
 
   const ScreenView(

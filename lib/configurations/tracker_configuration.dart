@@ -11,14 +11,42 @@
 
 import 'package:flutter/foundation.dart';
 
+/// Configuration of the tracker and the core tracker properties.
+///
+/// Indicates what should be tracked in terms of automatic tracking and contexts/entities to attach to the events.
+/// {@category Configuration}
 @immutable
 class TrackerConfiguration {
+  /// Identifier of the app.
   final String? appId;
+
+  /// The device platform the tracker runs on.
+  /// Allowed platform values are: `mob` (Mobile/Tablet), `web` (Web), `pc` (Desktop/Laptop), `srv` (Server-side app), `app` (General app), `tv` (Connected TV), `cnsl` (Games Console), `iot` (Internet of things)
   final String? devicePlatform;
+
+  /// Indicates whether payload JSON data should be base64 encoded.
+  ///
+  /// Defaults to true.
   final bool? base64Encoding;
+
+  /// Indicates whether platform context should be attached to tracked events.
+  ///
+  /// Defaults to true on iOS and Android. Not available on Web.
   final bool? platformContext;
+
+  /// Indicates whether geo-location context should be attached to tracked events.
+  ///
+  /// Defaults to false.
   final bool? geoLocationContext;
+
+  /// Indicates whether session context should be attached to tracked events.
+  ///
+  /// Defaults to true.
   final bool? sessionContext;
+
+  /// Indicates whether context about current web page should be attached to tracked events.
+  ///
+  /// Only available on Web, defaults to true.
   final bool? webPageContext;
 
   const TrackerConfiguration(

@@ -13,7 +13,11 @@ import 'package:snowplow_flutter_tracker/configurations/network_configuration.da
 
 class NetworkConfigurationReader extends NetworkConfiguration {
   NetworkConfigurationReader(dynamic map)
-      : super(endpoint: map['endpoint'], method: map['method']);
+      : super(
+            endpoint: map['endpoint'],
+            method: map['method'] == null
+                ? null
+                : (map['method'] == 'get' ? Method.get : Method.post));
 
   void addTrackerOptions(dynamic options) {
     if (method != null) {
