@@ -131,6 +131,4 @@ void main() {
         }),
         isTrue);
   });
-
-  // test installation event
 }
