@@ -1,9 +1,9 @@
 import 'dart:js_util';
 
-import 'package:snowplow_flutter_tracker/web/readers/configurations/configuration_reader.dart';
-import 'package:snowplow_flutter_tracker/web/readers/messages/event_message_reader.dart';
-import 'package:snowplow_flutter_tracker/web/readers/messages/set_user_id_message_reader.dart';
-import 'package:snowplow_flutter_tracker/web/sp.dart';
+import 'readers/configurations/configuration_reader.dart';
+import 'readers/messages/event_message_reader.dart';
+import 'readers/messages/set_user_id_message_reader.dart';
+import 'sp.dart';
 
 class SnowplowFlutterTrackerController {
   static void createTracker(ConfigurationReader configuration) {

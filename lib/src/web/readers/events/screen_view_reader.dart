@@ -1,5 +1,5 @@
 import 'package:snowplow_flutter_tracker/events/screen_view.dart';
-import 'package:snowplow_flutter_tracker/web/readers/events/event_reader.dart';
+import 'event_reader.dart';
 
 class ScreenViewReader extends ScreenView implements EventReader {
   ScreenViewReader(dynamic map)

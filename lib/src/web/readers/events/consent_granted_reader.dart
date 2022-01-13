@@ -1,5 +1,5 @@
 import 'package:snowplow_flutter_tracker/events/consent_granted.dart';
-import 'package:snowplow_flutter_tracker/web/readers/events/event_reader.dart';
+import 'event_reader.dart';
 
 class ConsentGrantedReader extends ConsentGranted implements EventReader {
   ConsentGrantedReader(dynamic map)

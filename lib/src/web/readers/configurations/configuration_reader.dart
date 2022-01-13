@@ -1,8 +1,8 @@
 import 'package:snowplow_flutter_tracker/configurations/configuration.dart';
-import 'package:snowplow_flutter_tracker/web/readers/configurations/gdpr_configuration_reader.dart';
-import 'package:snowplow_flutter_tracker/web/readers/configurations/network_configuration_reader.dart';
-import 'package:snowplow_flutter_tracker/web/readers/configurations/subject_configuration_reader.dart';
-import 'package:snowplow_flutter_tracker/web/readers/configurations/tracker_configuration_reader.dart';
+import 'gdpr_configuration_reader.dart';
+import 'network_configuration_reader.dart';
+import 'subject_configuration_reader.dart';
+import 'tracker_configuration_reader.dart';
 
 class ConfigurationReader extends Configuration {
   ConfigurationReader(dynamic map)

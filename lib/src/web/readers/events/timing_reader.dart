@@ -1,5 +1,5 @@
 import 'package:snowplow_flutter_tracker/events/timing.dart';
-import 'package:snowplow_flutter_tracker/web/readers/events/event_reader.dart';
+import 'event_reader.dart';
 
 class TimingReader extends Timing implements EventReader {
   TimingReader(dynamic map)

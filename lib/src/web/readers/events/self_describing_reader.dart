@@ -1,5 +1,5 @@
 import 'package:snowplow_flutter_tracker/events/self_describing.dart';
-import 'package:snowplow_flutter_tracker/web/readers/events/event_reader.dart';
+import 'event_reader.dart';
 
 class SelfDescribingReader extends SelfDescribing implements EventReader {
   SelfDescribingReader(dynamic map)

@@ -1,5 +1,5 @@
 import 'package:snowplow_flutter_tracker/events/structured.dart';
-import 'package:snowplow_flutter_tracker/web/readers/events/event_reader.dart';
+import 'event_reader.dart';
 
 class StructuredReader extends Structured implements EventReader {
   StructuredReader(dynamic map)

@@ -1,4 +1,4 @@
-import 'package:snowplow_flutter_tracker/web/readers/events/event_reader.dart';
+import 'event_reader.dart';
 import 'package:snowplow_flutter_tracker/events/consent_withdrawn.dart';
 
 class ConsentWithdrawnReader extends ConsentWithdrawn implements EventReader {

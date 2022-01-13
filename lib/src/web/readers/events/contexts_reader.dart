@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:snowplow_flutter_tracker/web/readers/events/self_describing_reader.dart';
+import 'self_describing_reader.dart';
 
 @immutable
 class ContextsReader {
