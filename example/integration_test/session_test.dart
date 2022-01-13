@@ -12,6 +12,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
 import 'package:snowplow_flutter_tracker/events/structured.dart';
+import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_flutter_tracker/tracker.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'helpers.dart';
@@ -42,8 +44,12 @@ void main() {
           if (events.length == 0) {
             return false;
           }
-          clientSession1 = events[0]['event']['contexts']['data'].firstWhere(
-              (x) => x['schema'].toString().contains('client_session'));
+          Iterable sessions = events[0]['event']['contexts']['data']
+              .where((x) => x['schema'].toString().contains('client_session'));
+          if (sessions.length != 1) {
+            return false;
+          }
+          clientSession1 = sessions.first;
           return true;
         }),
         isTrue);
@@ -64,8 +70,12 @@ void main() {
           if (events.length == 0) {
             return false;
           }
-          clientSession2 = events[0]['event']['contexts']['data'].firstWhere(
-              (x) => x['schema'].toString().contains('client_session'));
+          Iterable sessions = events[0]['event']['contexts']['data']
+              .where((x) => x['schema'].toString().contains('client_session'));
+          if (sessions.length != 1) {
+            return false;
+          }
+          clientSession2 = sessions.first;
           return true;
         }),
         isTrue);
@@ -92,8 +102,12 @@ void main() {
           if (events.length != 1) {
             return false;
           }
-          clientSession = events[0]['event']['contexts']['data'].firstWhere(
-              (x) => x['schema'].toString().contains('client_session'));
+          Iterable sessions = events[0]['event']['contexts']['data']
+              .where((x) => x['schema'].toString().contains('client_session'));
+          if (sessions.length != 1) {
+            return false;
+          }
+          clientSession = sessions.first;
           return true;
         }),
         isTrue);
@@ -105,5 +119,29 @@ void main() {
     expect(clientSession['data']['sessionId'], equals(sessionId));
     expect(clientSession['data']['userId'], equals(sessionUserId));
     expect(clientSession['data']['sessionIndex'], equals(sessionIndex));
+  });
+
+  testWidgets("doesn't add session context when disabled",
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp(testing: true));
+
+    Tracker tracker = await Snowplow.createTracker(
+        namespace: 'test-without-session',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(sessionContext: false));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          Iterable contexts = events[0]['event']['contexts']['data']
+              .where((x) => x['schema'].toString().contains('client_session'));
+          return contexts.isEmpty;
+        }),
+        isTrue);
   });
 }
