@@ -6,93 +6,91 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v1
         with:
+          flutter-version: '2.8.0'
           channel: 'stable'
-      - name: run tests
+      - name: Run Flutter Driver tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 30
+          target: default
           arch: x86_64
           profile: Nexus 6
-          script: |
-            cd example
-            flutter pub get
-            flutter drive --driver test_driver/integration_test.dart --target integration_test/configuration_test.dart
-            flutter drive --driver test_driver/integration_test.dart --target integration_test/events_test.dart
-            flutter drive --driver test_driver/integration_test.dart --target integration_test/session_test.dart
+          working-directory: example
+          script: flutter drive --driver test_driver/integration_test.dart --target integration_test/configuration_test.dart
       # - run: |
       #     cd example
       #     ./tool/ci_script.sh Pixel_API_28_AOSP
       #     flutter build apk
       #     flutter build appbundle
 
-  build-ios:
-    name: Build iOS flutter app
-    strategy:
-      matrix:
-        device:
-          - "iPhone 8 (13.3)"
-          - "iPhone 11 Pro (13.3)"
-      fail-fast: false
-    runs-on: macos-latest
-    steps:
-      - name: List all simulators
-        run: xcrun instruments -s
-      - name: Start Simulator
-        run: |
-          UDID=$(
-            xcrun instruments -s |
-            awk \
-              -F ' *[][]' \
-              -v 'device=${{ matrix.device }}' \
-              '$1 == device { print $2 }'
-          )
-          xcrun simctl boot "${UDID:?No Simulator with this name found}"
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-      - run: |
-          cd example
-          ./tool/ci_script.sh ${UDID}
-          flutter build apk
-          flutter build ios --release --no-codesign
-    #   - name: Run Flutter Driver tests
-    #     run: flutter drive --target=test_driver/app.dart
-    # runs-on: macos-latest
-    # steps:
-    #   - name: "List all simulators"
-    #     run: "xcrun instruments -s"
-    #   - name: "Start Simulator"
-    #     run: |
-    #       UDID=$(
-    #         xcrun instruments -s |
-    #         awk \
-    #           -F ' *[][]' \
-    #           -v 'device="iPhone 13 (15.2)"' \
-    #           '$1 == device { print $2 }'
-    #       )
-    #       xcrun simctl boot "${UDID:?No Simulator with this name found}"
-    #   - uses: actions/checkout@v2
-    #   - uses: subosito/flutter-action@v2
-    #     with:
-    #       channel: 'stable'
-    #   - run: |
-    #       cd example
-    #       ./tool/ci_script.sh "iPhone 13 (15.2)"
-    #       flutter build apk
-    #       flutter build ios --release --no-codesign
+  # build-ios:
+  #   name: Build iOS flutter app
+  #   strategy:
+  #     matrix:
+  #       device:
+  #         - "iPhone 8 (13.3)"
+  #         - "iPhone 11 Pro (13.3)"
+  #     fail-fast: false
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: List all simulators
+  #       run: xcrun instruments -s
+  #     - name: Start Simulator
+  #       run: |
+  #         UDID=$(
+  #           xcrun instruments -s |
+  #           awk \
+  #             -F ' *[][]' \
+  #             -v 'device=${{ matrix.device }}' \
+  #             '$1 == device { print $2 }'
+  #         )
+  #         xcrun simctl boot "${UDID:?No Simulator with this name found}"
+  #     - uses: actions/checkout@v2
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: 'stable'
+  #     - run: |
+  #         cd example
+  #         ./tool/ci_script.sh ${UDID}
+  #         flutter build apk
+  #         flutter build ios --release --no-codesign
+  #   #   - name: Run Flutter Driver tests
+  #   #     run: flutter drive --target=test_driver/app.dart
+  #   # runs-on: macos-latest
+  #   # steps:
+  #   #   - name: "List all simulators"
+  #   #     run: "xcrun instruments -s"
+  #   #   - name: "Start Simulator"
+  #   #     run: |
+  #   #       UDID=$(
+  #   #         xcrun instruments -s |
+  #   #         awk \
+  #   #           -F ' *[][]' \
+  #   #           -v 'device="iPhone 13 (15.2)"' \
+  #   #           '$1 == device { print $2 }'
+  #   #       )
+  #   #       xcrun simctl boot "${UDID:?No Simulator with this name found}"
+  #   #   - uses: actions/checkout@v2
+  #   #   - uses: subosito/flutter-action@v2
+  #   #     with:
+  #   #       channel: 'stable'
+  #   #   - run: |
+  #   #       cd example
+  #   #       ./tool/ci_script.sh "iPhone 13 (15.2)"
+  #   #       flutter build apk
+  #   #       flutter build ios --release --no-codesign
 
-  build-web:
-    name: Build web flutter app
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-      - run: chromedriver --port=4444 &
-      - run: |
-          cd example
-          ./tool/ci_script.sh web-server
+  # build-web:
+  #   name: Build web flutter app
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: 'stable'
+  #     - run: chromedriver --port=4444 &
+  #     - run: |
+  #         cd example
+  #         ./tool/ci_script.sh web-server
