@@ -27,17 +27,10 @@ struct TrackerConfigurationReader: Decodable {
 }
 
 extension TrackerConfigurationReader {
-    func toConfiguration() -> TrackerConfiguration {
+    static func defaultConfiguration() -> TrackerConfiguration {
         let trackerConfig = TrackerConfiguration()
         trackerConfig.trackerVersionSuffix(TrackerVersion.TRACKER_VERSION)
-        
-        if let appId = self.appId { trackerConfig.appId(appId) }
-        if let dp = self.devicePlatformType { trackerConfig.devicePlatform(dp) }
-        if let enc = self.base64Encoding { trackerConfig.base64Encoding(enc) }
-        if let pc = self.platformContext { trackerConfig.platformContext(pc) }
-        if let gc = self.geoLocationContext { trackerConfig.geoLocationContext(gc) }
-        if let sc = self.sessionContext { trackerConfig.sessionContext(sc) }
-        
+
         trackerConfig.applicationContext(false)
         trackerConfig.screenContext(false)
         trackerConfig.screenViewAutotracking(false)
@@ -46,6 +39,19 @@ extension TrackerConfigurationReader {
         trackerConfig.exceptionAutotracking(false)
         trackerConfig.diagnosticAutotracking(false)
         
+        return trackerConfig
+    }
+
+    func toConfiguration() -> TrackerConfiguration {
+        let trackerConfig = TrackerConfigurationReader.defaultConfiguration()
+        
+        if let appId = self.appId { trackerConfig.appId(appId) }
+        if let dp = self.devicePlatformType { trackerConfig.devicePlatform(dp) }
+        if let enc = self.base64Encoding { trackerConfig.base64Encoding(enc) }
+        if let pc = self.platformContext { trackerConfig.platformContext(pc) }
+        if let gc = self.geoLocationContext { trackerConfig.geoLocationContext(gc) }
+        if let sc = self.sessionContext { trackerConfig.sessionContext(sc) }
+
         return trackerConfig
     }
 }

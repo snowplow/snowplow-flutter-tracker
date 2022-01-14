@@ -14,7 +14,6 @@ package com.snowplowanalytics.snowplow_flutter_tracker.readers.configurations
 import android.content.Context
 import com.snowplowanalytics.snowplow.configuration.TrackerConfiguration
 import com.snowplowanalytics.snowplow.tracker.DevicePlatform
-import com.snowplowanalytics.snowplow.tracker.LogLevel
 import com.snowplowanalytics.snowplow_flutter_tracker.TrackerVersion
 
 class TrackerConfigurationReader(values: Map<String, Any>) {
@@ -28,8 +27,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
     val sessionContext: Boolean? by valuesDefault
 
     fun toConfiguration(context: Context): TrackerConfiguration {
-        val trackerConfig = TrackerConfiguration(appId ?: context.getPackageName())
-                .trackerVersionSuffix(TrackerVersion.TRACKER_VERSION)
+        val trackerConfig = DefaultTrackerConfiguration.toConfiguration(appId, context)
 
         devicePlatform?.let {
             trackerConfig.devicePlatform(when (it) {
@@ -47,6 +45,15 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
         platformContext?.let { trackerConfig.platformContext(it) }
         geoLocationContext?.let { trackerConfig.geoLocationContext(it) }
         sessionContext?.let { trackerConfig.sessionContext(it) }
+
+        return trackerConfig
+    }
+}
+
+object DefaultTrackerConfiguration {
+    fun toConfiguration(appId: String?, context: Context): TrackerConfiguration {
+        val trackerConfig = TrackerConfiguration(appId ?: context.getPackageName())
+                .trackerVersionSuffix(TrackerVersion.TRACKER_VERSION)
 
         trackerConfig.applicationContext(false)
         trackerConfig.screenContext(false)

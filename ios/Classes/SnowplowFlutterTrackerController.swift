@@ -18,6 +18,8 @@ class SnowplowFlutterTrackerController {
         
         if let trackerConfig = message.trackerConfig {
             controllers.append(trackerConfig.toConfiguration())
+        } else {
+            controllers.append(TrackerConfigurationReader.defaultConfiguration())
         }
         if let subjectConfig = message.subjectConfig {
             controllers.append(subjectConfig.toConfiguration())

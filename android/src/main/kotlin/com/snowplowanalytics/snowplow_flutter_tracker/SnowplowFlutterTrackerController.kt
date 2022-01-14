@@ -15,6 +15,7 @@ import android.content.Context
 
 import com.snowplowanalytics.snowplow.Snowplow;
 import com.snowplowanalytics.snowplow.configuration.Configuration;
+import com.snowplowanalytics.snowplow_flutter_tracker.readers.configurations.DefaultTrackerConfiguration
 import com.snowplowanalytics.snowplow_flutter_tracker.readers.messages.*
 
 object SnowplowFlutterTrackerController {
@@ -27,7 +28,11 @@ object SnowplowFlutterTrackerController {
         val networkConfiguration = networkConfigReader.toConfiguration()
 
         val trackerConfigReader = messageReader.trackerConfig
-        trackerConfigReader?.let { controllers.add(it.toConfiguration(context)) }
+        if (trackerConfigReader == null) {
+            controllers.add(DefaultTrackerConfiguration.toConfiguration(null, context))
+        } else {
+            controllers.add(trackerConfigReader.toConfiguration(context))
+        }
 
         val subjectConfigReader = messageReader.subjectConfig
         subjectConfigReader?.let { controllers.add(it.toConfiguration()) }
