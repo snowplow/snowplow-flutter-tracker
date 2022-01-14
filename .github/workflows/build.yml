@@ -9,6 +9,29 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: "11.x"
+
+      # -- Micro --
+      - name: Cache Micro
+        id: cache-micro
+        uses: actions/cache@v2
+        with:
+          path: micro.jar
+          key: ${{ runner.os }}-micro
+
+      - name: Get micro
+        if: steps.cache-micro.outputs.cache-hit != 'true'
+        run: curl -o micro.jar -L https://github.com/snowplow-incubator/snowplow-micro/releases/download/micro-1.1.2/snowplow-micro-1.1.2.jar
+
+      - name: Run Micro in background
+        run: java -jar micro.jar --collector-config DemoApp/tests/micro/micro.conf --iglu DemoApp/tests/micro/iglu.json &
+
+      - name: Wait on Micro endpoint
+        timeout-minutes: 2
+        run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
+
+      - name: Prepare DemoApp for Micro
+        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/10.0.2.2:9090\'\;/" example/integration_test/helpers.dart
+
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.8.0'
