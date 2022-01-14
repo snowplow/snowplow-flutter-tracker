@@ -10,21 +10,16 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'dart:async';
-// In order to *not* need this ignore, consider extracting the "web" version
-// of your plugin as a separate package, instead of inlining it in the same
-// package as the core of your plugin.
-// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'readers/configurations/configuration_reader.dart';
-import 'readers/messages/event_message_reader.dart';
-import 'readers/messages/set_user_id_message_reader.dart';
-import 'snowplow_flutter_tracker_controller.dart';
+import 'src/web/readers/configurations/configuration_reader.dart';
+import 'src/web/readers/messages/event_message_reader.dart';
+import 'src/web/readers/messages/set_user_id_message_reader.dart';
+import 'src/web/snowplow_flutter_tracker_controller.dart';
 
-/// A web implementation of the SnowplowFlutterTracker plugin.
-class SnowplowFlutterTrackerPlugin {
+class SnowplowFlutterTrackerPluginWeb {
   static void registerWith(Registrar registrar) {
     final MethodChannel channel = MethodChannel(
       'snowplow_flutter_tracker',
@@ -32,7 +27,7 @@ class SnowplowFlutterTrackerPlugin {
       registrar,
     );
 
-    final pluginInstance = SnowplowFlutterTrackerPlugin();
+    final pluginInstance = SnowplowFlutterTrackerPluginWeb();
     channel.setMethodCallHandler(pluginInstance.handleMethodCall);
 
     // Add JS dynamically if not already imported (this is needed to prevent hot reload or refresh to import it again and again)

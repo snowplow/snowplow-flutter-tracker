@@ -30,8 +30,8 @@ flutter:
       ios:
         pluginClass: SnowplowFlutterTrackerPlugin
       web:
-        pluginClass: SnowplowFlutterTrackerPlugin
-        fileName: src/web/snowplow_flutter_tracker_plugin.dart
+        pluginClass: SnowplowFlutterTrackerPluginWeb
+        fileName: snowplow_flutter_tracker_plugin_web.dart
 
   assets:
     - packages/snowplow_flutter_tracker/assets/sp.js
