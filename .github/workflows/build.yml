@@ -3,6 +3,7 @@ on: [push, pull_request]
 jobs:
   build:
     name: Analyze and run unit tests
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
