@@ -46,6 +46,7 @@ jobs:
       - name: Update endpoint for Micro
         run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/0.0.0.0:9090\'\;/" example/integration_test/helpers.dart
 
+      # -- Integration tests --
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.8.0'
@@ -59,10 +60,7 @@ jobs:
           arch: x86_64
           profile: Nexus 6
           working-directory: example
-          script: |
-            flutter drive --driver test_driver/integration_test.dart --target integration_test/configuration_test.dart
-            flutter drive --driver test_driver/integration_test.dart --target integration_test/events_test.dart
-            flutter drive --driver test_driver/integration_test.dart --target integration_test/session_test.dart
+          script: ./tool/ci_script.sh
 
   build-ios:
     name: Integration tests on iOS
@@ -90,8 +88,9 @@ jobs:
         run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
 
       - name: Update endpoint for Micro
-        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/10.0.2.2:9090\'\;/" example/integration_test/helpers.dart
+        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/0.0.0.0:9090\'\;/" example/integration_test/helpers.dart
 
+      # -- Integration tests --
       - name: "Start Simulator"
         uses: futureware-tech/simulator-action@v1
         with:
@@ -108,10 +107,7 @@ jobs:
 
       - name: Run tests
         working-directory: example
-        run: |
-          flutter drive --driver test_driver/integration_test.dart --target integration_test/configuration_test.dart
-          flutter drive --driver test_driver/integration_test.dart --target integration_test/events_test.dart
-          flutter drive --driver test_driver/integration_test.dart --target integration_test/session_test.dart
+        run: ./tool/ci_script.sh
 
   build-web:
     name: Integration tests on Web
@@ -142,6 +138,7 @@ jobs:
       - name: Update endpoint for Micro
         run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/0.0.0.0:9090\'\;/" example/integration_test/helpers.dart
 
+      # -- Integration tests --
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.8.0'
@@ -151,4 +148,4 @@ jobs:
 
       - name: Run tests
         working-directory: example
-        run: ./tool/ci_script.sh web-server
+        run: ./tool/ci_script.sh "-d web-server"
