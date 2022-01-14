@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v2
         with:
           java-version: "12.x"
       - uses: subosito/flutter-action@v2
@@ -14,8 +14,7 @@ jobs:
           channel: 'stable'
       - run: |
           cd example
-          flutter pub get
-          flutter test
+          ./tool/ci_script.sh Pixel_API_28_AOSP
           flutter build apk
           flutter build appbundle
   build-ios:
@@ -23,16 +22,12 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
-        with:
-          java-version: "12.x"
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
       - run: |
           cd example
-          flutter pub get
-          flutter test
+          ./tool/ci_script.sh "iPhone 13"
           flutter build apk
           flutter build ios --release --no-codesign
   build-web:
@@ -43,7 +38,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - run: chromedriver --port=4444 &
       - run: |
           cd example
-          flutter pub get
-          flutter build web
+          ./tool/ci_script.sh web-server

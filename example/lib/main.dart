@@ -9,6 +9,7 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -24,6 +25,7 @@ class MyApp extends StatefulWidget {
   const MyApp({Key? key, this.testing}) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   State<MyApp> createState() => _MyAppState(testing: testing);
 }
 
@@ -73,7 +75,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           await Snowplow.getSessionUserId(tracker: 'ns1') ?? 'Unknown';
       sessionIndex = await Snowplow.getSessionIndex(tracker: 'ns1');
     } on PlatformException catch (err) {
-      print(err);
+      if (kDebugMode) {
+        print(err);
+      }
     }
 
     if (!mounted) return;

@@ -39,7 +39,7 @@ class SnowplowTests {
 
   static Future<bool> checkMicroResponse(
       String api, bool Function(dynamic body) validation) async {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
       final response = await http.get(Uri.parse(microEndpoint + api));
       if (validation(jsonDecode(response.body))) {
         return true;
