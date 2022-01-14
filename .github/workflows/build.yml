@@ -29,13 +29,14 @@ jobs:
         timeout-minutes: 2
         run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
 
-      - name: Prepare DemoApp for Micro
+      - name: Update endpoint for Micro
         run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/10.0.2.2:9090\'\;/" example/integration_test/helpers.dart
 
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.8.0'
           channel: 'stable'
+
       - name: Run Flutter Driver tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -44,69 +45,86 @@ jobs:
           arch: x86_64
           profile: Nexus 6
           working-directory: example
-          script: flutter drive --driver test_driver/integration_test.dart --target integration_test/configuration_test.dart
-      # - run: |
-      #     cd example
-      #     ./tool/ci_script.sh Pixel_API_28_AOSP
-      #     flutter build apk
-      #     flutter build appbundle
+          script: |
+            flutter drive --driver test_driver/integration_test.dart --target integration_test/configuration_test.dart
+            flutter drive --driver test_driver/integration_test.dart --target integration_test/events_test.dart
+            flutter drive --driver test_driver/integration_test.dart --target integration_test/session_test.dart
 
-  # build-ios:
-  #   name: Build iOS flutter app
-  #   strategy:
-  #     matrix:
-  #       device:
-  #         - "iPhone 8 (13.3)"
-  #         - "iPhone 11 Pro (13.3)"
-  #     fail-fast: false
-  #   runs-on: macos-latest
-  #   steps:
-  #     - name: List all simulators
-  #       run: xcrun instruments -s
-  #     - name: Start Simulator
-  #       run: |
-  #         UDID=$(
-  #           xcrun instruments -s |
-  #           awk \
-  #             -F ' *[][]' \
-  #             -v 'device=${{ matrix.device }}' \
-  #             '$1 == device { print $2 }'
-  #         )
-  #         xcrun simctl boot "${UDID:?No Simulator with this name found}"
-  #     - uses: actions/checkout@v2
-  #     - uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: 'stable'
-  #     - run: |
-  #         cd example
-  #         ./tool/ci_script.sh ${UDID}
-  #         flutter build apk
-  #         flutter build ios --release --no-codesign
-  #   #   - name: Run Flutter Driver tests
-  #   #     run: flutter drive --target=test_driver/app.dart
-  #   # runs-on: macos-latest
-  #   # steps:
-  #   #   - name: "List all simulators"
-  #   #     run: "xcrun instruments -s"
-  #   #   - name: "Start Simulator"
-  #   #     run: |
-  #   #       UDID=$(
-  #   #         xcrun instruments -s |
-  #   #         awk \
-  #   #           -F ' *[][]' \
-  #   #           -v 'device="iPhone 13 (15.2)"' \
-  #   #           '$1 == device { print $2 }'
-  #   #       )
-  #   #       xcrun simctl boot "${UDID:?No Simulator with this name found}"
-  #   #   - uses: actions/checkout@v2
-  #   #   - uses: subosito/flutter-action@v2
-  #   #     with:
-  #   #       channel: 'stable'
-  #   #   - run: |
-  #   #       cd example
-  #   #       ./tool/ci_script.sh "iPhone 13 (15.2)"
-  #   #       flutter build apk
-  #   #       flutter build ios --release --no-codesign
+  build-ios:
+    name: Build iOS flutter app
+    runs-on: macos-latest
+    steps:
+
+      # -- Micro --
+      - name: Cache Micro
+        id: cache-micro
+        uses: actions/cache@v2
+        with:
+          path: micro.jar
+          key: ${{ runner.os }}-micro
+
+      - name: Get micro
+        if: steps.cache-micro.outputs.cache-hit != 'true'
+        run: curl -o micro.jar -L https://github.com/snowplow-incubator/snowplow-micro/releases/download/micro-1.1.2/snowplow-micro-1.1.2.jar
+
+      - name: Run Micro in background
+        run: java -jar micro.jar --collector-config example/tool/micro.conf --iglu example/tool/iglu.json &
+
+      - name: Wait on Micro endpoint
+        timeout-minutes: 2
+        run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
+
+      - name: Update endpoint for Micro
+        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/10.0.2.2:9090\'\;/" example/integration_test/helpers.dart
+
+      - name: "Start Simulator"
+        uses: futureware-tech/simulator-action@v1
+        with:
+          model: iPhone 13
+          erase_before_boot: true
+          shutdown_after_job: true
+
+      - uses: actions/checkout@v2
+
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.8.0'
+          channel: 'stable'
+
+      - run: "flutter clean"
+
+      - name: Run tests
+        working-directory: example
+        run: |
+          flutter drive --driver test_driver/integration_test.dart --target integration_test/configuration_test.dart
+          flutter drive --driver test_driver/integration_test.dart --target integration_test/events_test.dart
+          flutter drive --driver test_driver/integration_test.dart --target integration_test/session_test.dart
+
+    #   - name: Run Flutter Driver tests
+    #     run: flutter drive --target=test_driver/app.dart
+    # runs-on: macos-latest
+    # steps:
+    #   - name: "List all simulators"
+    #     run: "xcrun instruments -s"
+    #   - name: "Start Simulator"
+    #     run: |
+    #       UDID=$(
+    #         xcrun instruments -s |
+    #         awk \
+    #           -F ' *[][]' \
+    #           -v 'device="iPhone 13 (15.2)"' \
+    #           '$1 == device { print $2 }'
+    #       )
+    #       xcrun simctl boot "${UDID:?No Simulator with this name found}"
+    #   - uses: actions/checkout@v2
+    #   - uses: subosito/flutter-action@v2
+    #     with:
+    #       channel: 'stable'
+    #   - run: |
+    #       cd example
+    #       ./tool/ci_script.sh "iPhone 13 (15.2)"
+    #       flutter build apk
+    #       flutter build ios --release --no-codesign
 
   # build-web:
   #   name: Build web flutter app
