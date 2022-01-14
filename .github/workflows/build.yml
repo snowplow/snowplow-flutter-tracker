@@ -23,7 +23,7 @@ jobs:
         run: curl -o micro.jar -L https://github.com/snowplow-incubator/snowplow-micro/releases/download/micro-1.1.2/snowplow-micro-1.1.2.jar
 
       - name: Run Micro in background
-        run: java -jar micro.jar --collector-config DemoApp/tests/micro/micro.conf --iglu DemoApp/tests/micro/iglu.json &
+        run: java -jar micro.jar --collector-config example/tool/micro.conf --iglu example/tool/iglu.json &
 
       - name: Wait on Micro endpoint
         timeout-minutes: 2
