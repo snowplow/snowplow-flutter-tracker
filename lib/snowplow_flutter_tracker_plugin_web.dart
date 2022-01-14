@@ -12,6 +12,7 @@
 import 'dart:async';
 import 'dart:html' as html;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'src/web/readers/configurations/configuration_reader.dart';
@@ -40,8 +41,10 @@ class SnowplowFlutterTrackerPluginWeb {
     }
 
     if (!foundSpJs) {
-      print(
-          "WARNING: Importing 'sp.js' from assets, consider importing it directly from your index.html");
+      if (kDebugMode) {
+        print(
+            "WARNING: Importing 'sp.js' from assets, consider importing it directly from your index.html");
+      }
       html.document.body!.append(html.ScriptElement()
         ..innerHtml =
             ' ;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[]; p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments) };p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1; n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script","assets/packages/snowplow_flutter_tracker/assets/sp.js","snowplow")); '

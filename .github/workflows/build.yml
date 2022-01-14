@@ -1,8 +1,21 @@
 name: Build and Test
 on: [push, pull_request]
 jobs:
+  build:
+    name: Analyze and run unit tests
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.8.0'
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter format -n --set-exit-if-changed .
+      - run: flutter test
+
   build-android:
-    name: Build Android flutter app
+    name: Integration tests on Android
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,7 +43,7 @@ jobs:
         run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
 
       - name: Update endpoint for Micro
-        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/10.0.2.2:9090\'\;/" example/integration_test/helpers.dart
+        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/0.0.0.0:9090\'\;/" example/integration_test/helpers.dart
 
       - uses: subosito/flutter-action@v1
         with:
@@ -51,10 +64,9 @@ jobs:
             flutter drive --driver test_driver/integration_test.dart --target integration_test/session_test.dart
 
   build-ios:
-    name: Build iOS flutter app
+    name: Integration tests on iOS
     runs-on: macos-latest
     steps:
-
       - uses: actions/checkout@v2
 
       # -- Micro --
@@ -100,34 +112,8 @@ jobs:
           flutter drive --driver test_driver/integration_test.dart --target integration_test/events_test.dart
           flutter drive --driver test_driver/integration_test.dart --target integration_test/session_test.dart
 
-    #   - name: Run Flutter Driver tests
-    #     run: flutter drive --target=test_driver/app.dart
-    # runs-on: macos-latest
-    # steps:
-    #   - name: "List all simulators"
-    #     run: "xcrun instruments -s"
-    #   - name: "Start Simulator"
-    #     run: |
-    #       UDID=$(
-    #         xcrun instruments -s |
-    #         awk \
-    #           -F ' *[][]' \
-    #           -v 'device="iPhone 13 (15.2)"' \
-    #           '$1 == device { print $2 }'
-    #       )
-    #       xcrun simctl boot "${UDID:?No Simulator with this name found}"
-    #   - uses: actions/checkout@v2
-    #   - uses: subosito/flutter-action@v2
-    #     with:
-    #       channel: 'stable'
-    #   - run: |
-    #       cd example
-    #       ./tool/ci_script.sh "iPhone 13 (15.2)"
-    #       flutter build apk
-    #       flutter build ios --release --no-codesign
-
   build-web:
-    name: Build web flutter app
+    name: Integration tests on Web
     runs-on: ubuntu-latest
     steps:
 
@@ -153,14 +139,15 @@ jobs:
         run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
 
       - name: Update endpoint for Micro
-        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/10.0.2.2:9090\'\;/" example/integration_test/helpers.dart
+        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/0.0.0.0:9090\'\;/" example/integration_test/helpers.dart
 
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v1
         with:
+          flutter-version: '2.8.0'
           channel: 'stable'
 
       - run: chromedriver --port=4444 &
 
-      - run: |
-          cd example
-          ./tool/ci_script.sh web-server
+      - name: Run tests
+        working-directory: example
+        run: ./tool/ci_script.sh web-server
