@@ -55,6 +55,8 @@ jobs:
     runs-on: macos-latest
     steps:
 
+      - uses: actions/checkout@v2
+
       # -- Micro --
       - name: Cache Micro
         id: cache-micro
@@ -83,8 +85,6 @@ jobs:
           model: iPhone 13
           erase_before_boot: true
           shutdown_after_job: true
-
-      - uses: actions/checkout@v2
 
       - uses: subosito/flutter-action@v1
         with:
@@ -126,15 +126,41 @@ jobs:
     #       flutter build apk
     #       flutter build ios --release --no-codesign
 
-  # build-web:
-  #   name: Build web flutter app
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: 'stable'
-  #     - run: chromedriver --port=4444 &
-  #     - run: |
-  #         cd example
-  #         ./tool/ci_script.sh web-server
+  build-web:
+    name: Build web flutter app
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      # -- Micro --
+      - name: Cache Micro
+        id: cache-micro
+        uses: actions/cache@v2
+        with:
+          path: micro.jar
+          key: ${{ runner.os }}-micro
+
+      - name: Get micro
+        if: steps.cache-micro.outputs.cache-hit != 'true'
+        run: curl -o micro.jar -L https://github.com/snowplow-incubator/snowplow-micro/releases/download/micro-1.1.2/snowplow-micro-1.1.2.jar
+
+      - name: Run Micro in background
+        run: java -jar micro.jar --collector-config example/tool/micro.conf --iglu example/tool/iglu.json &
+
+      - name: Wait on Micro endpoint
+        timeout-minutes: 2
+        run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
+
+      - name: Update endpoint for Micro
+        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/10.0.2.2:9090\'\;/" example/integration_test/helpers.dart
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - run: chromedriver --port=4444 &
+
+      - run: |
+          cd example
+          ./tool/ci_script.sh web-server
