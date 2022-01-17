@@ -1,3 +1,0 @@
-# Events
-
-bla bla bla.
