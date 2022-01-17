@@ -43,9 +43,6 @@ jobs:
         timeout-minutes: 2
         run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
 
-      - name: Update endpoint for Micro
-        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/10.0.2.2:9090\'\;/" example/integration_test/helpers.dart
-
       # -- Integration tests --
       - uses: subosito/flutter-action@v1
         with:
@@ -60,7 +57,7 @@ jobs:
           arch: x86_64
           profile: Nexus 6
           working-directory: example
-          script: ./tool/ci_script.sh
+          script: ./tool/e2e_tests.sh http://10.0.2.2:9090
 
   build-ios:
     name: Integration tests on iOS
@@ -87,9 +84,6 @@ jobs:
         timeout-minutes: 2
         run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
 
-      - name: Update endpoint for Micro
-        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/0.0.0.0:9090\'\;/" example/integration_test/helpers.dart
-
       # -- Integration tests --
       - name: "Start Simulator"
         uses: futureware-tech/simulator-action@v1
@@ -107,7 +101,7 @@ jobs:
 
       - name: Run tests
         working-directory: example
-        run: ./tool/ci_script.sh
+        run: ./tool/e2e_tests.sh http://0.0.0.0:9090
 
   build-web:
     name: Integration tests on Web
@@ -135,9 +129,6 @@ jobs:
         timeout-minutes: 2
         run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
 
-      - name: Update endpoint for Micro
-        run: perl -i -pe "s/^.*microEndpoint =\K.*/ \'http:\/\/0.0.0.0:9090\'\;/" example/integration_test/helpers.dart
-
       # -- Integration tests --
       - uses: subosito/flutter-action@v1
         with:
@@ -148,4 +139,4 @@ jobs:
 
       - name: Run tests
         working-directory: example
-        run: ./tool/ci_script.sh "-d web-server"
+        run: ./tool/e2e_tests.sh http://0.0.0.0:9090 "-d web-server"

@@ -48,7 +48,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (testing == null || testing == false) {
       await Snowplow.createTracker(
           namespace: "ns1",
-          endpoint: "http://192.168.100.127:9090",
+          endpoint: const String.fromEnvironment('ENDPOINT',
+              defaultValue: 'http://0.0.0.0:9090'),
           trackerConfig: const TrackerConfiguration(webPageContext: false),
           gdprConfig: const GdprConfiguration(
               basisForProcessing: 'consent',

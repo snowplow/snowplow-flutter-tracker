@@ -60,5 +60,3 @@ Visit documentation about [tracking events](03-tracking-events.md) to learn abou
 Testing that your event tracking is properly configured can be as important as testing the other aspects of your app. It confirms that you are generating the events you expect.
 
 We provide two types of pipeline for testing and debugging. [Snowplow Mini](https://docs.snowplowanalytics.com/docs/understanding-your-pipeline/what-is-snowplow-mini/) is especially useful in manual schema and pipeline testing. [Snowplow Micro](https://docs.snowplowanalytics.com/docs/understanding-your-pipeline/what-is-snowplow-micro/) is a minimal pipeline designed to be used as part of your app's automated test suite.
-
-Check out the [example Flutter app](06-example-app.md) to see the tracker used with a Snowplow Micro.

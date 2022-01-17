@@ -16,7 +16,8 @@ import 'package:snowplow_flutter_tracker/snowplow.dart';
 import 'dart:convert';
 
 class SnowplowTests {
-  static const microEndpoint = 'http://192.168.100.127:9090';
+  static const microEndpoint =
+      String.fromEnvironment('ENDPOINT', defaultValue: 'http://0.0.0.0:9090');
 
   static Future<void> createTracker() async {
     await Snowplow.createTracker(namespace: 'test', endpoint: microEndpoint);
