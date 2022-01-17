@@ -27,7 +27,7 @@ class NetworkConfiguration {
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
       'endpoint': endpoint,
-      'method': method == null ? null : (method == Method.get ? 'get' : 'post')
+      'method': method?.name
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

@@ -164,8 +164,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ),
               ElevatedButton(
                 onPressed: () {
-                  const event = ConsentGranted(
-                    expiry: '2021-12-30T09:03:51.196111Z',
+                  final event = ConsentGranted(
+                    expiry: DateTime.parse('2021-12-30T09:03:51.196111Z'),
                     documentId: '1234',
                     version: '5',
                     name: 'name1',

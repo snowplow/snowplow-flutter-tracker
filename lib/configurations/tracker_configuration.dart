@@ -21,8 +21,7 @@ class TrackerConfiguration {
   final String? appId;
 
   /// The device platform the tracker runs on.
-  /// Allowed platform values are: `mob` (Mobile/Tablet), `web` (Web), `pc` (Desktop/Laptop), `srv` (Server-side app), `app` (General app), `tv` (Connected TV), `cnsl` (Games Console), `iot` (Internet of things)
-  final String? devicePlatform;
+  final DevicePlatform? devicePlatform;
 
   /// Indicates whether payload JSON data should be base64 encoded.
   ///
@@ -61,7 +60,7 @@ class TrackerConfiguration {
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
       'appId': appId,
-      'devicePlatform': devicePlatform,
+      'devicePlatform': devicePlatform?.name,
       'base64Encoding': base64Encoding,
       'platformContext': platformContext,
       'geoLocationContext': geoLocationContext,
@@ -71,4 +70,31 @@ class TrackerConfiguration {
     conf.removeWhere((key, value) => value == null);
     return conf;
   }
+}
+
+/// Device platform the tracker runs on
+enum DevicePlatform {
+  /// Mobile/Tablet,
+  mob,
+
+  /// Web
+  web,
+
+  /// Desktop/Laptop
+  pc,
+
+  /// Server-side app
+  srv,
+
+  /// General app
+  app,
+
+  /// Connected TV
+  tv,
+
+  /// Games Console
+  cnsl,
+
+  /// Internet of things
+  iot
 }

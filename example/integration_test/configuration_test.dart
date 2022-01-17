@@ -11,12 +11,8 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_flutter_tracker/snowplow.dart';
-import 'package:snowplow_flutter_tracker/events/structured.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/subject_configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/gdpr_configuration.dart';
+import 'package:snowplow_flutter_tracker/snowplow_flutter_tracker.dart';
 
 import 'helpers.dart';
 import 'package:snowplow_flutter_tracker_example/main.dart';
@@ -129,6 +125,27 @@ void main() {
               (context['data']['documentDescription'] ==
                   'this document describes consent basis for processing');
         }),
+        isTrue);
+  });
+
+  testWidgets("sets app ID and platform based on configuration",
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp(testing: true));
+
+    Tracker tracker = await Snowplow.createTracker(
+        namespace: 'app-platform',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            appId: 'App Z', devicePlatform: DevicePlatform.iot));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            (events[0]['event']['app_id'] == 'App Z') &&
+            (events[0]['event']['platform'] == 'iot')),
         isTrue);
   });
 }

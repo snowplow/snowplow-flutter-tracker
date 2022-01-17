@@ -17,11 +17,11 @@ class NetworkConfigurationReader extends NetworkConfiguration {
             endpoint: map['endpoint'],
             method: map['method'] == null
                 ? null
-                : (map['method'] == 'get' ? Method.get : Method.post));
+                : Method.values.byName(map['method']));
 
   void addTrackerOptions(dynamic options) {
     if (method != null) {
-      options['eventMethod'] = method;
+      options['eventMethod'] = method?.name;
     }
   }
 }

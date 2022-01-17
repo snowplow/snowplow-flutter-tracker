@@ -15,7 +15,7 @@ import 'event_reader.dart';
 class ConsentGrantedReader extends ConsentGranted implements EventReader {
   ConsentGrantedReader(dynamic map)
       : super(
-            expiry: map['expiry'],
+            expiry: DateTime.parse(map['expiry']),
             documentId: map['documentId'],
             version: map['version'],
             name: map['name'],
@@ -33,7 +33,7 @@ class ConsentGrantedReader extends ConsentGranted implements EventReader {
       'version': version,
       'name': name,
       'description': documentDescription,
-      'expiry': expiry
+      'expiry': expiry.toIso8601String()
     };
   }
 }

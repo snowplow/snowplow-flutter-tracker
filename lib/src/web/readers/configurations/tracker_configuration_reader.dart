@@ -15,7 +15,9 @@ class TrackerConfigurationReader extends TrackerConfiguration {
   TrackerConfigurationReader(dynamic map)
       : super(
             appId: map['appId'],
-            devicePlatform: map['devicePlatform'],
+            devicePlatform: map['devicePlatform'] == null
+                ? null
+                : DevicePlatform.values.byName(map['devicePlatform']),
             base64Encoding: map['base64Encoding'],
             platformContext: map['platformContext'],
             geoLocationContext: map['geoLocationContext'],
@@ -27,7 +29,7 @@ class TrackerConfigurationReader extends TrackerConfiguration {
       options['appId'] = appId;
     }
     if (devicePlatform != null) {
-      options['platform'] = devicePlatform;
+      options['platform'] = devicePlatform?.name;
     }
     if (base64Encoding != null) {
       options['encodeBase64'] = base64Encoding;

@@ -59,6 +59,8 @@ class SubjectConfiguration {
 
   /// The language set on the device.
   ///
+  /// Populates the `lang` field.
+  ///
   /// Only configurable on iOS and Android. Ignored on Web where it is automatically assigned.
   final String? language;
 

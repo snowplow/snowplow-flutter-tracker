@@ -13,13 +13,13 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  uuid: 3.0.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
   http: ^0.13.4
+  uuid: 3.0.5
 
 flutter:
   plugin:

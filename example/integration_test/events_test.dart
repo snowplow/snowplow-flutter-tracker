@@ -115,8 +115,8 @@ void main() {
   testWidgets("tracks a consent granted event", (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp(testing: true));
 
-    const consentGranted = ConsentGranted(
-      expiry: '2021-12-30T09:03:51.196111Z',
+    final consentGranted = ConsentGranted(
+      expiry: DateTime.parse('2021-12-30T09:03:51.196Z'),
       documentId: '1234',
       version: '5',
       name: 'name1',
@@ -128,7 +128,7 @@ void main() {
         await SnowplowTests.checkMicroGood((events) =>
             (events.length == 1) &&
             (events[0]['event']['unstruct_event']['data']['data']['expiry'] ==
-                '2021-12-30T09:03:51.196111Z')),
+                '2021-12-30T09:03:51.196Z')),
         isTrue);
   });
 

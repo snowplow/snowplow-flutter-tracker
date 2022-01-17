@@ -19,8 +19,8 @@ import 'package:snowplow_flutter_tracker/events/event.dart';
 /// {@category Events}
 @immutable
 class ConsentGranted implements Event {
-  /// The expiry (date-time string, e.g.: "2022-01-01T00:00:00Z")
-  final String expiry;
+  /// The expiry date-time of the consent.
+  final DateTime expiry;
 
   /// The consent document ID.
   final String documentId;
@@ -49,7 +49,7 @@ class ConsentGranted implements Event {
   @override
   Map<String, Object?> toMap() {
     final data = <String, Object?>{
-      'expiry': expiry,
+      'expiry': expiry.toIso8601String(),
       'documentId': documentId,
       'version': version,
       'name': name,

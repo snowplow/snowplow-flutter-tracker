@@ -47,7 +47,8 @@ void main() {
     await Snowplow.createTracker(
         namespace: 'tns1',
         endpoint: 'https://snowplowanalytics.com',
-        trackerConfig: const TrackerConfiguration(base64Encoding: true),
+        trackerConfig: const TrackerConfiguration(
+            devicePlatform: DevicePlatform.iot, base64Encoding: true),
         gdprConfig: const GdprConfiguration(
             basisForProcessing: 'b',
             documentId: 'd',
@@ -59,7 +60,7 @@ void main() {
         isMethodCall('createTracker', arguments: {
           'namespace': 'tns1',
           'networkConfig': {'endpoint': 'https://snowplowanalytics.com'},
-          'trackerConfig': {'base64Encoding': true},
+          'trackerConfig': {'devicePlatform': 'iot', 'base64Encoding': true},
           'gdprConfig': {
             'basisForProcessing': 'b',
             'documentId': 'd',
@@ -143,8 +144,8 @@ void main() {
   });
 
   test('tracks consent granted event', () async {
-    Event event = const ConsentGranted(
-      expiry: '2021-10-10',
+    Event event = ConsentGranted(
+      expiry: DateTime.parse('2021-12-30T09:03:51.196Z'),
       documentId: 'd1',
       version: '10',
     );
@@ -155,7 +156,7 @@ void main() {
         isMethodCall('trackConsentGranted', arguments: {
           'tracker': 'tns1',
           'eventData': {
-            'expiry': '2021-10-10',
+            'expiry': '2021-12-30T09:03:51.196Z',
             'documentId': 'd1',
             'version': '10'
           }
