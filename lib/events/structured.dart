@@ -14,7 +14,8 @@ import 'package:flutter/foundation.dart';
 import 'package:snowplow_flutter_tracker/events/event.dart';
 
 /// Event to capture custom consumer interactions without the need to define a custom schema.
-/// {@category Events}
+/// {@category Tracking events}
+/// {@category Adding data to your events}
 @immutable
 class Structured implements Event {
   /// Name you for the group of objects you want to track e.g. "media", "ecomm".

@@ -1,4 +1,4 @@
-# Tracking Events
+# Tracking events
 
 Snowplow has been built to enable you to track a wide range of events that occur when users interact with your apps.
 

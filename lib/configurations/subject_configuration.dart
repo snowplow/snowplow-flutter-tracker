@@ -13,7 +13,7 @@ import 'package:flutter/foundation.dart';
 
 /// Subject information about tracked user and device that is added to events.
 ///
-/// {@category Configuration}
+/// {@category Initialization and configuration}
 @immutable
 class SubjectConfiguration {
   /// Business ID of the user.

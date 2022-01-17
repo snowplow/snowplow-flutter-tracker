@@ -18,7 +18,8 @@ import 'package:snowplow_flutter_tracker/events/event.dart';
 /// Self-describing events are a [data structure based on JSON Schemas](https://docs.snowplowanalytics.com/docs/understanding-tracking-design/understanding-schemas-and-validation/) and can have arbitrarily many fields.
 /// To define your own custom self-describing event, you must create a JSON schema for that event and upload it to an [Iglu Schema Repository](https://github.com/snowplow/iglu) using [igluctl](https://docs.snowplowanalytics.com/docs/open-source-components-and-applications/iglu/) (or if a Snowplow BDP customer, you can use the [Snowplow BDP Console UI](https://docs.snowplowanalytics.com/docs/understanding-tracking-design/managing-data-structures/) or [Data Structures API](https://docs.snowplowanalytics.com/docs/understanding-tracking-design/managing-data-structures-via-the-api-2/)).
 /// Snowplow uses the schema to validate that the JSON containing the event properties is well-formed.
-/// {@category Events}
+/// {@category Tracking events}
+/// {@category Adding data to your events}
 @immutable
 class SelfDescribing implements Event {
   /// A valid Iglu schema path.

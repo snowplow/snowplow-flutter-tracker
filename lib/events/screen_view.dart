@@ -15,7 +15,8 @@ import 'package:snowplow_flutter_tracker/events/event.dart';
 
 /// Event to track user viewing a screen within the application.
 ///
-/// {@category Events}
+/// {@category Tracking events}
+/// {@category Adding data to your events}
 @immutable
 class ScreenView implements Event {
   /// The name of the screen viewed.

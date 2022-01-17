@@ -13,7 +13,7 @@ import 'package:flutter/foundation.dart';
 
 /// Determines the GDPR context that will be attached to all events sent by the tracker.
 ///
-/// {@category Configuration}
+/// {@category Initialization and configuration}
 @immutable
 class GdprConfiguration {
   /// Basis for processing.

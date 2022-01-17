@@ -16,6 +16,8 @@ import 'package:snowplow_flutter_tracker/events/self_describing.dart';
 import 'package:snowplow_flutter_tracker/snowplow.dart';
 
 /// Instance of an initialized Snowplow tracker identified by [namespace].
+///
+/// {@category Getting started}
 class Tracker {
   /// Unique tracker namespace.
   final String namespace;

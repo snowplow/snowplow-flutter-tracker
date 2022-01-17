@@ -17,7 +17,8 @@ import 'package:snowplow_flutter_tracker/events/event.dart';
 ///
 /// A consent document context will be attached to the event using the id and version arguments supplied.
 /// To specify that a user opts out of all data collection, [all] should be set to true.
-/// {@category Events}
+/// {@category Tracking events}
+/// {@category Adding data to your events}
 @immutable
 class ConsentWithdrawn implements Event {
   /// Whether user opts out of all data collection.

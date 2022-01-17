@@ -1,4 +1,4 @@
-# Initialization and Configuration
+# Initialization and configuration
 
 The package provides a single method to initialize and configure a new tracker, the `Snowplow.createTracker` method. It accepts configuration parameters for the tracker and returns a `Tracker` instance.
 

@@ -13,7 +13,7 @@ import 'package:flutter/foundation.dart';
 
 /// Configuration of the collector network endpoint.
 ///
-/// {@category Configuration}
+/// {@category Initialization and configuration}
 @immutable
 class NetworkConfiguration {
   /// Endpoint of the collector, e.g. `http://localhost:9090`

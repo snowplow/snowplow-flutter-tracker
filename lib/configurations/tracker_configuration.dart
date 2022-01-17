@@ -14,7 +14,8 @@ import 'package:flutter/foundation.dart';
 /// Configuration of the tracker and the core tracker properties.
 ///
 /// Indicates what should be tracked in terms of automatic tracking and contexts/entities to attach to the events.
-/// {@category Configuration}
+/// {@category Sessions and data model}
+/// {@category Initialization and configuration}
 @immutable
 class TrackerConfiguration {
   /// Identifier of the app.

@@ -23,7 +23,8 @@ import 'package:snowplow_flutter_tracker/tracker.dart';
 
 /// Main interface for the package mainly used to initialize trackers and track events.
 ///
-/// {@category Initialization}
+/// {@category Getting started}
+/// {@category Initialization and configuration}
 class Snowplow {
   static const MethodChannel _channel =
       MethodChannel('snowplow_flutter_tracker');

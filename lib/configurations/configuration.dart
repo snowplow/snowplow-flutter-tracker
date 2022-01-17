@@ -17,7 +17,7 @@ import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.da
 
 /// Wraps configuration used to initialize a tracker.
 ///
-/// {@category Configuration}
+/// {@category Initialization and configuration}
 @immutable
 class Configuration {
   /// Unique namespace to identify the tracker.

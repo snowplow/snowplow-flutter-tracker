@@ -27,26 +27,24 @@ void main() {
   testWidgets("sets and changes user id", (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp(testing: true));
 
-    await Snowplow.createTracker(
+    Tracker tracker = await Snowplow.createTracker(
         namespace: 'test',
         endpoint: SnowplowTests.microEndpoint,
         subjectConfig: const SubjectConfiguration(userId: 'XYZ'));
 
-    await Snowplow.track(
-        const Structured(category: 'category', action: 'action'),
-        tracker: "test");
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
 
     expect(
         await SnowplowTests.checkMicroGood((events) =>
             (events.length == 1) && (events[0]['event']['user_id'] == 'XYZ')),
         isTrue);
 
-    await Snowplow.setUserId('ABC', tracker: 'test');
+    await tracker.setUserId('ABC');
 
     await SnowplowTests.resetMicro();
-    await Snowplow.track(
-        const Structured(category: 'category', action: 'action'),
-        tracker: "test");
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
 
     expect(
         await SnowplowTests.checkMicroGood((events) =>
@@ -61,22 +59,20 @@ void main() {
     }
     await tester.pumpWidget(const MyApp(testing: true));
 
-    await Snowplow.createTracker(
+    Tracker withoutContext = await Snowplow.createTracker(
         namespace: 'withoutContext',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(webPageContext: false));
 
-    await Snowplow.createTracker(
+    Tracker withContext = await Snowplow.createTracker(
         namespace: 'withContext',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(webPageContext: true));
 
-    await Snowplow.track(
-        const Structured(category: 'category', action: 'action'),
-        tracker: 'withoutContext');
-    await Snowplow.track(
-        const Structured(category: 'category', action: 'action'),
-        tracker: 'withContext');
+    await withoutContext
+        .track(const Structured(category: 'category', action: 'action'));
+    await withContext
+        .track(const Structured(category: 'category', action: 'action'));
 
     expect(
         await SnowplowTests.checkMicroGood((events) =>
@@ -97,8 +93,8 @@ void main() {
   testWidgets("attaches gdpr context to events", (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp(testing: true));
 
-    await Snowplow.createTracker(
-        namespace: 'test',
+    Tracker tracker = await Snowplow.createTracker(
+        namespace: 'gdpr',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(),
         gdprConfig: const GdprConfiguration(
@@ -108,9 +104,7 @@ void main() {
             documentDescription:
                 'this document describes consent basis for processing'));
 
-    await Snowplow.track(
-        const Structured(category: 'category', action: 'action'),
-        tracker: 'test');
+    tracker.track(const Structured(category: 'category', action: 'action'));
 
     expect(
         await SnowplowTests.checkMicroGood((dynamic events) {

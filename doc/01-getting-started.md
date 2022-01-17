@@ -1,4 +1,4 @@
-# Getting Started
+# Getting started
 
 Designing how and what to track in your app is an important decision. Check out our docs about tracking design [here](https://docs.snowplowanalytics.com/docs/understanding-tracking-design/introduction-to-tracking-design/).
 
