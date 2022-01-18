@@ -12,22 +12,21 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:snowplow_flutter_tracker/configurations/configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/gdpr_configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/network_configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/subject_configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
-import 'package:snowplow_flutter_tracker/events/event.dart';
-import 'package:snowplow_flutter_tracker/events/self_describing.dart';
-import 'package:snowplow_flutter_tracker/tracker.dart';
+import 'package:snowplow_tracker/configurations/configuration.dart';
+import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
+import 'package:snowplow_tracker/configurations/network_configuration.dart';
+import 'package:snowplow_tracker/configurations/subject_configuration.dart';
+import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_tracker/events/event.dart';
+import 'package:snowplow_tracker/events/self_describing.dart';
+import 'package:snowplow_tracker/tracker.dart';
 
 /// Main interface for the package mainly used to initialize trackers and track events.
 ///
 /// {@category Getting started}
 /// {@category Initialization and configuration}
 class Snowplow {
-  static const MethodChannel _channel =
-      MethodChannel('snowplow_flutter_tracker');
+  static const MethodChannel _channel = MethodChannel('snowplow_tracker');
 
   /// Creates a new tracker instance with the given unique [namespace].
   ///

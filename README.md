@@ -39,20 +39,20 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 Add the Snowplow tracker as a dependency to your Flutter application:
 
 ```bash
-flutter pub add snowplow_flutter_tracker
+flutter pub add snowplow_tracker
 ```
 
 This will add a line with the dependency like to your pubspec.yaml:
 
 ```yml
 dependencies:
-    snowplow_flutter_tracker: ^0.1.0
+    snowplow_tracker: ^0.1.0
 ```
 
 Import the package into your Dart code:
 
 ```dart
-import 'package:snowplow_flutter_tracker/snowplow_flutter_tracker.dart'
+import 'package:snowplow_tracker/snowplow_tracker.dart'
 ```
 
 ### Using the Tracker
@@ -199,7 +199,7 @@ To run the integration tests on Web:
 
 ## Copyright and License
 
-The Snowplow Flutter Tracker is copyright 2021 Snowplow Analytics Ltd.
+The Snowplow Flutter Tracker is copyright 2022 Snowplow Analytics Ltd.
 
 Licensed under the **[Apache License, Version 2.0][license]** (the "License");
 you may not use this software except in compliance with the License.

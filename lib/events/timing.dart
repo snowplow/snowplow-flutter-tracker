@@ -11,7 +11,7 @@
 
 import 'package:flutter/foundation.dart';
 
-import 'package:snowplow_flutter_tracker/events/event.dart';
+import 'package:snowplow_tracker/events/event.dart';
 
 /// Event used to track user timing events such as how long resources take to load.
 /// {@category Tracking events}

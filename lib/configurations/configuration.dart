@@ -10,10 +10,10 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter/foundation.dart';
-import 'package:snowplow_flutter_tracker/configurations/gdpr_configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/network_configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/subject_configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
+import 'package:snowplow_tracker/configurations/network_configuration.dart';
+import 'package:snowplow_tracker/configurations/subject_configuration.dart';
+import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
 
 /// Wraps configuration used to initialize a tracker.
 ///

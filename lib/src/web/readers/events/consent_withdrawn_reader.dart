@@ -10,7 +10,7 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'event_reader.dart';
-import 'package:snowplow_flutter_tracker/events/consent_withdrawn.dart';
+import 'package:snowplow_tracker/events/consent_withdrawn.dart';
 
 class ConsentWithdrawnReader extends ConsentWithdrawn implements EventReader {
   ConsentWithdrawnReader(dynamic map)

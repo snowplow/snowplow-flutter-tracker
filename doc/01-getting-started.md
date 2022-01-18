@@ -9,20 +9,20 @@ The following steps will guide you through setting up the Flutter tracker in you
 Add the Snowplow tracker as a dependency to your Flutter application:
 
 ```bash
-flutter pub add snowplow_flutter_tracker
+flutter pub add snowplow_tracker
 ```
 
 This will add a line with the dependency like to your pubspec.yaml:
 
 ```yml
 dependencies:
-    snowplow_flutter_tracker: ^0.1.0
+    snowplow_tracker: ^0.1.0
 ```
 
 Import the package into your Dart code:
 
 ```dart
-import 'package:snowplow_flutter_tracker/snowplow_flutter_tracker.dart'
+import 'package:snowplow_tracker/snowplow_tracker.dart'
 ```
 
 ## Initialization

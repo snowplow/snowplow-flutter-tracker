@@ -183,7 +183,7 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  snowplow_flutter_tracker:
+  snowplow_tracker:
     dependency: "direct main"
     description:
       path: ".."

@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 
-import 'package:snowplow_flutter_tracker/snowplow_flutter_tracker.dart';
+import 'package:snowplow_tracker/snowplow_tracker.dart';
 
 void main() {
   runApp(const MyApp());

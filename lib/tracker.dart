@@ -11,9 +11,9 @@
 
 import 'dart:async';
 
-import 'package:snowplow_flutter_tracker/events/event.dart';
-import 'package:snowplow_flutter_tracker/events/self_describing.dart';
-import 'package:snowplow_flutter_tracker/snowplow.dart';
+import 'package:snowplow_tracker/events/event.dart';
+import 'package:snowplow_tracker/events/self_describing.dart';
+import 'package:snowplow_tracker/snowplow.dart';
 
 /// Instance of an initialized Snowplow tracker identified by [namespace].
 ///

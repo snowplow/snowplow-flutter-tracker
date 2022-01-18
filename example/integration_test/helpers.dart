@@ -12,7 +12,7 @@
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_flutter_tracker/snowplow.dart';
+import 'package:snowplow_tracker/snowplow.dart';
 import 'dart:convert';
 
 class SnowplowTests {

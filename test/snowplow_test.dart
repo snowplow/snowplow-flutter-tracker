@@ -11,20 +11,20 @@
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_flutter_tracker/configurations/gdpr_configuration.dart';
-import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
-import 'package:snowplow_flutter_tracker/events/consent_granted.dart';
-import 'package:snowplow_flutter_tracker/events/consent_withdrawn.dart';
-import 'package:snowplow_flutter_tracker/events/event.dart';
-import 'package:snowplow_flutter_tracker/events/screen_view.dart';
-import 'package:snowplow_flutter_tracker/events/self_describing.dart';
-import 'package:snowplow_flutter_tracker/events/structured.dart';
-import 'package:snowplow_flutter_tracker/events/timing.dart';
-import 'package:snowplow_flutter_tracker/snowplow.dart';
+import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
+import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_tracker/events/consent_granted.dart';
+import 'package:snowplow_tracker/events/consent_withdrawn.dart';
+import 'package:snowplow_tracker/events/event.dart';
+import 'package:snowplow_tracker/events/screen_view.dart';
+import 'package:snowplow_tracker/events/self_describing.dart';
+import 'package:snowplow_tracker/events/structured.dart';
+import 'package:snowplow_tracker/events/timing.dart';
+import 'package:snowplow_tracker/snowplow.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('snowplow_flutter_tracker');
+  const MethodChannel channel = MethodChannel('snowplow_tracker');
   MethodCall? methodCall;
   dynamic returnValue;
 

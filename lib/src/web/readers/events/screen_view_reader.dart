@@ -9,7 +9,7 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import 'package:snowplow_flutter_tracker/events/screen_view.dart';
+import 'package:snowplow_tracker/events/screen_view.dart';
 import 'event_reader.dart';
 
 class ScreenViewReader extends ScreenView implements EventReader {

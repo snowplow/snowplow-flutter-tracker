@@ -12,10 +12,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:snowplow_flutter_tracker/snowplow_flutter_tracker.dart';
+import 'package:snowplow_tracker/snowplow_tracker.dart';
 
 import 'helpers.dart';
-import 'package:snowplow_flutter_tracker_example/main.dart';
+import 'package:snowplow_tracker_example/main.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

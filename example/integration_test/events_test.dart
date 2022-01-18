@@ -11,17 +11,17 @@
 
 import 'package:uuid/uuid.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_flutter_tracker/snowplow.dart';
-import 'package:snowplow_flutter_tracker/events/structured.dart';
-import 'package:snowplow_flutter_tracker/events/self_describing.dart';
-import 'package:snowplow_flutter_tracker/events/screen_view.dart';
-import 'package:snowplow_flutter_tracker/events/timing.dart';
-import 'package:snowplow_flutter_tracker/events/consent_granted.dart';
-import 'package:snowplow_flutter_tracker/events/consent_withdrawn.dart';
+import 'package:snowplow_tracker/snowplow.dart';
+import 'package:snowplow_tracker/events/structured.dart';
+import 'package:snowplow_tracker/events/self_describing.dart';
+import 'package:snowplow_tracker/events/screen_view.dart';
+import 'package:snowplow_tracker/events/timing.dart';
+import 'package:snowplow_tracker/events/consent_granted.dart';
+import 'package:snowplow_tracker/events/consent_withdrawn.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'helpers.dart';
-import 'package:snowplow_flutter_tracker_example/main.dart';
+import 'package:snowplow_tracker_example/main.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

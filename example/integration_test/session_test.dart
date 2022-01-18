@@ -10,14 +10,14 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_flutter_tracker/snowplow.dart';
-import 'package:snowplow_flutter_tracker/events/structured.dart';
-import 'package:snowplow_flutter_tracker/configurations/tracker_configuration.dart';
-import 'package:snowplow_flutter_tracker/tracker.dart';
+import 'package:snowplow_tracker/snowplow.dart';
+import 'package:snowplow_tracker/events/structured.dart';
+import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_tracker/tracker.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'helpers.dart';
-import 'package:snowplow_flutter_tracker_example/main.dart';
+import 'package:snowplow_tracker_example/main.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

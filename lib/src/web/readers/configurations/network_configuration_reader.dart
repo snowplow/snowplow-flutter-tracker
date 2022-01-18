@@ -9,7 +9,7 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import 'package:snowplow_flutter_tracker/configurations/network_configuration.dart';
+import 'package:snowplow_tracker/configurations/network_configuration.dart';
 
 class NetworkConfigurationReader extends NetworkConfiguration {
   NetworkConfigurationReader(dynamic map)

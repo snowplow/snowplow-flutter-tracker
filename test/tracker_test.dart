@@ -11,12 +11,12 @@
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_flutter_tracker/events/structured.dart';
-import 'package:snowplow_flutter_tracker/tracker.dart';
-import 'package:snowplow_flutter_tracker/snowplow.dart';
+import 'package:snowplow_tracker/events/structured.dart';
+import 'package:snowplow_tracker/tracker.dart';
+import 'package:snowplow_tracker/snowplow.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('snowplow_flutter_tracker');
+  const MethodChannel channel = MethodChannel('snowplow_tracker');
   String? method;
   dynamic arguments;
   Tracker? tracker;

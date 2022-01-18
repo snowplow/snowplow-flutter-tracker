@@ -11,7 +11,7 @@
 
 import 'package:flutter/foundation.dart';
 
-import 'package:snowplow_flutter_tracker/events/event.dart';
+import 'package:snowplow_tracker/events/event.dart';
 
 /// Event to track a user withdrawing consent for data collection.
 ///

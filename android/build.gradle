@@ -1,4 +1,4 @@
-group 'com.snowplowanalytics.snowplow_flutter_tracker'
+group 'com.snowplowanalytics.snowplow_tracker'
 version '1.0-SNAPSHOT'
 
 buildscript {
