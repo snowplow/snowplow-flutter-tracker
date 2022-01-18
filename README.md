@@ -23,7 +23,7 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 | Feature | Android | iOS | Web |
 |---|---|---|---|
 | Manual trackig of events: screen views, self-describing, structured, timing, consent granted and withdrawal | ✔ | ✔ | ✔ |
-| Adding custom context to events | ✔ | ✔ | ✔ |
+| Adding custom context entities to events | ✔ | ✔ | ✔ |
 | Support for multiple trackers | ✔ | ✔ | ✔ |
 | Configurable subject properties | ✔ | ✔ | partly |
 | Session context entity added to events | ✔ | ✔ | ✔ |
@@ -59,7 +59,7 @@ import 'package:snowplow_flutter_tracker/snowplow_flutter_tracker.dart'
 
 Instantiate a tracker using the `Snowplow.createTracker` function.
 The function takes two required arguments: `namespace` and `endpoint`.
-Tracker namespace identifies the tracker instance, you may create multiple trackers with different namespaces.
+Tracker namespace identifies the tracker instance; you may create multiple trackers with different namespaces.
 The endpoint is the URI of the Snowplow collector to send the events to.
 There are additional optional arguments to configure the tracker, please refer to the documentation for a complete specification.
 
@@ -129,7 +129,7 @@ tracker.track(
 
 ### Maintainer Quick Start
 
-Assuming git, Node.js 12 LTS or 16 LTS are installed.
+Assuming [Flutter SDK](https://docs.flutter.dev/get-started/install) is set up and and [Snowplow Micro](https://github.com/snowplow-incubator/snowplow-micro) is running on your computer.
 
 #### Clone Repository
 
@@ -137,20 +137,32 @@ Assuming git, Node.js 12 LTS or 16 LTS are installed.
 git clone https://github.com/snowplow-incubator/snowplow-flutter-tracker.git
 ```
 
-## Building
-
-To build the package in order to include it in other Flutter projects:
-
-TODO
-
 ## Example App
 
 The tracker comes with a demo app that shows it in use.
 It is a simple app with list of buttons for triggering different types of events.
 The project is located in the `example` subfolder.
-Please follow the Flutter [getting started](https://docs.flutter.dev/get-started/install) tutorial for running the app.
 
-Additionaly, you need to set the URI address of your Snowplow Micro instance (or other Snowplow Collector) in 
+Running the example app on Android/iOS:
+
+1. Change into the project folder and `cd example`
+2. Run the integration tests (replace the Snowplow Micro URI with your IP address and set your iPhone or Android simulator name or remove to use default):
+
+```bash
+flutter run --dart-define=ENDPOINT=http://192.168.100.127:9090 -d "iPhone 13 Pro"
+```
+
+To run the example app on Web:
+
+1. [Download ChromeDriver](https://chromedriver.chromium.org/downloads) and launch it using `chromedriver --port=4444`
+2. Change into the project folder and `cd example`
+3. Run the integration tests (replace the Snowplow Micro URI with your IP address):
+
+```bash
+flutter run --dart-define=ENDPOINT=http://0.0.0.0:9090 -d Chrome
+```
+
+Alternatively, you may also run the integration tests from Visual Studio Code using the "Run Example App" target (update your IP address in launch.json).
 
 ## Testing
 
@@ -159,24 +171,31 @@ Unit tests test individual components of the tracker in isolation and do not mak
 Integration tests use a Snowplow Micro instance to verify end-to-end tracking of events.
 
 The unit tests are located in the `tests` subfolder in the root of the project.
-Having installed the Flutter SDK, run the tests using `flutter test`.
+Having installed the Flutter SDK, run the tests using `flutter test` (or run them directly from Visual Studio Code).
 
 The integration tests are located in the `example/integration_test` subfolder.
 These tests make use of the example app to provide end-to-end testing of the tracker.
-Follo
 
-1. TODO
-5. Start [Snowplow Micro](https://github.com/snowplow-incubator/snowplow-micro) on your computer
-6. Add configuration for your Snowplow Micro (with the network IP of your computer) instance to `tests/manifest`
+Running the integration tests on Android/iOS:
 
-    ```bash
-    snowplow_collector=http://192.168.100.127:9090
-    snowplow_method=POST
-    ```
+1. Change into the project folder and `cd example`
+2. Run the integration tests (replace the Snowplow Micro URI with your IP address and set your iPhone or Android simulator name or remove to use default):
 
-7. Run the tests using `npm test`
+```bash
+flutter test integration_test --dart-define=ENDPOINT=http://192.168.100.127:9090 -d "iPhone 13 Pro"
+```
 
-Alternatively, you may run the tests from Visual Studio Code as the debug configuration is already prepared.
+Alternatively, you may also run the integration tests directly from Visual Studio Code.
+
+To run the integration tests on Web:
+
+1. [Download ChromeDriver](https://chromedriver.chromium.org/downloads) and launch it using `chromedriver --port=4444`
+2. Change into the project folder and `cd example`
+3. Run the integration tests (replace the Snowplow Micro URI with your IP address):
+
+```bash
+./tool/e2e_tests.sh http://0.0.0.0:9090 "-d web-server"
+```
 
 ## Copyright and License
 
