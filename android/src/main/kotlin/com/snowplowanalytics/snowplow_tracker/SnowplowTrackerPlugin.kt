@@ -14,6 +14,10 @@ package com.snowplowanalytics.snowplow_tracker
 import androidx.annotation.NonNull
 
 import android.content.Context
+import com.snowplowanalytics.snowplow_tracker.readers.messages.CreateTrackerMessageReader
+import com.snowplowanalytics.snowplow_tracker.readers.messages.EventMessageReader
+import com.snowplowanalytics.snowplow_tracker.readers.messages.GetParameterMessageReader
+import com.snowplowanalytics.snowplow_tracker.readers.messages.SetUserIdMessageReader
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -60,7 +64,7 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
     private fun onCreateTracker(call: MethodCall, result: MethodChannel.Result) {
         context?.let { ctxt ->
             (call.arguments as? Map<String, Any>)?.let { values ->
-                SnowplowTrackerController.createTracker(values, ctxt)
+                SnowplowTrackerController.createTracker(CreateTrackerMessageReader(values), ctxt)
             }
         }
         result.success(null)
@@ -68,70 +72,70 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
 
     private fun onTrackStructured(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.trackStructured(it)
+            SnowplowTrackerController.trackStructured(EventMessageReader(it))
         }
         result.success(null)
     }
 
     private fun onTrackSelfDescribing(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.trackSelfDescribing(it)
+            SnowplowTrackerController.trackSelfDescribing(EventMessageReader(it))
         }
         result.success(null)
     }
 
     private fun onTrackScreenView(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.trackScreenView(it)
+            SnowplowTrackerController.trackScreenView(EventMessageReader(it))
         }
         result.success(null)
     }
 
     private fun onTrackTiming(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.trackTiming(it)
+            SnowplowTrackerController.trackTiming(EventMessageReader(it))
         }
         result.success(null)
     }
 
     private fun onTrackConsentGranted(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.trackConsentGranted(it)
+            SnowplowTrackerController.trackConsentGranted(EventMessageReader(it))
         }
         result.success(null)
     }
 
     private fun onTrackConsentWithdrawn(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.trackConsentWithdrawn(it)
+            SnowplowTrackerController.trackConsentWithdrawn(EventMessageReader(it))
         }
         result.success(null)
     }
 
     private fun onSetUserId(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.setUserId(it)
+            SnowplowTrackerController.setUserId(SetUserIdMessageReader(it))
         }
         result.success(null)
     }
 
     private fun onGetSessionUserId(call: MethodCall, result: MethodChannel.Result) {
         val sessionUserId = (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.getSessionUserId(it)
+            SnowplowTrackerController.getSessionUserId(GetParameterMessageReader(it))
         }
         result.success(sessionUserId)
     }
 
     private fun onGetSessionId(call: MethodCall, result: MethodChannel.Result) {
         val sessionId = (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.getSessionId(it)
+            SnowplowTrackerController.getSessionId(GetParameterMessageReader(it))
         }
         result.success(sessionId)
     }
 
     private fun onGetSessionIndex(call: MethodCall, result: MethodChannel.Result) {
         val sessionIndex = (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.getSessionIndex(it)
+            SnowplowTrackerController.getSessionIndex(GetParameterMessageReader(it))
         }
         result.success(sessionIndex)
     }

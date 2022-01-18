@@ -22,7 +22,7 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 
 | Feature | Android | iOS | Web |
 |---|---|---|---|
-| Manual trackig of events: screen views, self-describing, structured, timing, consent granted and withdrawal | ✔ | ✔ | ✔ |
+| Manual tracking of events: screen views, self-describing, structured, timing, consent granted and withdrawal | ✔ | ✔ | ✔ |
 | Adding custom context entities to events | ✔ | ✔ | ✔ |
 | Support for multiple trackers | ✔ | ✔ | ✔ |
 | Configurable subject properties | ✔ | ✔ | partly |
@@ -42,7 +42,7 @@ Add the Snowplow tracker as a dependency to your Flutter application:
 flutter pub add snowplow_tracker
 ```
 
-This will add a line with the dependency like to your pubspec.yaml:
+This will add a line with the dependency like this to your `pubspec.yaml`:
 
 ```yml
 dependencies:
@@ -71,7 +71,7 @@ Tracker tracker = await Snowplow.createTracker(
 ```
 
 To track events, simply instantiate their respective types (e.g., `ScreenView`, `SelfDescribing`, `Structured`) and pass them to the `tracker.track` or `Snowplow.track` methods.
-Please refer to the documentation for specificiation of event properties.
+Please refer to the documentation for specification of event properties.
 
 ```dart
 // Tracking a screen view event
@@ -129,7 +129,7 @@ tracker.track(
 
 ### Maintainer Quick Start
 
-Assuming [Flutter SDK](https://docs.flutter.dev/get-started/install) is set up and and [Snowplow Micro](https://github.com/snowplow-incubator/snowplow-micro) is running on your computer.
+Assuming [Flutter SDK](https://docs.flutter.dev/get-started/install) is set up and [Snowplow Micro](https://github.com/snowplow-incubator/snowplow-micro) is running on your computer.
 
 #### Clone Repository
 
