@@ -32,8 +32,8 @@ The only required attributes of the `Snowplow.createTracker` method are `namespa
 
 | Attribute | Type | Description | Android | iOS | Web | Default |
 |---|---|---|---|---|---|---|
-| `appId` | `String?` | Identifier of the app. | ✔ | ✔ | ✔ | |
-| `devicePlatform` | `DevicePlatform?` | The device platform the tracker runs on. Available options are provided by the `DevicePlatform` enum. | ✔ | ✔ | ✔ | |
+| `appId` | `String?` | Identifier of the app. | ✔ | ✔ | ✔ | null on Web, bundle identifier on iOS/Android |
+| `devicePlatform` | `DevicePlatform?` | The device platform the tracker runs on. Available options are provided by the `DevicePlatform` enum. | ✔ | ✔ | ✔ | "web" on Web, "mob" on iOS/Android |
 | `base64Encoding` | `bool?` | Indicates whether payload JSON data should be base64 encoded. | ✔ | ✔ | ✔ | true |
 | `platformContext` | `bool?` | Indicates whether platform context should be attached to tracked events. | ✔ | ✔ | | true |
 | `geoLocationContext` | `bool?` | Indicates whether geo-location context should be attached to tracked events. | ✔ | ✔ | ✔ | false |

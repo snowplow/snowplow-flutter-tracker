@@ -19,9 +19,13 @@ import 'package:flutter/foundation.dart';
 @immutable
 class TrackerConfiguration {
   /// Identifier of the app.
+  ///
+  /// Defaults to null on Web, product bundle identifier on iOS/Android
   final String? appId;
 
   /// The device platform the tracker runs on.
+  ///
+  /// Defaults to "web" on Web and "mob" on iOS/Android
   final DevicePlatform? devicePlatform;
 
   /// Indicates whether payload JSON data should be base64 encoded.
