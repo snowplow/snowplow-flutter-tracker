@@ -6,7 +6,7 @@ repository: https://github.com/snowplow-incubator/snowplow-flutter-tracker
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
-  flutter: ">=2.2.0"
+  flutter: ">=2.5.0"
 
 dependencies:
   flutter:
