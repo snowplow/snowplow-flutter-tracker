@@ -25,6 +25,12 @@ Import the package into your Dart code:
 import 'package:snowplow_tracker/snowplow_tracker.dart'
 ```
 
+### Installation on Web
+
+If using the tracker within a Flutter app for Web, you will also need to import the Snowplow JavaScript Tracker in your `index.html` file. Please load the JS tracker with the Snowplow tag as [described in the official documentation](https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/javascript-trackers/javascript-tracker/javascript-tracker-v3/tracker-setup/loading/).
+
+Make sure to use JavaScript tracker version `3.2` or newer. You may also refer to the [example project](https://github.com/snowplow-incubator/snowplow-flutter-tracker/tree/main/example) in the Flutter tracker repository to see this in action.
+
 ## Initialization
 
 Instantiate a tracker using the `Snowplow.createTracker` function.

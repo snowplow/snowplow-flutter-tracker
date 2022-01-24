@@ -12,9 +12,9 @@
 import 'dart:async';
 import 'dart:html' as html;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:snowplow_tracker/src/web/sp.dart';
 import 'src/web/readers/configurations/configuration_reader.dart';
 import 'src/web/readers/messages/event_message_reader.dart';
 import 'src/web/readers/messages/set_user_id_message_reader.dart';
@@ -31,31 +31,31 @@ class SnowplowTrackerPluginWeb {
     final pluginInstance = SnowplowTrackerPluginWeb();
     channel.setMethodCallHandler(pluginInstance.handleMethodCall);
 
-    // Add JS dynamically if not already imported (this is needed to prevent hot reload or refresh to import it again and again)
-    var foundSpJs = false;
+    // Add JS plugin for client session context
+    const clientSessionJSFile =
+        'assets/packages/snowplow_tracker/assets/sp_session_context_plugin.js';
+    var foundClientSessionJSFile = false;
     for (html.ScriptElement script
         in html.document.head!.querySelectorAll('script')) {
-      if (script.src.contains('snowplow_tracker/assets/sp.js')) {
-        foundSpJs = true;
+      if (script.src.contains(clientSessionJSFile)) {
+        foundClientSessionJSFile = true;
       }
     }
-
-    if (!foundSpJs) {
-      if (kDebugMode) {
-        print(
-            "WARNING: Importing 'sp.js' from assets, consider importing it directly from your index.html");
-      }
+    if (!foundClientSessionJSFile) {
       html.document.body!.append(html.ScriptElement()
-        ..innerHtml =
-            ' ;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[]; p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments) };p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1; n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script","assets/packages/snowplow_tracker/assets/sp.js","snowplow")); '
+        ..src = clientSessionJSFile
         ..type = 'application/javascript');
     }
   }
 
-  /// Handles method calls over the MethodChannel of this plugin.
-  /// Note: Check the "federated" architecture for a new way of doing this:
-  /// https://flutter.dev/go/federated-plugins
   Future<dynamic> handleMethodCall(MethodCall call) async {
+    if (!isSnowplowInstalled()) {
+      throw PlatformException(
+        code: 'Unimplemented',
+        details: 'Snowplow JS tracker is not installed',
+      );
+    }
+
     switch (call.method) {
       case 'createTracker':
         return onCreateTracker(call);

@@ -34,3 +34,6 @@ external String? getSnowplowSid();
 
 @JS('getSnowplowVid')
 external int? getSnowplowVid();
+
+@JS('isSnowplowInstalled')
+external bool isSnowplowInstalled();
