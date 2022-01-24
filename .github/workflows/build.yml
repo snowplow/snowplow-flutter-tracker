@@ -2,7 +2,7 @@ name: Build and Test
 on: [push, pull_request]
 jobs:
   build:
-    name: Analyze and run unit tests
+    name: Run unit tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -14,9 +14,20 @@ jobs:
           flutter-version: ${{ matrix.flutter }}
           channel: 'stable'
       - run: flutter pub get
+      - run: flutter test
+
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.8.0'
+          channel: 'stable'
+      - run: flutter pub get
       - run: flutter analyze
       - run: flutter format -n --set-exit-if-changed .
-      - run: flutter test
 
   # build-android:
   #   name: Integration tests on Android
