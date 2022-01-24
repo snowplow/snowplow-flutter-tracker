@@ -200,10 +200,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   );
                   trackEvent(structured, contexts: [
                     const SelfDescribing(
-                      schema:
-                          'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',
-                      data: {'targetUrl': 'http://a-target-url.com'},
-                    )
+                        schema: 'iglu:org.schema/WebPage/jsonschema/1-0-0',
+                        data: {
+                          'keywords': ['tester']
+                        })
                   ]);
                 },
                 child: const Text('Send Structured Event With Context'),

@@ -161,10 +161,18 @@ void main() {
         tracker: "test",
         contexts: [
           const SelfDescribing(
-            schema:
-                'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',
-            data: {'targetUrl': 'http://a-target-url.com'},
-          )
+              schema:
+                  'iglu:com.snowplowanalytics.snowplow/media_player/jsonschema/1-0-0',
+              data: {
+                'currentTime': 0,
+                'duration': 10,
+                'ended': false,
+                'loop': false,
+                'muted': false,
+                'paused': false,
+                'playbackRate': 1,
+                'volume': 100
+              })
         ]);
 
     expect(
@@ -172,9 +180,9 @@ void main() {
           if (events.length != 1) {
             return false;
           }
-          dynamic context = events[0]['event']['contexts']['data']
-              .firstWhere((x) => x['schema'].toString().contains('link_click'));
-          return context['data']['targetUrl'] == 'http://a-target-url.com';
+          dynamic context = events[0]['event']['contexts']['data'].firstWhere(
+              (x) => x['schema'].toString().contains('media_player'));
+          return context['data']['volume'] == 100;
         }),
         isTrue);
   });

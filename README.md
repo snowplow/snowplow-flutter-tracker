@@ -107,8 +107,8 @@ tracker.track(
     Structured(category: 'shop', action: 'add-to-basket'),
     contexts: [
         const SelfDescribing(
-            schema: 'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',
-            data: {'targetUrl': 'http://a-target-url.com'},
+            schema: 'iglu:org.schema/WebPage/jsonschema/1-0-0',
+            data: {'keywords': ['tester']}
         )
     ]);
 ```
