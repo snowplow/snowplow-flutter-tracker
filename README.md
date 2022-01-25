@@ -227,8 +227,8 @@ limitations under the License.
 [license]: https://www.apache.org/licenses/LICENSE-2.0
 [license-image]: https://img.shields.io/badge/license-Apache--2-blue.svg?style=flat
 
-[release-image]: https://img.shields.io/npm/v/@snowplow/flutter-tracker
-[releases]: https://github.com/snowplow-incubator/snowplow-flutter-tracker/releases
+[release-image]: https://img.shields.io/pub/v/snowplow_tracker
+[releases]: https://pub.dev/packages/snowplow_tracker
 
 [techdocs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/flutter-tracker/
 [techdocs-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
