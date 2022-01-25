@@ -5,7 +5,7 @@ PODS:
   - FMDB/standard (2.7.5)
   - integration_test (0.0.1):
     - Flutter
-  - snowplow_tracker (0.1.0):
+  - snowplow_tracker (0.1.0-dev.1):
     - Flutter
     - SnowplowTracker (~> 3.0.2)
   - SnowplowTracker (3.0.2):
@@ -33,7 +33,7 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
-  snowplow_tracker: 90ea9083b578578110e3bfeb65a0720b654755b2
+  snowplow_tracker: d177e74163dea0ef1545e0033e752b09decef2c0
   SnowplowTracker: a96fd8819c86c56844f930af372d0f4f92c35472
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
