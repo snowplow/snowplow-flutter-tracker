@@ -33,7 +33,7 @@ class SnowplowTrackerPluginWeb {
 
     // Add JS plugin for client session context
     const clientSessionJSFile =
-        'assets/packages/snowplow_tracker/assets/sp_session_context_plugin.js';
+        'assets/packages/snowplow_tracker/js/sp_session_context_plugin.js';
     var foundClientSessionJSFile = false;
     for (html.ScriptElement script
         in html.document.head!.querySelectorAll('script')) {
