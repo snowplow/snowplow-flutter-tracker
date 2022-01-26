@@ -1,0 +1,101 @@
+name: Publish package to pub.dev and make a GitHub release
+
+on:
+  push:
+    tags:
+    - '*.*.*'
+
+jobs:
+  test:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        flutter: ['2.8.0']
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ matrix.flutter }}
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter test
+
+  version_check:
+    runs-on: ubuntu-latest
+    outputs:
+      v_tracker: ${{ steps.version.outputs.FLUTTER_TRACKER_VERSION}}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+
+    - name: Get tag and tracker versions
+      id: version
+      env:
+        IOS_VER_FILEPATH: 'ios/Classes/TrackerVersion.swift'
+        ANDR_VER_FILEPATH: 'android/src/main/kotlin/com/snowplowanalytics/snowplow_tracker/TrackerVersion.kt'
+      run: |
+        echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/*/}
+        echo "##[set-output name=FLUTTER_TRACKER_VERSION;]$(cat pubspec.yaml | sed -n -e 's/^.*version: \(.*\)/\1/p')"
+        echo "##[set-output name=FLUTTER_IOS_TRACKER_VERSION;]$(cat "${IOS_VER_FILEPATH}" | sed -n -e 's/^.*TRACKER_VERSION = "flutter-\(.*\)"/\1/p')"
+        echo "##[set-output name=FLUTTER_ANDROID_TRACKER_VERSION;]$(cat "${ANDR_VER_FILEPATH}" | sed -n -e 's/^.*TRACKER_VERSION = "flutter-\(.*\)"/\1/p')"
+    - name: Fail if version mismatch
+      run: |
+        if [ "${{ steps.version.outputs.TAG_VERSION }}" != "${{ steps.version.outputs.FLUTTER_TRACKER_VERSION }}" ] ; then
+          echo "Tag version (${{ steps.version.outputs.TAG_VERSION }}) doesn't match version in project (${{ steps.version.outputs.FLUTTER_TRACKER_VERSION }})"
+          exit 1
+        fi
+        if [ "${{ steps.version.outputs.TAG_VERSION }}" != "${{ steps.version.outputs.FLUTTER_IOS_TRACKER_VERSION }}" ] ; then
+          echo "Tag version (${{ steps.version.outputs.TAG_VERSION }}) doesn't match version in project(ios) (${{ steps.version.outputs.FLUTTER_IOS_TRACKER_VERSION }})"
+          exit 1
+        fi
+        if [ "${{ steps.version.outputs.TAG_VERSION }}" != "${{ steps.version.outputs.FLUTTER_ANDROID_TRACKER_VERSION }}" ] ; then
+          echo "Tag version (${{ steps.version.outputs.TAG_VERSION }}) doesn't match version in project(android) (${{ steps.version.outputs.FLUTTER_ANDROID_TRACKER_VERSION }})"
+          exit 1
+        fi
+
+  publish_pubdev:
+    needs: ["test", "version_check"]
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup credentials
+      run: | 
+        mkdir -p ~/.pub-cache 
+        cat <<EOF > ~/.pub-cache/credentials.json
+        {
+          "accessToken":"${{ secrets.ACCESS_TOKEN }}",
+          "refreshToken":"${{ secrets.REFRESH_TOKEN }}",
+          "tokenEndpoint":"https://accounts.google.com/o/oauth2/token",
+          "scopes": [ "openid", "https://www.googleapis.com/auth/userinfo.email" ],
+          "expiration": 1643122520446
+        }
+        EOF
+    - name: Publish package
+      run: pub publish -f
+
+  release:
+    needs: ["test", "publish_pubdev", "version_check"]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Release
+      uses: softprops/action-gh-release@v0.1.7
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        name: Version ${{ needs.version_check.outputs.v_tracker }}
+        draft: false
+        prerelease: ${{ contains(needs.version_check.outputs.v_tracker, '-') }}

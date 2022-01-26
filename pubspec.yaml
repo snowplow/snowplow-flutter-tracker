@@ -1,0 +1,38 @@
+name: snowplow_tracker
+description: A package for tracking Snowplow events in Flutter apps
+version: 0.1.0-alpha.1
+homepage: https://github.com/snowplow-incubator/snowplow-flutter-tracker
+repository: https://github.com/snowplow-incubator/snowplow-flutter-tracker
+
+environment:
+  sdk: ">=2.15.0 <3.0.0"
+  flutter: ">=2.8.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  js: ^0.6.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+  http: ^0.13.3
+  uuid: ^3.0.5
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.snowplowanalytics.snowplow_tracker
+        pluginClass: SnowplowTrackerPlugin
+      ios:
+        pluginClass: SnowplowTrackerPlugin
+      web:
+        pluginClass: SnowplowTrackerPluginWeb
+        fileName: snowplow_tracker_plugin_web.dart
+
+  assets:
+    - packages/snowplow_tracker/js/sp_session_context_plugin.js
