@@ -64,6 +64,7 @@ Make sure to use JavaScript tracker version `3.2` or newer. You may also refer t
 ### Using the Tracker
 
 Instantiate a tracker using the `Snowplow.createTracker` function.
+You may create the tracker in the `initState()` of your main widget.
 The function takes two required arguments: `namespace` and `endpoint`.
 Tracker namespace identifies the tracker instance; you may create multiple trackers with different namespaces.
 The endpoint is the URI of the Snowplow collector to send the events to.
