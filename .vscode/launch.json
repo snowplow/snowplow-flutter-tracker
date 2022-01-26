@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+			"name": "Run Example App",
+			"program": "example/lib/main.dart",
+			"request": "launch",
+			"type": "dart",
+			"args":[
+				"--dart-define=ENDPOINT=http://192.168.100.127:9090"
+			]
+		}
+    ]
+}
