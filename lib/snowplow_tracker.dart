@@ -16,6 +16,7 @@ export 'configurations/gdpr_configuration.dart';
 export 'configurations/network_configuration.dart';
 export 'configurations/subject_configuration.dart';
 export 'configurations/tracker_configuration.dart';
+export 'configurations/activity_tracking_configuration.dart';
 
 export 'events/consent_granted.dart';
 export 'events/consent_withdrawn.dart';
@@ -23,3 +24,4 @@ export 'events/screen_view.dart';
 export 'events/self_describing.dart';
 export 'events/structured.dart';
 export 'events/timing.dart';
+export 'events/page_view_event.dart';

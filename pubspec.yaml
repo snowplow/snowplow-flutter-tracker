@@ -1,6 +1,6 @@
 name: snowplow_tracker
 description: A package for tracking Snowplow events in Flutter apps
-version: 0.1.0-alpha.1
+version: 0.1.0-alpha.2
 homepage: https://github.com/snowplow-incubator/snowplow-flutter-tracker
 repository: https://github.com/snowplow-incubator/snowplow-flutter-tracker
 

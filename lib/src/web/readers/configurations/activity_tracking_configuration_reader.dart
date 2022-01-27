@@ -9,8 +9,13 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import Foundation
+import 'package:snowplow_tracker/configurations/activity_tracking_configuration.dart';
 
-class TrackerVersion {
-    static let TRACKER_VERSION = "flutter-0.1.0-alpha.2"
+class ActivityTrackingConfigurationReader
+    extends ActivityTrackingConfiguration {
+  ActivityTrackingConfigurationReader(dynamic map)
+      : super(
+            enabled: map['enabled'],
+            minimumVisitLength: map['minimumVisitLength'],
+            heartbeatDelay: map['heartbeatDelay']);
 }

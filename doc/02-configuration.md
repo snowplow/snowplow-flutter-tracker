@@ -39,6 +39,7 @@ The only required attributes of the `Snowplow.createTracker` method are `namespa
 | `geoLocationContext` | `bool?` | Indicates whether geo-location context should be attached to tracked events. | ✔ | ✔ | ✔ | false |
 | `sessionContext` | `bool?` | Indicates whether session context should be attached to tracked events. | ✔ | ✔ | ✔ | true |
 | `webPageContext` | `bool?` | Indicates whether context about current web page should be attached to tracked events. | | | ✔ | true |
+| `activityTrackingConfig` | ActivityTrackingConfiguration?` | Enables activity tracking using page pings on the Web. | | | ✔ | true |
 
 ## Configuration of subject information: `SubjectConfiguration`
 

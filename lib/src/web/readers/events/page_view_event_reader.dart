@@ -9,8 +9,21 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import Foundation
+import 'package:snowplow_tracker/events/page_view_event.dart';
+import 'event_reader.dart';
 
-class TrackerVersion {
-    static let TRACKER_VERSION = "flutter-0.1.0-alpha.2"
+class PageViewEventReader extends PageViewEvent implements EventReader {
+  PageViewEventReader(dynamic map) : super(title: map['title']);
+
+  @override
+  String endpoint() {
+    return 'trackPageView';
+  }
+
+  @override
+  Map eventData() {
+    final data = {'title': title};
+    data.removeWhere((key, value) => value == null);
+    return data;
+  }
 }
