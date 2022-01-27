@@ -71,6 +71,8 @@ class SnowplowTrackerPluginWeb {
         return onTrackConsentGranted(call);
       case 'trackConsentWithdrawn':
         return onTrackConsentWithdrawn(call);
+      case 'trackPageView':
+        return onTrackPageView(call);
       case 'setUserId':
         return onSetUserId(call);
       case "getSessionUserId":
@@ -120,6 +122,11 @@ class SnowplowTrackerPluginWeb {
 
   void onTrackConsentWithdrawn(MethodCall call) {
     var message = EventMessageReader.withConsentWithdrawn(call.arguments);
+    SnowplowTrackerController.trackEvent(message);
+  }
+
+  void onTrackPageView(MethodCall call) {
+    var message = EventMessageReader.withPageView(call.arguments);
     SnowplowTrackerController.trackEvent(message);
   }
 

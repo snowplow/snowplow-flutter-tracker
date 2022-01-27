@@ -10,6 +10,7 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_tracker/src/web/readers/configurations/activity_tracking_configuration_reader.dart';
 
 class TrackerConfigurationReader extends TrackerConfiguration {
   TrackerConfigurationReader(dynamic map)
@@ -22,7 +23,11 @@ class TrackerConfigurationReader extends TrackerConfiguration {
             platformContext: map['platformContext'],
             geoLocationContext: map['geoLocationContext'],
             sessionContext: map['sessionContext'],
-            webPageContext: map['webPageContext']);
+            webPageContext: map['webPageContext'],
+            activityTrackingConfig: map['activityTrackingConfig'] == null
+                ? null
+                : ActivityTrackingConfigurationReader(
+                    map['activityTrackingConfig']));
 
   void addTrackerOptions(dynamic options) {
     if (appId != null) {

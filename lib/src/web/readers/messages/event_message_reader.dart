@@ -18,6 +18,7 @@ import '../events/screen_view_reader.dart';
 import '../events/self_describing_reader.dart';
 import '../events/structured_reader.dart';
 import '../events/timing_reader.dart';
+import '../events/page_view_event_reader.dart';
 
 @immutable
 class EventMessageReader {
@@ -26,6 +27,7 @@ class EventMessageReader {
   final SelfDescribingReader? selfDescribing;
   final ScreenViewReader? screenView;
   final TimingReader? timing;
+  final PageViewEventReader? pageView;
   final ConsentGrantedReader? consentGranted;
   final ConsentWithdrawnReader? consentWithdrawn;
   final ContextsReader? contexts;
@@ -38,6 +40,7 @@ class EventMessageReader {
       this.timing,
       this.consentGranted,
       this.consentWithdrawn,
+      this.pageView,
       this.contexts});
 
   EventMessageReader.withStructured(dynamic map)
@@ -48,6 +51,7 @@ class EventMessageReader {
         timing = null,
         consentGranted = null,
         consentWithdrawn = null,
+        pageView = null,
         contexts =
             map['contexts'] != null ? ContextsReader(map['contexts']) : null;
 
@@ -59,6 +63,7 @@ class EventMessageReader {
         timing = null,
         consentGranted = null,
         consentWithdrawn = null,
+        pageView = null,
         contexts =
             map['contexts'] != null ? ContextsReader(map['contexts']) : null;
 
@@ -70,6 +75,7 @@ class EventMessageReader {
         timing = null,
         consentGranted = null,
         consentWithdrawn = null,
+        pageView = null,
         contexts =
             map['contexts'] != null ? ContextsReader(map['contexts']) : null;
 
@@ -81,6 +87,7 @@ class EventMessageReader {
         timing = TimingReader(map['eventData']),
         consentGranted = null,
         consentWithdrawn = null,
+        pageView = null,
         contexts =
             map['contexts'] != null ? ContextsReader(map['contexts']) : null;
 
@@ -92,6 +99,7 @@ class EventMessageReader {
         timing = null,
         consentGranted = ConsentGrantedReader(map['eventData']),
         consentWithdrawn = null,
+        pageView = null,
         contexts =
             map['contexts'] != null ? ContextsReader(map['contexts']) : null;
 
@@ -103,6 +111,19 @@ class EventMessageReader {
         timing = null,
         consentGranted = null,
         consentWithdrawn = ConsentWithdrawnReader(map['eventData']),
+        pageView = null,
+        contexts =
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+
+  EventMessageReader.withPageView(dynamic map)
+      : tracker = map['tracker'],
+        selfDescribing = null,
+        structured = null,
+        screenView = null,
+        timing = null,
+        consentGranted = null,
+        consentWithdrawn = null,
+        pageView = PageViewEventReader(map['eventData']),
         contexts =
             map['contexts'] != null ? ContextsReader(map['contexts']) : null;
 
@@ -112,6 +133,7 @@ class EventMessageReader {
     if (screenView != null) return screenView!;
     if (timing != null) return timing!;
     if (consentGranted != null) return consentGranted!;
+    if (pageView != null) return pageView!;
     return consentWithdrawn!;
   }
 

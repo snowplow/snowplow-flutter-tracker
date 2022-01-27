@@ -88,6 +88,9 @@ tracker.track(ScreenView(
     type: 'full',
     transitionType: 'none'));
 
+// Tracking a page view event – only supported on the Web
+tracker.track(PageView(title: 'Page Title'));
+
 // Tracking a self-describing event
 tracker.track(SelfDescribing(
     schema: 'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',

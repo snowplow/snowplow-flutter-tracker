@@ -9,15 +9,11 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:snowplow_tracker/snowplow_tracker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_tracker/snowplow.dart';
-import 'package:snowplow_tracker/events/structured.dart';
-import 'package:snowplow_tracker/events/self_describing.dart';
-import 'package:snowplow_tracker/events/screen_view.dart';
-import 'package:snowplow_tracker/events/timing.dart';
-import 'package:snowplow_tracker/events/consent_granted.dart';
-import 'package:snowplow_tracker/events/consent_withdrawn.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'helpers.dart';
@@ -185,5 +181,37 @@ void main() {
           return context['data']['volume'] == 100;
         }),
         isTrue);
+  });
+
+  testWidgets("tracks a page view event on web", (WidgetTester tester) async {
+    if (!kIsWeb) {
+      return;
+    }
+    await tester.pumpWidget(const MyApp(testing: true));
+
+    await Snowplow.track(const PageViewEvent(), tracker: 'test');
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            (events[0]['event']['page_title'] == 'Demo App') &&
+            (events[0]['event']['page_url'] != null) &&
+            (events[0]['event']['page_referrer'] != null)),
+        isTrue);
+  });
+
+  testWidgets("raises an exception when tracking page view event on mobile",
+      (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+    await tester.pumpWidget(const MyApp(testing: true));
+
+    try {
+      await Snowplow.track(const PageViewEvent(), tracker: 'test');
+      fail('Exception not thrown');
+    } catch (e) {
+      expect(e, isInstanceOf<MissingPluginException>());
+    }
   });
 }

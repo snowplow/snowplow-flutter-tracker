@@ -20,6 +20,7 @@ import 'package:snowplow_tracker/events/screen_view.dart';
 import 'package:snowplow_tracker/events/self_describing.dart';
 import 'package:snowplow_tracker/events/structured.dart';
 import 'package:snowplow_tracker/events/timing.dart';
+import 'package:snowplow_tracker/events/page_view_event.dart';
 import 'package:snowplow_tracker/snowplow.dart';
 import 'package:uuid/uuid.dart';
 
@@ -176,6 +177,20 @@ void main() {
         isMethodCall('trackConsentWithdrawn', arguments: {
           'tracker': 'tns1',
           'eventData': {'all': true, 'documentId': 'd1', 'version': '10'}
+        }));
+  });
+
+  test('tracks page view event', () async {
+    Event event = const PageViewEvent(
+      title: 'pageTitle',
+    );
+    await Snowplow.track(event, tracker: 'ns1');
+
+    expect(
+        methodCall,
+        isMethodCall('trackPageView', arguments: {
+          'tracker': 'ns1',
+          'eventData': {'title': 'pageTitle'}
         }));
   });
 
