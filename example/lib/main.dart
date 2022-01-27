@@ -50,7 +50,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           namespace: "ns1",
           endpoint: const String.fromEnvironment('ENDPOINT',
               defaultValue: 'http://0.0.0.0:9090'),
-          trackerConfig: const TrackerConfiguration(webPageContext: false),
+          trackerConfig: const TrackerConfiguration(
+              webPageContext: false,
+              activityTrackingConfig: ActivityTrackingConfiguration(
+                  minimumVisitLength: 15, heartbeatDelay: 10)),
           gdprConfig: const GdprConfiguration(
               basisForProcessing: 'consent',
               documentId: 'consentDoc-abc123',
@@ -106,6 +109,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Demo App',
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
@@ -189,6 +193,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 },
                 child: const Text('Send Consent Withdrawn Event'),
               ),
+              kIsWeb
+                  ? ElevatedButton(
+                      onPressed: () {
+                        trackEvent(const PageViewEvent());
+                      },
+                      child: const Text('Send Page View Event'),
+                    )
+                  : const Text('Page view tracking not available'),
               ElevatedButton(
                 onPressed: () {
                   const structured = Structured(

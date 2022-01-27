@@ -10,6 +10,7 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter/foundation.dart';
+import 'package:snowplow_tracker/configurations/activity_tracking_configuration.dart';
 
 /// Configuration of the tracker and the core tracker properties.
 ///
@@ -53,6 +54,9 @@ class TrackerConfiguration {
   /// Only available on Web, defaults to true.
   final bool? webPageContext;
 
+  /// Configuration for activity tracking on the Web.
+  final ActivityTrackingConfiguration? activityTrackingConfig;
+
   const TrackerConfiguration(
       {this.appId,
       this.devicePlatform,
@@ -60,7 +64,8 @@ class TrackerConfiguration {
       this.platformContext,
       this.geoLocationContext,
       this.sessionContext,
-      this.webPageContext});
+      this.webPageContext,
+      this.activityTrackingConfig});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -71,6 +76,7 @@ class TrackerConfiguration {
       'geoLocationContext': geoLocationContext,
       'sessionContext': sessionContext,
       'webPageContext': webPageContext,
+      'activityTrackingConfig': activityTrackingConfig?.toMap(),
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

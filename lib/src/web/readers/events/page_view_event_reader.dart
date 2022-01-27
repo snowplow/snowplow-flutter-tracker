@@ -9,19 +9,21 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-export 'snowplow.dart';
-export 'tracker.dart';
+import 'package:snowplow_tracker/events/page_view_event.dart';
+import 'event_reader.dart';
 
-export 'configurations/gdpr_configuration.dart';
-export 'configurations/network_configuration.dart';
-export 'configurations/subject_configuration.dart';
-export 'configurations/tracker_configuration.dart';
-export 'configurations/activity_tracking_configuration.dart';
+class PageViewEventReader extends PageViewEvent implements EventReader {
+  PageViewEventReader(dynamic map) : super(title: map['title']);
 
-export 'events/consent_granted.dart';
-export 'events/consent_withdrawn.dart';
-export 'events/screen_view.dart';
-export 'events/self_describing.dart';
-export 'events/structured.dart';
-export 'events/timing.dart';
-export 'events/page_view_event.dart';
+  @override
+  String endpoint() {
+    return 'trackPageView';
+  }
+
+  @override
+  Map eventData() {
+    final data = {'title': title};
+    data.removeWhere((key, value) => value == null);
+    return data;
+  }
+}

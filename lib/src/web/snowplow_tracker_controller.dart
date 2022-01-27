@@ -38,6 +38,17 @@ class SnowplowTrackerController {
           }));
     }
 
+    if (configuration.trackerConfig?.activityTrackingConfig?.enabled ?? false) {
+      final activityTrackingConfig =
+          configuration.trackerConfig!.activityTrackingConfig!;
+      snowplow(
+          'enableActivityTracking',
+          jsify({
+            'minimumVisitLength': activityTrackingConfig.minimumVisitLength,
+            'heartbeatDelay': activityTrackingConfig.heartbeatDelay
+          }));
+    }
+
     if (configuration.addSessionContext) {
       addSessionContextPlugin(configuration.namespace);
     }
