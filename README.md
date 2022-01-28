@@ -23,6 +23,7 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 | Feature | Android | iOS | Web |
 |---|---|---|---|
 | Manual tracking of events: screen views, self-describing, structured, timing, consent granted and withdrawal | ✔ | ✔ | ✔ |
+| Automatic tracking of views events from Navigator API | ✔ | ✔ | ✔ |
 | Adding custom context entities to events | ✔ | ✔ | ✔ |
 | Support for multiple trackers | ✔ | ✔ | ✔ |
 | Configurable subject properties | ✔ | ✔ | partly |

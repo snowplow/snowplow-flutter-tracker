@@ -39,7 +39,11 @@ The only required attributes of the `Snowplow.createTracker` method are `namespa
 | `geoLocationContext` | `bool?` | Indicates whether geo-location context should be attached to tracked events. | ✔ | ✔ | ✔ | false |
 | `sessionContext` | `bool?` | Indicates whether session context should be attached to tracked events. | ✔ | ✔ | ✔ | true |
 | `webPageContext` | `bool?` | Indicates whether context about current web page should be attached to tracked events. | | | ✔ | true |
-| `activityTrackingConfig` | ActivityTrackingConfiguration?` | Enables activity tracking using page pings on the Web. | | | ✔ | true |
+| `webActivityTracking` | WebActivityTracking?` | Enables activity tracking using page views and pings on the Web. | | | ✔ | true |
+
+The optional `WebActivityTracking` property configures page tracking on Web. Initializing the configuration will inform `SnowplowObserver` observers (see section on auto-tracking in "Tracking events") to auto track `PageViewEvent` events instead of `ScreenView` events on navigation changes. Further, setting the `minimumVisitLength` and `heartbeatDelay` properties of the `WebActivityTracking` instance will enable activity tracking using 'page ping' events on Web.
+
+Activity tracking monitors whether a user continues to engage with a page over time, and record how he / she digests content on the page over time.  That is accomplished using 'page ping' events. If activity tracking is enabled, the web page is monitored to see if a user is engaging with it. (E.g. is the tab in focus, does the mouse move over the page, does the user scroll etc.) If any of these things occur in a set period of time (`minimumVisitLength` seconds from page load and every `heartbeatDelay` seconds after that), a page ping event fires, and records the maximum scroll left / right and up / down in the last ping period. If there is no activity in the page (e.g. because the user is on a different tab in his / her browser), no page ping fires.
 
 ## Configuration of subject information: `SubjectConfiguration`
 

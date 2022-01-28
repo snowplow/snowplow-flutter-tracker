@@ -17,13 +17,12 @@ import 'package:snowplow_tracker/tracker.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'helpers.dart';
-import 'package:snowplow_tracker_example/main.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
-    await SnowplowTests.createTracker();
+    SnowplowTests.createTracker();
   });
 
   setUp(() async {
@@ -32,11 +31,8 @@ void main() {
 
   testWidgets("maintains the same session context",
       (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
-    await Snowplow.track(
-        const Structured(category: 'category', action: 'action'),
-        tracker: "test");
+    await SnowplowTests.tracker
+        ?.track(const Structured(category: 'category', action: 'action'));
 
     dynamic clientSession1;
     expect(
@@ -60,9 +56,8 @@ void main() {
 
     await SnowplowTests.resetMicro();
 
-    await Snowplow.track(
-        const Structured(category: 'category', action: 'action'),
-        tracker: "test");
+    await SnowplowTests.tracker
+        ?.track(const Structured(category: 'category', action: 'action'));
 
     dynamic clientSession2;
     expect(
@@ -90,11 +85,8 @@ void main() {
 
   testWidgets("tracks the same session information as returned from API",
       (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
-    await Snowplow.track(
-        const Structured(category: 'category', action: 'action'),
-        tracker: "test");
+    await SnowplowTests.tracker
+        ?.track(const Structured(category: 'category', action: 'action'));
 
     dynamic clientSession;
     expect(
@@ -123,9 +115,7 @@ void main() {
 
   testWidgets("doesn't add session context when disabled",
       (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
-    Tracker tracker = await Snowplow.createTracker(
+    Tracker tracker = Snowplow.createTracker(
         namespace: 'test-without-session',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(sessionContext: false));

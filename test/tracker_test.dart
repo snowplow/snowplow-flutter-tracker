@@ -33,7 +33,7 @@ void main() {
       return returnValue;
     });
 
-    tracker = await Snowplow.createTracker(namespace: 'ns1', endpoint: 'e1');
+    tracker = Snowplow.createTracker(namespace: 'ns1', endpoint: 'e1');
     method = null;
     arguments = null;
   });

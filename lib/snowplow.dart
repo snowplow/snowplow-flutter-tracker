@@ -32,21 +32,21 @@ class Snowplow {
   ///
   /// [endpoint] refers to the Snowplow collector endpoint.
   /// [method] is the HTTP method used to send events to collector and it defaults to POST.
-  static Future<Tracker> createTracker(
+  static Tracker createTracker(
       {required String namespace,
       required String endpoint,
       Method? method,
       TrackerConfiguration? trackerConfig,
       SubjectConfiguration? subjectConfig,
-      GdprConfiguration? gdprConfig}) async {
+      GdprConfiguration? gdprConfig}) {
     final configuration = Configuration(
         namespace: namespace,
         networkConfig: NetworkConfiguration(endpoint: endpoint, method: method),
         trackerConfig: trackerConfig,
         subjectConfig: subjectConfig,
         gdprConfig: gdprConfig);
-    await _channel.invokeMethod('createTracker', configuration.toMap());
-    return Tracker(namespace: configuration.namespace);
+    _channel.invokeMethod('createTracker', configuration.toMap());
+    return Tracker(configuration: configuration);
   }
 
   /// Tracks the given event using the specified [tracker] namespace and with optional context entities.

@@ -14,15 +14,17 @@ import 'dart:async';
 import 'package:snowplow_tracker/events/event.dart';
 import 'package:snowplow_tracker/events/self_describing.dart';
 import 'package:snowplow_tracker/snowplow.dart';
+import 'package:snowplow_tracker/snowplow_observer.dart';
+import 'package:snowplow_tracker/configurations/configuration.dart';
 
-/// Instance of an initialized Snowplow tracker identified by [namespace].
+/// Instance of an initialized Snowplow tracker identified by a [namespace].
 ///
 /// {@category Getting started}
 class Tracker {
-  /// Unique tracker namespace.
-  final String namespace;
+  /// Tracker configuration.
+  final Configuration configuration;
 
-  const Tracker({required this.namespace});
+  const Tracker({required this.configuration});
 
   /// Tracks the given event with optional context entities.
   Future<void> track(Event event, {List<SelfDescribing>? contexts}) async {
@@ -53,5 +55,69 @@ class Tracker {
   /// All trackers on Web share the same session.
   Future<int?> get sessionIndex async {
     return await Snowplow.getSessionIndex(tracker: namespace);
+  }
+
+  /// Returns a [SnowplowObserver] for automatically tracking `PageViewEvent`
+  /// and `ScreenView` events from a navigator when the currently active
+  /// [ModalRoute] of the navigator changes.
+  ///
+  /// `ScreenView` events are tracked on all platforms. Optionally,
+  /// `PageViewEvent` events may be tracked on Web if
+  /// `TrackerConfiguration.webActivityTracking` is configured when creating
+  /// the tracker.
+  ///
+  /// The [nameExtractor] function is used to extract a name
+  /// from [RouteSettings] of the now active route and that name is used in
+  /// tracked `ScreenView` or `PageViewEvent` events.
+  ///
+  /// The following operations will result in tracking a view event:
+  ///
+  /// ```dart
+  /// Navigator.pushNamed(context, '/contact/123');
+  ///
+  /// Navigator.push<void>(context, MaterialPageRoute(
+  ///   settings: RouteSettings(name: '/contact/123'),
+  ///   builder: (_) => ContactDetail(123)));
+  ///
+  /// Navigator.pushReplacement<void>(context, MaterialPageRoute(
+  ///   settings: RouteSettings(name: '/contact/123'),
+  ///   builder: (_) => ContactDetail(123)));
+  ///
+  /// Navigator.pop(context);
+  /// ```
+  ///
+  /// If using [MaterialApp], add the retrieved observer to
+  /// `navigatorObservers`, e.g.:
+  ///
+  /// ```dart
+  /// MaterialApp(
+  ///   navigatorObservers: [
+  ///     tracker.getObserver()
+  ///   ],
+  ///   ...
+  /// );
+  /// ```
+  ///
+  /// If using the `Router` API with the `MaterialApp.router` constructor,
+  /// add the observer to the `observers` of your [Navigator] instance, e.g.:
+  ///
+  /// ```dart
+  /// return Navigator(
+  ///   observers: [tracker.getObserver()],
+  ///   ...
+  /// );
+  /// ```
+  ///
+  /// You can also trigger view event tracking within your [ModalRoute] by implementing
+  /// [RouteAware<ModalRoute<dynamic>>] and subscribing it to [SnowplowObserver].
+  /// See the [RouteObserver<ModalRoute<dynamic>>] docs for an example.
+  SnowplowObserver getObserver(
+      {ScreenNameExtractor nameExtractor = defaultNameExtractor}) {
+    return SnowplowObserver(tracker: this, nameExtractor: nameExtractor);
+  }
+
+  /// Namespace that identifies the tracker.
+  String get namespace {
+    return configuration.namespace;
   }
 }

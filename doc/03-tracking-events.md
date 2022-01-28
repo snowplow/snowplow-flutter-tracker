@@ -185,3 +185,48 @@ tracker.track(ConsentWithdrawn(
     documentDescription: 'description1',
 ));
 ```
+
+## Automatically tracking view events using navigator observer
+
+There is also an option to automatically track view events when currently active pages change through the [Navigator API](https://api.flutter.dev/flutter/widgets/Navigator-class.html).
+
+To activate this feature, one has to register a `SnowplowObserver` retrieved from the tracker instance using `Tracker.getObserver()`. The retrieved observer can be added to `navigatorObservers` in `MaterialApp`:
+
+```dart
+MaterialApp(
+  navigatorObservers: [
+    tracker.getObserver()
+  ],
+  ...
+);
+```
+
+If using the `Router` API with the `MaterialApp.router` constructor, add the observer to the `observers` of your `Navigator` instance, e.g.:
+
+```dart
+Navigator(
+  observers: [tracker.getObserver()],
+  ...
+);
+```
+
+The `SnowplowObserver` automatically tracks `PageViewEvent` and `ScreenView` events when the currently active `ModalRoute` of the navigator changes.  `ScreenView` events are tracked on all platforms. `PageViewEvent` events may be tracked on Web if `TrackerConfiguration.webActivityTracking` is configured when creating the tracker.
+
+The `Tracker.getObserver()` function takes an optional `nameExtractor` function as argument which is used to extract a name from new routes that is used in
+tracked `ScreenView` or `PageViewEvent` events.
+
+The following operations will result in tracking a view event:
+
+```dart
+Navigator.pushNamed(context, '/contact/123');
+
+Navigator.push<void>(context, MaterialPageRoute(
+  settings: RouteSettings(name: '/contact/123'),
+  builder: (_) => ContactDetail(123)));
+
+Navigator.pushReplacement<void>(context, MaterialPageRoute(
+  settings: RouteSettings(name: '/contact/123'),
+  builder: (_) => ContactDetail(123)));
+
+Navigator.pop(context);
+```
