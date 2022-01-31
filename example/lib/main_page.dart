@@ -10,11 +10,9 @@ class MainPage extends StatefulWidget {
   const MainPage({
     Key? key,
     required this.tracker,
-    required this.observer,
   }) : super(key: key);
 
   final Tracker tracker;
-  final SnowplowObserver observer;
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -200,8 +198,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
             MaterialPageRoute<NestedPage>(
               settings: const RouteSettings(name: NestedPage.routeName),
               builder: (BuildContext context) {
-                return NestedPage(
-                    tracker: widget.tracker, observer: widget.observer);
+                return NestedPage(tracker: widget.tracker);
               },
             ),
           );

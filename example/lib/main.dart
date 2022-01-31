@@ -47,11 +47,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
-    SnowplowObserver observer = widget.tracker.getObserver();
-
+    Tracker tracker = widget.tracker;
     return MaterialApp(
         title: 'Demo App',
-        home: MainPage(observer: observer, tracker: widget.tracker),
-        navigatorObservers: [observer]);
+        home: MainPage(tracker: tracker),
+        navigatorObservers: [tracker.getObserver()]);
   }
 }

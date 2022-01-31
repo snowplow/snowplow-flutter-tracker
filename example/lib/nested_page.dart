@@ -5,11 +5,9 @@ import 'overview.dart';
 import 'snowplow_bdp.dart';
 
 class NestedPage extends StatefulWidget {
-  const NestedPage({required this.tracker, required this.observer, Key? key})
-      : super(key: key);
+  const NestedPage({required this.tracker, Key? key}) : super(key: key);
 
   final Tracker tracker;
-  final SnowplowObserver observer;
 
   static const String routeName = '/tab';
 
