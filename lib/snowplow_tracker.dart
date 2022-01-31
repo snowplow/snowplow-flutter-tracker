@@ -11,12 +11,13 @@
 
 export 'snowplow.dart';
 export 'tracker.dart';
+export 'snowplow_observer.dart';
 
 export 'configurations/gdpr_configuration.dart';
 export 'configurations/network_configuration.dart';
 export 'configurations/subject_configuration.dart';
 export 'configurations/tracker_configuration.dart';
-export 'configurations/activity_tracking_configuration.dart';
+export 'configurations/web_activity_tracking.dart';
 
 export 'events/consent_granted.dart';
 export 'events/consent_withdrawn.dart';

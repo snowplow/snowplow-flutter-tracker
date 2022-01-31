@@ -9,13 +9,11 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import 'package:snowplow_tracker/configurations/activity_tracking_configuration.dart';
+import 'package:snowplow_tracker/configurations/web_activity_tracking.dart';
 
-class ActivityTrackingConfigurationReader
-    extends ActivityTrackingConfiguration {
-  ActivityTrackingConfigurationReader(dynamic map)
+class WebActivityTrackingReader extends WebActivityTracking {
+  WebActivityTrackingReader(dynamic map)
       : super(
-            enabled: map['enabled'],
             minimumVisitLength: map['minimumVisitLength'],
             heartbeatDelay: map['heartbeatDelay']);
 }

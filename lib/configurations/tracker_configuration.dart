@@ -10,11 +10,12 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter/foundation.dart';
-import 'package:snowplow_tracker/configurations/activity_tracking_configuration.dart';
+import 'package:snowplow_tracker/configurations/web_activity_tracking.dart';
 
 /// Configuration of the tracker and the core tracker properties.
 ///
-/// Indicates what should be tracked in terms of automatic tracking and contexts/entities to attach to the events.
+/// Indicates what should be tracked in terms of automatic tracking and
+/// contexts/entities to attach to the events.
 /// {@category Sessions and data model}
 /// {@category Initialization and configuration}
 @immutable
@@ -49,13 +50,15 @@ class TrackerConfiguration {
   /// Defaults to true.
   final bool? sessionContext;
 
-  /// Indicates whether context about current web page should be attached to tracked events.
+  /// Indicates whether context about current web page should be attached to
+  /// tracked events.
   ///
   /// Only available on Web, defaults to true.
   final bool? webPageContext;
 
-  /// Configuration for activity tracking on the Web.
-  final ActivityTrackingConfiguration? activityTrackingConfig;
+  /// Configuration for activity tracking on the Web and use of `PageViewEvent`
+  /// events in auto tracking from [SnowplowObserver] observers.
+  final WebActivityTracking? webActivityTracking;
 
   const TrackerConfiguration(
       {this.appId,
@@ -65,7 +68,7 @@ class TrackerConfiguration {
       this.geoLocationContext,
       this.sessionContext,
       this.webPageContext,
-      this.activityTrackingConfig});
+      this.webActivityTracking});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -76,7 +79,7 @@ class TrackerConfiguration {
       'geoLocationContext': geoLocationContext,
       'sessionContext': sessionContext,
       'webPageContext': webPageContext,
-      'activityTrackingConfig': activityTrackingConfig?.toMap(),
+      'webActivityTracking': webActivityTracking?.toMap(),
     };
     conf.removeWhere((key, value) => value == null);
     return conf;
