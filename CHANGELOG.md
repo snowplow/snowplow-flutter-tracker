@@ -1,3 +1,7 @@
+# 0.1.0
+
+* Add route observer for auto tracking screen or page view events on navigation (#9)
+
 # 0.1.0-alpha.2
 
 * Add page view events and activity tracking on Web (#6)

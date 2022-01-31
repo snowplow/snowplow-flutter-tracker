@@ -12,5 +12,5 @@
 import Foundation
 
 class TrackerVersion {
-    static let TRACKER_VERSION = "flutter-0.1.0-alpha.2"
+    static let TRACKER_VERSION = "flutter-0.1.0"
 }
