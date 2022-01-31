@@ -1,9 +1,9 @@
 # Initialization and configuration
 
-The package provides a single method to initialize and configure a new tracker, the `Snowplow.createTracker` method. It accepts configuration parameters for the tracker and returns a `Tracker` instance.
+The package provides a single method to initialize and configure a new tracker, the `Snowplow.createTracker` method. It accepts configuration parameters for the tracker and returns a `SnowplowTracker` instance.
 
 ```dart
-Tracker tracker = await Snowplow.createTracker(
+SnowplowTracker tracker = await Snowplow.createTracker(
     namespace: 'ns1',
     endpoint: 'http://...',
     method: Method.post,
@@ -13,7 +13,7 @@ Tracker tracker = await Snowplow.createTracker(
 );
 ```
 
-The method returns a `Tracker` instance. This can be later used for tracking events, or accessing tracker properties. However, all methods provided by the `Tracker` instance are also available as static functions in the `Snowplow` class but they require passing the tracker namespace as string.
+The method returns a `SnowplowTracker` instance. This can be later used for tracking events, or accessing tracker properties. However, all methods provided by the `SnowplowTracker` instance are also available as static functions in the `Snowplow` class but they require passing the tracker namespace as string.
 
 The only required attributes of the `Snowplow.createTracker` method are `namespace` used to identify the tracker, and the Snowplow collector `endpoint`. Additionally, one can configure the HTTP method to be used when sending events to the collector and provide configuration by instantiating classes for `TrackerConfiguration`, `SubjectConfiguration`, or `GdprConfiguration`. The following arguments are accepted by the `Snowplow.createTracker` method:
 

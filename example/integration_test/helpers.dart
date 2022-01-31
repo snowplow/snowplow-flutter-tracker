@@ -17,7 +17,7 @@ import 'package:snowplow_tracker/tracker.dart';
 import 'dart:convert';
 
 class SnowplowTests {
-  static Tracker? tracker;
+  static SnowplowTracker? tracker;
 
   static const microEndpoint =
       String.fromEnvironment('ENDPOINT', defaultValue: 'http://0.0.0.0:9090');

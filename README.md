@@ -72,7 +72,7 @@ The endpoint is the URI of the Snowplow collector to send the events to.
 There are additional optional arguments to configure the tracker, please refer to the documentation for a complete specification.
 
 ```dart
-Tracker tracker = await Snowplow.createTracker(
+SnowplowTracker tracker = await Snowplow.createTracker(
     namespace: 'ns1',
     endpoint: 'http://...'
 );

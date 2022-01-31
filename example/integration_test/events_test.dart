@@ -176,7 +176,7 @@ void main() {
     if (!kIsWeb) {
       return;
     }
-    Tracker tracker = await Snowplow.createTracker(
+    SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'web',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(

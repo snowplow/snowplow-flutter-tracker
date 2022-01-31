@@ -21,11 +21,11 @@ import 'package:snowplow_tracker/configurations/configuration.dart';
 /// Instance of an initialized Snowplow tracker identified by a [namespace].
 ///
 /// {@category Getting started}
-class Tracker {
+class SnowplowTracker {
   /// Tracker configuration.
   final Configuration configuration;
 
-  const Tracker({required this.configuration});
+  const SnowplowTracker({required this.configuration});
 
   /// Tracks the given event with optional context entities.
   Future<void> track(Event event, {List<SelfDescribing>? contexts}) async {

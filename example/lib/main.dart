@@ -17,7 +17,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// create a Snowplow tracker instance
-  final Tracker tracker = await Snowplow.createTracker(
+  final SnowplowTracker tracker = await Snowplow.createTracker(
       namespace: "ns1",
       endpoint: const String.fromEnvironment('ENDPOINT',
           defaultValue: 'http://0.0.0.0:9090'),
@@ -37,7 +37,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatefulWidget {
-  final Tracker tracker;
+  final SnowplowTracker tracker;
   const MyApp({Key? key, required this.tracker}) : super(key: key);
 
   @override
@@ -47,7 +47,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
-    Tracker tracker = widget.tracker;
+    SnowplowTracker tracker = widget.tracker;
     return MaterialApp(
         title: 'Demo App',
         home: MainPage(tracker: tracker),

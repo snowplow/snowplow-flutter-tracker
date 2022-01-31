@@ -40,7 +40,7 @@ Tracker namespace identifies the tracker instance, you may create multiple track
 The endpoint is the URI of the Snowplow collector to send the events to.
 
 ```dart
-Tracker tracker = await Snowplow.createTracker(
+SnowplowTracker tracker = await Snowplow.createTracker(
     namespace: 'ns1',
     endpoint: 'http://...'
 );

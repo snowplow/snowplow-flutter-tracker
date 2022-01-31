@@ -22,13 +22,13 @@ String? defaultNameExtractor(RouteSettings settings) => settings.name;
 /// Route observer that tracks `ScreenView` or `PageViewEvent` events when the
 /// currently active [ModalRoute] changes.
 ///
-/// See the documentation in `Tracker.getObserver` for a more in-depth guide.
+/// See the documentation in `SnowplowTracker.getObserver` for a more in-depth guide.
 class SnowplowObserver extends RouteObserver<ModalRoute<dynamic>> {
   SnowplowObserver(
       {required this.tracker, this.nameExtractor = defaultNameExtractor});
 
   final ScreenNameExtractor nameExtractor;
-  final Tracker tracker;
+  final SnowplowTracker tracker;
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {

@@ -190,7 +190,7 @@ tracker.track(ConsentWithdrawn(
 
 There is also an option to automatically track view events when currently active pages change through the [Navigator API](https://api.flutter.dev/flutter/widgets/Navigator-class.html).
 
-To activate this feature, one has to register a `SnowplowObserver` retrieved from the tracker instance using `Tracker.getObserver()`. The retrieved observer can be added to `navigatorObservers` in `MaterialApp`:
+To activate this feature, one has to register a `SnowplowObserver` retrieved from the tracker instance using `SnowplowTracker.getObserver()`. The retrieved observer can be added to `navigatorObservers` in `MaterialApp`:
 
 ```dart
 MaterialApp(
@@ -214,7 +214,7 @@ The `SnowplowObserver` automatically tracks `PageViewEvent` and `ScreenView` eve
 
 By default, `ScreenView` events are tracked on all platforms. In case `TrackerConfiguration.webActivityTracking` is configured when creating the tracker, `PageViewEvent` events will be tracked on Web instead of `ScreenView` events (`ScreenView` events will still be tracked on other platforms).
 
-The `Tracker.getObserver()` function takes an optional `nameExtractor` function as argument which is used to extract a name from new routes that is used in tracked `ScreenView` or `PageViewEvent` events.
+The `SnowplowTracker.getObserver()` function takes an optional `nameExtractor` function as argument which is used to extract a name from new routes that is used in tracked `ScreenView` or `PageViewEvent` events.
 
 The following operations will result in tracking a view event:
 

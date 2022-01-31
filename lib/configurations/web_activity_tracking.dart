@@ -34,7 +34,7 @@ import 'package:flutter/foundation.dart';
 class WebActivityTracking {
   /// Indicates whether to track page views from navigator observer.
   ///
-  /// The observer can be accessed through the `observer` property in `Tracker` instance.
+  /// The observer can be accessed through the `observer` property in `SnowplowTracker` instance.
   final bool trackPageViewsInObserver;
 
   /// Time period from page load before the first page ping occurs, in seconds.

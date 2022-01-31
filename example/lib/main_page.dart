@@ -12,7 +12,7 @@ class MainPage extends StatefulWidget {
     required this.tracker,
   }) : super(key: key);
 
-  final Tracker tracker;
+  final SnowplowTracker tracker;
 
   @override
   _MainPageState createState() => _MainPageState();
