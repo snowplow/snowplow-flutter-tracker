@@ -210,10 +210,11 @@ Navigator(
 );
 ```
 
-The `SnowplowObserver` automatically tracks `PageViewEvent` and `ScreenView` events when the currently active `ModalRoute` of the navigator changes.  `ScreenView` events are tracked on all platforms. `PageViewEvent` events may be tracked on Web if `TrackerConfiguration.webActivityTracking` is configured when creating the tracker.
+The `SnowplowObserver` automatically tracks `PageViewEvent` and `ScreenView` events when the currently active `ModalRoute` of the navigator changes.
 
-The `Tracker.getObserver()` function takes an optional `nameExtractor` function as argument which is used to extract a name from new routes that is used in
-tracked `ScreenView` or `PageViewEvent` events.
+By default, `ScreenView` events are tracked on all platforms. In case `TrackerConfiguration.webActivityTracking` is configured when creating the tracker, `PageViewEvent` events will be tracked on Web instead of `ScreenView` events (`ScreenView` events will still be tracked on other platforms).
+
+The `Tracker.getObserver()` function takes an optional `nameExtractor` function as argument which is used to extract a name from new routes that is used in tracked `ScreenView` or `PageViewEvent` events.
 
 The following operations will result in tracking a view event:
 
