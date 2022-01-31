@@ -11,6 +11,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:snowplow_tracker/events/event.dart';
 import 'package:snowplow_tracker/events/self_describing.dart';
 import 'package:snowplow_tracker/snowplow.dart';
@@ -119,5 +120,17 @@ class Tracker {
   /// Namespace that identifies the tracker.
   String get namespace {
     return configuration.namespace;
+  }
+
+  /// Returns true if current platform is Web and `PageViewEvent` tracking is
+  /// enabled in `trackerConfig.webActivityTracking` configuration.
+  ///
+  /// Indicates whether page view events will be tracked in any initialized
+  /// observers. If false, screen view events will be tracked.
+  bool get tracksPageViews {
+    return kIsWeb &&
+        (configuration
+                .trackerConfig?.webActivityTracking?.trackPageViewsInObserver ??
+            false);
   }
 }

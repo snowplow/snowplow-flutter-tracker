@@ -22,9 +22,9 @@ class SnowplowTests {
   static const microEndpoint =
       String.fromEnvironment('ENDPOINT', defaultValue: 'http://0.0.0.0:9090');
 
-  static void createTracker() {
-    tracker =
-        Snowplow.createTracker(namespace: 'test', endpoint: microEndpoint);
+  static Future<void> createTracker() async {
+    tracker = await Snowplow.createTracker(
+        namespace: 'test', endpoint: microEndpoint);
   }
 
   static Future<void> resetMicro() async {

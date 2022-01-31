@@ -23,7 +23,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
-    SnowplowTests.createTracker();
+    await SnowplowTests.createTracker();
   });
 
   setUp(() async {
@@ -176,7 +176,7 @@ void main() {
     if (!kIsWeb) {
       return;
     }
-    Tracker tracker = Snowplow.createTracker(
+    Tracker tracker = await Snowplow.createTracker(
         namespace: 'web',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(
@@ -194,7 +194,7 @@ void main() {
 
   testWidgets("tracks a screen view event after loading page",
       (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp(tracker: SnowplowTests.tracker));
+    await tester.pumpWidget(MyApp(tracker: SnowplowTests.tracker!));
 
     expect(
         await SnowplowTests.checkMicroGood((events) =>

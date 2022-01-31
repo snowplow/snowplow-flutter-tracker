@@ -56,9 +56,7 @@ class SnowplowObserver extends RouteObserver<ModalRoute<dynamic>> {
 
   void _trackRoute(PageRoute<dynamic> route) {
     final String? screenName = nameExtractor(route.settings);
-    if (tracker.configuration.trackerConfig?.webActivityTracking
-            ?.trackPageViewsInObserver ??
-        false) {
+    if (tracker.tracksPageViews) {
       tracker.track(PageViewEvent(title: screenName));
     } else {
       if (screenName != null) {

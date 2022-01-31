@@ -115,7 +115,7 @@ void main() {
 
   testWidgets("doesn't add session context when disabled",
       (WidgetTester tester) async {
-    Tracker tracker = Snowplow.createTracker(
+    Tracker tracker = await Snowplow.createTracker(
         namespace: 'test-without-session',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(sessionContext: false));
