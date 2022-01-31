@@ -38,14 +38,16 @@ class SnowplowTrackerController {
           }));
     }
 
-    if (configuration.trackerConfig?.activityTrackingConfig?.enabled ?? false) {
-      final activityTrackingConfig =
-          configuration.trackerConfig!.activityTrackingConfig!;
+    if (configuration
+            .trackerConfig?.webActivityTracking?.enableActivityTracking ??
+        false) {
+      final webActivityTracking =
+          configuration.trackerConfig!.webActivityTracking!;
       snowplow(
           'enableActivityTracking',
           jsify({
-            'minimumVisitLength': activityTrackingConfig.minimumVisitLength,
-            'heartbeatDelay': activityTrackingConfig.heartbeatDelay
+            'minimumVisitLength': webActivityTracking.minimumVisitLength,
+            'heartbeatDelay': webActivityTracking.heartbeatDelay
           }));
     }
 

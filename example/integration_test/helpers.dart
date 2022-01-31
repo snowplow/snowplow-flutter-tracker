@@ -13,14 +13,18 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:snowplow_tracker/snowplow.dart';
+import 'package:snowplow_tracker/tracker.dart';
 import 'dart:convert';
 
 class SnowplowTests {
+  static SnowplowTracker? tracker;
+
   static const microEndpoint =
       String.fromEnvironment('ENDPOINT', defaultValue: 'http://0.0.0.0:9090');
 
   static Future<void> createTracker() async {
-    await Snowplow.createTracker(namespace: 'test', endpoint: microEndpoint);
+    tracker = await Snowplow.createTracker(
+        namespace: 'test', endpoint: microEndpoint);
   }
 
   static Future<void> resetMicro() async {

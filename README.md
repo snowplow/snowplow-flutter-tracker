@@ -23,6 +23,7 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 | Feature | Android | iOS | Web |
 |---|---|---|---|
 | Manual tracking of events: screen views, self-describing, structured, timing, consent granted and withdrawal | ✔ | ✔ | ✔ |
+| Automatic tracking of views events from Navigator API | ✔ | ✔ | ✔ |
 | Adding custom context entities to events | ✔ | ✔ | ✔ |
 | Support for multiple trackers | ✔ | ✔ | ✔ |
 | Configurable subject properties | ✔ | ✔ | partly |
@@ -71,7 +72,7 @@ The endpoint is the URI of the Snowplow collector to send the events to.
 There are additional optional arguments to configure the tracker, please refer to the documentation for a complete specification.
 
 ```dart
-Tracker tracker = await Snowplow.createTracker(
+SnowplowTracker tracker = await Snowplow.createTracker(
     namespace: 'ns1',
     endpoint: 'http://...'
 );
