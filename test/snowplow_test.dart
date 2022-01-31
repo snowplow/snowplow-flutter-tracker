@@ -45,7 +45,7 @@ void main() {
   });
 
   test('createsTrackerWithConfiguration', () async {
-    Snowplow.createTracker(
+    await Snowplow.createTracker(
         namespace: 'tns1',
         endpoint: 'https://snowplowanalytics.com',
         trackerConfig: const TrackerConfiguration(
