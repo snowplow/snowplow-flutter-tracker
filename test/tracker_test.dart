@@ -19,7 +19,7 @@ void main() {
   const MethodChannel channel = MethodChannel('snowplow_tracker');
   String? method;
   dynamic arguments;
-  Tracker? tracker;
+  SnowplowTracker? tracker;
   dynamic returnValue;
 
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -15,7 +15,6 @@ import 'package:integration_test/integration_test.dart';
 import 'package:snowplow_tracker/snowplow_tracker.dart';
 
 import 'helpers.dart';
-import 'package:snowplow_tracker_example/main.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -25,9 +24,7 @@ void main() {
   });
 
   testWidgets("sets and changes user id", (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
-    Tracker tracker = await Snowplow.createTracker(
+    SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'test',
         endpoint: SnowplowTests.microEndpoint,
         subjectConfig: const SubjectConfiguration(userId: 'XYZ'));
@@ -57,14 +54,13 @@ void main() {
     if (!kIsWeb) {
       return;
     }
-    await tester.pumpWidget(const MyApp(testing: true));
 
-    Tracker withoutContext = await Snowplow.createTracker(
+    SnowplowTracker withoutContext = await Snowplow.createTracker(
         namespace: 'withoutContext',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(webPageContext: false));
 
-    Tracker withContext = await Snowplow.createTracker(
+    SnowplowTracker withContext = await Snowplow.createTracker(
         namespace: 'withContext',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(webPageContext: true));
@@ -91,9 +87,7 @@ void main() {
   });
 
   testWidgets("attaches gdpr context to events", (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
-    Tracker tracker = await Snowplow.createTracker(
+    SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'gdpr',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(),
@@ -124,9 +118,7 @@ void main() {
 
   testWidgets("sets app ID and platform based on configuration",
       (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
-    Tracker tracker = await Snowplow.createTracker(
+    SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'app-platform',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(

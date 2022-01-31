@@ -31,8 +31,6 @@ void main() {
   });
 
   testWidgets("tracks a structured event", (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
     await Snowplow.track(
         const Structured(category: 'category', action: 'action'),
         tracker: "test");
@@ -50,8 +48,6 @@ void main() {
   });
 
   testWidgets("tracks a self-describing event", (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
     const selfDescribing = SelfDescribing(
       schema: 'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',
       data: {'targetUrl': 'http://a-target-url.com'},
@@ -74,7 +70,6 @@ void main() {
   });
 
   testWidgets("tracks a screen view event", (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
     String id = const Uuid().v4();
 
     var screenView = ScreenView(id: id, name: 'name');
@@ -92,8 +87,6 @@ void main() {
   });
 
   testWidgets("tracks a timing event", (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
     var timing =
         const Timing(category: 'cat', variable: 'var', timing: 10, label: 'l');
     await Snowplow.track(timing, tracker: 'test');
@@ -109,8 +102,6 @@ void main() {
   });
 
   testWidgets("tracks a consent granted event", (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
     final consentGranted = ConsentGranted(
       expiry: DateTime.parse('2021-12-30T09:03:51.196Z'),
       documentId: '1234',
@@ -129,8 +120,6 @@ void main() {
   });
 
   testWidgets("tracks a consent withdrawn event", (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
     const consentWithdrawn = ConsentWithdrawn(
       all: false,
       documentId: '1234',
@@ -150,8 +139,6 @@ void main() {
 
   testWidgets("tracks an event with custom context",
       (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(testing: true));
-
     await Snowplow.track(
         const Structured(category: 'category', action: 'action'),
         tracker: "test",
@@ -183,20 +170,37 @@ void main() {
         isTrue);
   });
 
-  testWidgets("tracks a page view event on web", (WidgetTester tester) async {
+  testWidgets(
+      "tracks a page view event on web after loading page if web activity tracking",
+      (WidgetTester tester) async {
     if (!kIsWeb) {
       return;
     }
-    await tester.pumpWidget(const MyApp(testing: true));
-
-    await Snowplow.track(const PageViewEvent(), tracker: 'test');
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'web',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            webActivityTracking: WebActivityTracking()));
+    await tester.pumpWidget(MyApp(tracker: tracker));
 
     expect(
         await SnowplowTests.checkMicroGood((events) =>
             (events.length == 1) &&
-            (events[0]['event']['page_title'] == 'Demo App') &&
+            (events[0]['event']['page_title'] == '/') &&
             (events[0]['event']['page_url'] != null) &&
             (events[0]['event']['page_referrer'] != null)),
+        isTrue);
+  });
+
+  testWidgets("tracks a screen view event after loading page",
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp(tracker: SnowplowTests.tracker!));
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            (events[0]['event']['unstruct_event']['data']['data']['name'] ==
+                '/')),
         isTrue);
   });
 
@@ -205,7 +209,6 @@ void main() {
     if (kIsWeb) {
       return;
     }
-    await tester.pumpWidget(const MyApp(testing: true));
 
     try {
       await Snowplow.track(const PageViewEvent(), tracker: 'test');
