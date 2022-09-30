@@ -19,15 +19,24 @@ class NetworkConfigurationReader(values: Map<String, Any>) {
 
     val endpoint: String by values
     val method: String? by valuesDefault
+    val customPostPath: String? by valuesDefault
 
     fun toConfiguration(): NetworkConfiguration {
+        var networkConfig: NetworkConfiguration;
+
         if (method != null) {
-            return NetworkConfiguration(
-               endpoint,
-               if ("get".equals(method, true)) { HttpMethod.GET } else { HttpMethod.POST }
+            networkConfig = NetworkConfiguration(
+                endpoint,
+                if ("get".equals(method, true)) { HttpMethod.GET } else { HttpMethod.POST }
             )
         } else {
-            return NetworkConfiguration(endpoint)
+            networkConfig = NetworkConfiguration(endpoint)
+        }
+
+        if (customPostPath != null) {
+            return networkConfig.customPostPath(customPostPath)
+        } else {
+            return networkConfig
         }
     }
 }
