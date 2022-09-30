@@ -33,6 +33,3 @@ flutter:
       web:
         pluginClass: SnowplowTrackerPluginWeb
         fileName: snowplow_tracker_plugin_web.dart
-
-  assets:
-    - packages/snowplow_tracker/js/sp_session_context_plugin.js

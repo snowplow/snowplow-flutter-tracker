@@ -45,6 +45,9 @@ class TrackerConfigurationReader extends TrackerConfiguration {
     if (webPageContext != null) {
       contexts['webPage'] = webPageContext;
     }
+    if (sessionContext ?? true) {
+      contexts['session'] = true;
+    }
     if (contexts.isNotEmpty) {
       options['contexts'] = contexts;
     }
