@@ -28,7 +28,7 @@ class SnowplowTests {
   }
 
   static Future<void> resetMicro() async {
-    await http.get(Uri.parse(microEndpoint + '/micro/reset'));
+    await http.get(Uri.parse('$microEndpoint/micro/reset'));
     await Future.delayed(const Duration(seconds: 1), () {});
   }
 

@@ -15,7 +15,7 @@ class MainPage extends StatefulWidget {
   final SnowplowTracker tracker;
 
   @override
-  _MainPageState createState() => _MainPageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
 
     updateState();
 
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   Future<void> updateState() async {
