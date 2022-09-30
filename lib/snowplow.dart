@@ -36,12 +36,15 @@ class Snowplow {
       {required String namespace,
       required String endpoint,
       Method? method,
+      String? customPostPath,
+      NetworkConfiguration? networkConfig,
       TrackerConfiguration? trackerConfig,
       SubjectConfiguration? subjectConfig,
       GdprConfiguration? gdprConfig}) async {
     final configuration = Configuration(
         namespace: namespace,
-        networkConfig: NetworkConfiguration(endpoint: endpoint, method: method),
+        networkConfig: NetworkConfiguration(
+            endpoint: endpoint, method: method, customPostPath: customPostPath),
         trackerConfig: trackerConfig,
         subjectConfig: subjectConfig,
         gdprConfig: gdprConfig);

@@ -22,12 +22,17 @@ class NetworkConfiguration {
   /// Choice of GET or POST (default) HTTP method used to send events to the collector.
   final Method? method;
 
-  const NetworkConfiguration({required this.endpoint, this.method});
+  /// text goes here
+  final String? customPostPath;
+
+  const NetworkConfiguration(
+      {required this.endpoint, this.method, this.customPostPath});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
       'endpoint': endpoint,
-      'method': method?.name
+      'method': method?.name,
+      'customPostPath': customPostPath
     };
     conf.removeWhere((key, value) => value == null);
     return conf;
