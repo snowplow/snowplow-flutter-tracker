@@ -17,11 +17,15 @@ class NetworkConfigurationReader extends NetworkConfiguration {
             endpoint: map['endpoint'],
             method: map['method'] == null
                 ? null
-                : Method.values.byName(map['method']));
+                : Method.values.byName(map['method']),
+            customPostPath: map['customPostPath']);
 
   void addTrackerOptions(dynamic options) {
     if (method != null) {
       options['eventMethod'] = method?.name;
+    }
+    if (customPostPath != null) {
+      options['postPath'] = customPostPath;
     }
   }
 }
