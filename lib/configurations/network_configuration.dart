@@ -22,7 +22,7 @@ class NetworkConfiguration {
   /// Choice of GET or POST (default) HTTP method used to send events to the collector.
   final Method? method;
 
-  /// Set a path for POST requests. This will override the default "com.snowplowanalytics.snowplow" path.
+  /// Set a path for POST requests. This will override the default "com.snowplowanalytics.snowplow/tp2" path.
   /// You will need to configure your collector to accept your custom path.
   final String? customPostPath;
 
