@@ -32,7 +32,7 @@ class Snowplow {
   ///
   /// [endpoint] refers to the Snowplow collector endpoint.
   /// [method] is the HTTP method used to send events to collector and it defaults to POST.
-  /// [customPostPath] is an optional string for custom POST collector paths. Do not include a starting "/".
+  /// [customPostPath] is an optional string for custom POST collector paths.
   static Future<SnowplowTracker> createTracker(
       {required String namespace,
       required String endpoint,
