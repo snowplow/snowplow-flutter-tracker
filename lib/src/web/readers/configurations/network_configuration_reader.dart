@@ -25,7 +25,7 @@ class NetworkConfigurationReader extends NetworkConfiguration {
       options['eventMethod'] = method?.name;
     }
     if (customPostPath != null) {
-      options['postPath'] = customPostPath;
+      options['postPath'] = '/$customPostPath';
     }
   }
 }

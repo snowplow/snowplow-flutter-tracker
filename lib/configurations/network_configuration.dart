@@ -33,7 +33,9 @@ class NetworkConfiguration {
     final conf = <String, Object?>{
       'endpoint': endpoint,
       'method': method?.name,
-      'customPostPath': customPostPath
+      'customPostPath': customPostPath?[0] == '/'
+          ? customPostPath?.substring(1)
+          : customPostPath
     };
     conf.removeWhere((key, value) => value == null);
     return conf;
