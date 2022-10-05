@@ -38,7 +38,6 @@ class Snowplow {
       required String endpoint,
       Method? method,
       String? customPostPath,
-      NetworkConfiguration? networkConfig,
       TrackerConfiguration? trackerConfig,
       SubjectConfiguration? subjectConfig,
       GdprConfiguration? gdprConfig}) async {

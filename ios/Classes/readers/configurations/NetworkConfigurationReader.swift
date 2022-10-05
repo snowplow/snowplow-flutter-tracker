@@ -20,17 +20,17 @@ struct NetworkConfigurationReader: Decodable {
 
 extension NetworkConfigurationReader {
     func toConfiguration() -> NetworkConfiguration {
-    let networkConfig: NetworkConfiguration
+        let networkConfig: NetworkConfiguration
 
-    if let m = method {
-        networkConfig = NetworkConfiguration(endpoint: endpoint, method: m == "get" ? .get : .post)
-    } else {
-        networkConfig = NetworkConfiguration(endpoint: endpoint, method: .post)
-    }
+        if let m = method {
+            networkConfig = NetworkConfiguration(endpoint: endpoint, method: m == "get" ? .get : .post)
+        } else {
+            networkConfig = NetworkConfiguration(endpoint: endpoint, method: .post)
+        }
 
-    if let c = customPostPath {
-        networkConfig.customPostPath("/\(c)")
-    }
-    return networkConfig
+        if let c = customPostPath {
+            networkConfig.customPostPath("/\(c)")
+        }
+        return networkConfig
     }
 }
