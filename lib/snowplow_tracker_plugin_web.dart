@@ -10,11 +10,9 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'dart:async';
-import 'dart:html' as html;
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:snowplow_tracker/src/web/sp.dart';
 import 'src/web/readers/configurations/configuration_reader.dart';
 import 'src/web/readers/messages/event_message_reader.dart';
 import 'src/web/readers/messages/set_user_id_message_reader.dart';
@@ -30,32 +28,9 @@ class SnowplowTrackerPluginWeb {
 
     final pluginInstance = SnowplowTrackerPluginWeb();
     channel.setMethodCallHandler(pluginInstance.handleMethodCall);
-
-    // Add JS plugin for client session context
-    const clientSessionJSFile =
-        'assets/packages/snowplow_tracker/js/sp_session_context_plugin.js';
-    var foundClientSessionJSFile = false;
-    for (html.ScriptElement script
-        in html.document.head!.querySelectorAll('script')) {
-      if (script.src.contains(clientSessionJSFile)) {
-        foundClientSessionJSFile = true;
-      }
-    }
-    if (!foundClientSessionJSFile) {
-      html.document.body!.append(html.ScriptElement()
-        ..src = clientSessionJSFile
-        ..type = 'application/javascript');
-    }
   }
 
   Future<dynamic> handleMethodCall(MethodCall call) async {
-    if (!isSnowplowInstalled()) {
-      throw PlatformException(
-        code: 'Unimplemented',
-        details: 'Snowplow JS tracker is not installed',
-      );
-    }
-
     switch (call.method) {
       case 'createTracker':
         return onCreateTracker(call);
