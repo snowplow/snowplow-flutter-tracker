@@ -1,6 +1,6 @@
 # Getting started
 
-Designing how and what to track in your app is an important decision. Check out our docs about tracking design [here](https://docs.snowplowanalytics.com/docs/understanding-tracking-design/introduction-to-tracking-design/).
+Designing how and what to track in your app is an important decision. Check out our docs about tracking design [here](https://docs.snowplow.io/docs/understanding-tracking-design/introduction-to-tracking-design/).
 
 The following steps will guide you through setting up the Flutter tracker in your project and tracking a simple event.
 
@@ -27,7 +27,7 @@ import 'package:snowplow_tracker/snowplow_tracker.dart'
 
 ### Installation on Web
 
-If using the tracker within a Flutter app for Web, you will also need to import the Snowplow JavaScript Tracker in your `index.html` file. Please load the JS tracker with the Snowplow tag as [described in the official documentation](https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/javascript-trackers/javascript-tracker/javascript-tracker-v3/tracker-setup/loading/). Do not change the global function name `snowplow` that is used to access the tracker – the Flutter APIs assume that it remains the default as shown in documentation.
+If using the tracker within a Flutter app for Web, you will also need to import the Snowplow JavaScript Tracker in your `index.html` file. Please load the JS tracker with the Snowplow tag as [described in the official documentation](https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/javascript-trackers/javascript-tracker/javascript-tracker-v3/tracker-setup/loading/). Do not change the global function name `snowplow` that is used to access the tracker – the Flutter APIs assume that it remains the default as shown in documentation.
 
 Make sure to use JavaScript tracker version `3.2` or newer. You may also refer to the [example project](https://github.com/snowplow-incubator/snowplow-flutter-tracker/tree/main/example) in the Flutter tracker repository to see this in action.
 
@@ -66,4 +66,4 @@ Visit documentation about [tracking events](03-tracking-events.md) to learn abou
 
 Testing that your event tracking is properly configured can be as important as testing the other aspects of your app. It confirms that you are generating the events you expect.
 
-We provide two types of pipeline for testing and debugging. [Snowplow Mini](https://docs.snowplowanalytics.com/docs/understanding-your-pipeline/what-is-snowplow-mini/) is especially useful in manual schema and pipeline testing. [Snowplow Micro](https://docs.snowplowanalytics.com/docs/understanding-your-pipeline/what-is-snowplow-micro/) is a minimal pipeline designed to be used as part of your app's automated test suite.
+We provide two types of pipeline for testing and debugging. [Snowplow Mini](https://docs.snowplow.io/docs/understanding-your-pipeline/what-is-snowplow-mini/) is especially useful in manual schema and pipeline testing. [Snowplow Micro](https://docs.snowplow.io/docs/understanding-your-pipeline/what-is-snowplow-micro/) is a minimal pipeline designed to be used as part of your app's automated test suite.
