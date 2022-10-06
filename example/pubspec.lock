@@ -70,7 +70,7 @@ packages:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -101,14 +101,14 @@ packages:
       name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "2.0.1"
   flutter_markdown:
     dependency: "direct main"
     description:
       name: flutter_markdown
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.9"
+    version: "0.6.12"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -130,7 +130,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.4"
+    version: "0.13.5"
   http_parser:
     dependency: transitive
     description:
@@ -156,14 +156,14 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.0"
   markdown:
     dependency: transitive
     description:
       name: markdown
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.1"
+    version: "6.0.1"
   matcher:
     dependency: transitive
     description:
@@ -280,7 +280,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.5"
+    version: "3.0.6"
   vector_math:
     dependency: transitive
     description:
@@ -303,5 +303,5 @@ packages:
     source: hosted
     version: "3.0.0"
 sdks:
-  dart: ">=2.17.0-0 <3.0.0"
-  flutter: ">=2.8.0"
+  dart: ">=2.17.0 <3.0.0"
+  flutter: ">=3.0.0"
