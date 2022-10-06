@@ -29,7 +29,7 @@ extension NetworkConfigurationReader {
         }
 
         if let c = customPostPath {
-            networkConfig.customPostPath("/\(c)")
+            networkConfig.customPostPath(c)
         }
         return networkConfig
     }
