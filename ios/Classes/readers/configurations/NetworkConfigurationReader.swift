@@ -15,14 +15,22 @@ import SnowplowTracker
 struct NetworkConfigurationReader: Decodable {
     let endpoint: String
     let method: String?
+    let customPostPath: String?
 }
 
 extension NetworkConfigurationReader {
     func toConfiguration() -> NetworkConfiguration {
+        let networkConfig: NetworkConfiguration
+
         if let m = method {
-            return NetworkConfiguration(endpoint: endpoint, method: m == "get" ? .get : .post)
+            networkConfig = NetworkConfiguration(endpoint: endpoint, method: m == "get" ? .get : .post)
         } else {
-            return NetworkConfiguration(endpoint: endpoint, method: .post)
+            networkConfig = NetworkConfiguration(endpoint: endpoint, method: .post)
         }
+
+        if let c = customPostPath {
+            networkConfig.customPostPath(c)
+        }
+        return networkConfig
     }
 }
