@@ -1,3 +1,10 @@
+# 0.2.0
+* Configure custom POST path (#15)  
+* Upgrade underlying mobile native trackers to version 4 (#17)  
+* Fix schema link in documentation for ScreenView (#12)  
+* Remove loading custom JavaScript for session context and reading cookies (#13)  
+* Upgrade min Flutter, Dart and Android SDK versions and upgrade dependencies (#19) - thanks @koga for the Android work!  
+
 # 0.1.0
 
 * Add route observer for auto tracking screen or page view events on navigation (#9)
