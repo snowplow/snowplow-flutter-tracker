@@ -47,7 +47,7 @@ This will add a line with the dependency like this to your `pubspec.yaml`:
 
 ```yml
 dependencies:
-    snowplow_tracker: ^0.1.0
+    snowplow_tracker: ^0.2.0
 ```
 
 Import the package into your Dart code:
@@ -58,9 +58,9 @@ import 'package:snowplow_tracker/snowplow_tracker.dart'
 
 #### Installation on Web
 
-If using the tracker within a Flutter app for Web, you will also need to import the Snowplow JavaScript Tracker in your `index.html` file. Please load the JS tracker with the Snowplow tag as [described in the official documentation](https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/javascript-trackers/javascript-tracker/javascript-tracker-v3/tracker-setup/loading/). Do not change the global function name `snowplow` that is used to access the tracker – the Flutter APIs assume that it remains the default as shown in documentation.
+If using the tracker within a Flutter app for Web, you will also need to import the Snowplow JavaScript Tracker in your `index.html` file. Please load the JS tracker with the Snowplow tag as [described in the official documentation](https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/javascript-trackers/javascript-tracker/javascript-tracker-v3/tracker-setup/loading/). Do not change the global function name `snowplow` that is used to access the tracker – the Flutter APIs assume that it remains the default as shown in documentation.
 
-Make sure to use JavaScript tracker version `3.2` or newer. You may also refer to the [example project](https://github.com/snowplow-incubator/snowplow-flutter-tracker/tree/main/example) in the Flutter tracker repository to see this in action.
+Make sure to use JavaScript tracker version `3.5` or newer. You may also refer to the [example project](https://github.com/snowplow-incubator/snowplow-flutter-tracker/tree/main/example) in the Flutter tracker repository to see this in action.
 
 ### Using the Tracker
 
@@ -223,8 +223,8 @@ limitations under the License.
 
 [website]: https://snowplowanalytics.com
 [snowplow]: https://github.com/snowplow/snowplow
-[docs]: https://docs.snowplowanalytics.com/
-[flutter-docs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/flutter-tracker/
+[docs]: https://docs.snowplow.io/
+[flutter-docs]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/flutter-tracker/
 
 [gh-actions]: https://github.com/snowplow-incubator/snowplow-flutter-tracker/actions/workflows/build.yml
 [gh-actions-image]: https://github.com/snowplow-incubator/snowplow-flutter-tracker/actions/workflows/build.yml/badge.svg
@@ -235,9 +235,9 @@ limitations under the License.
 [release-image]: https://img.shields.io/pub/v/snowplow_tracker
 [releases]: https://pub.dev/packages/snowplow_tracker
 
-[techdocs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/flutter-tracker/
+[techdocs]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/flutter-tracker/
 [techdocs-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
-[setup]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/flutter-tracker/quick-start-guide
+[setup]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/flutter-tracker/quick-start-guide
 [setup-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/setup.png
 
 [api-docs]: https://snowplow.github.io/snowplow-flutter-tracker/

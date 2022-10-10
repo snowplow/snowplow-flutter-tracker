@@ -10,6 +10,7 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'dart:js_util';
+import 'dart:html';
 
 import 'readers/configurations/configuration_reader.dart';
 import 'readers/messages/event_message_reader.dart';
@@ -50,10 +51,6 @@ class SnowplowTrackerController {
             'heartbeatDelay': webActivityTracking.heartbeatDelay
           }));
     }
-
-    if (configuration.addSessionContext) {
-      addSessionContextPlugin(configuration.namespace);
-    }
   }
 
   static void trackEvent(EventMessageReader message) {
@@ -70,14 +67,27 @@ class SnowplowTrackerController {
   }
 
   static String? getSessionUserId() {
-    return getSnowplowDuid();
+    return _getSnowplowCookieParts()?[0];
   }
 
   static String? getSessionId() {
-    return getSnowplowSid();
+    return _getSnowplowCookieParts()?[5];
   }
 
   static int? getSessionIndex() {
-    return getSnowplowVid();
+    final cookiePart = _getSnowplowCookieParts()?[2];
+    if (cookiePart != null) {
+      return int.tryParse(cookiePart);
+    }
+    return null;
+  }
+
+  static List<String>? _getSnowplowCookieParts() {
+    final regex = RegExp(r'_sp_id\.[a-f0-9]+=([^;]+);?');
+    if (document.cookie != null) {
+      final cookieValue = regex.firstMatch(document.cookie!)?.group(1);
+      return cookieValue?.split('.');
+    }
+    return null;
   }
 }

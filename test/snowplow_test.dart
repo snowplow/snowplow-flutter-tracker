@@ -12,6 +12,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
+import 'package:snowplow_tracker/configurations/network_configuration.dart';
 import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
 import 'package:snowplow_tracker/events/consent_granted.dart';
 import 'package:snowplow_tracker/events/consent_withdrawn.dart';
@@ -61,6 +62,39 @@ void main() {
         isMethodCall('createTracker', arguments: {
           'namespace': 'tns1',
           'networkConfig': {'endpoint': 'https://snowplowanalytics.com'},
+          'trackerConfig': {'devicePlatform': 'iot', 'base64Encoding': true},
+          'gdprConfig': {
+            'basisForProcessing': 'b',
+            'documentId': 'd',
+            'documentVersion': 'v',
+            'documentDescription': 'e',
+          }
+        }));
+  });
+
+  test('createsTrackerWithCustomPostPath', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        method: Method.post,
+        customPostPath: 'com.custom',
+        trackerConfig: const TrackerConfiguration(
+            devicePlatform: DevicePlatform.iot, base64Encoding: true),
+        gdprConfig: const GdprConfiguration(
+            basisForProcessing: 'b',
+            documentId: 'd',
+            documentVersion: 'v',
+            documentDescription: 'e'));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {
+            'endpoint': 'https://snowplowanalytics.com',
+            'method': 'post',
+            'customPostPath': 'com.custom'
+          },
           'trackerConfig': {'devicePlatform': 'iot', 'base64Encoding': true},
           'gdprConfig': {
             'basisForProcessing': 'b',

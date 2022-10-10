@@ -20,17 +20,14 @@ class ConfigurationReader extends Configuration {
       : super(
             namespace: map['namespace'],
             networkConfig: NetworkConfigurationReader(map['networkConfig']),
-            trackerConfig: map['trackerConfig'] != null
-                ? TrackerConfigurationReader(map['trackerConfig'])
-                : null,
+            trackerConfig:
+                TrackerConfigurationReader(map['trackerConfig'] ?? {}),
             subjectConfig: map['subjectConfig'] != null
                 ? SubjectConfigurationReader(map['subjectConfig'])
                 : null,
             gdprConfig: map['gdprConfig'] != null
                 ? GdprConfigurationReader(map['gdprConfig'])
                 : null);
-
-  bool get addSessionContext => trackerConfig?.sessionContext ?? true;
 
   dynamic getTrackerOptions() {
     var options = {};
