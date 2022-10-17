@@ -33,4 +33,9 @@ class CreateTrackerMessageReader(val values: Map<String, Any>) {
             GdprConfigurationReader(it as Map<String, Any>)
         }
     }
+    val emitterConfig: EmitterConfigurationReader? by lazy {
+        values.get("emitterConfig")?.let {
+            EmitterConfigurationReader(it as Map<String, Any>)
+        }
+    }
 }

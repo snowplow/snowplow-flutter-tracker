@@ -14,6 +14,7 @@ import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
 import 'package:snowplow_tracker/configurations/network_configuration.dart';
 import 'package:snowplow_tracker/configurations/subject_configuration.dart';
 import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
 
 /// Wraps configuration used to initialize a tracker.
 ///
@@ -35,12 +36,16 @@ class Configuration {
   /// Configuration of GDPR context attached to events.
   final GdprConfiguration? gdprConfig;
 
+  /// Configuration of Emitter.
+  final EmitterConfiguration? emitterConfig;
+
   const Configuration(
       {required this.namespace,
       required this.networkConfig,
       this.trackerConfig,
       this.subjectConfig,
-      this.gdprConfig});
+      this.gdprConfig,
+      this.emitterConfig});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -48,7 +53,8 @@ class Configuration {
       'networkConfig': networkConfig.toMap(),
       'trackerConfig': trackerConfig?.toMap(),
       'subjectConfig': subjectConfig?.toMap(),
-      'gdprConfig': gdprConfig?.toMap()
+      'gdprConfig': gdprConfig?.toMap(),
+      'emitterConfig': emitterConfig?.toMap()
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

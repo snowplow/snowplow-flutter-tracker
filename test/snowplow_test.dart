@@ -14,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
 import 'package:snowplow_tracker/configurations/network_configuration.dart';
 import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
 import 'package:snowplow_tracker/events/consent_granted.dart';
 import 'package:snowplow_tracker/events/consent_withdrawn.dart';
 import 'package:snowplow_tracker/events/event.dart';
@@ -102,6 +103,23 @@ void main() {
             'documentVersion': 'v',
             'documentDescription': 'e',
           }
+        }));
+  });
+
+  test('createsTrackerWithEmitterConfig', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        emitterConfig: const EmitterConfiguration(serverAnonymisation: true));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {
+            'endpoint': 'https://snowplowanalytics.com',
+          },
+          'emitterConfig': {'serverAnonymisation': true},
         }));
   });
 
