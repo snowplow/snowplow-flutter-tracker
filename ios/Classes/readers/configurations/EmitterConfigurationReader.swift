@@ -12,25 +12,18 @@
 import Foundation
 import SnowplowTracker
 
-struct NetworkConfigurationReader: Decodable {
-    let endpoint: String
-    let method: String?
-    let customPostPath: String?
+struct EmitterConfigurationReader: Decodable {
+    let serverAnonymisation: Bool?
 }
 
-extension NetworkConfigurationReader {
-    func toConfiguration() -> NetworkConfiguration {
-        let networkConfig: NetworkConfiguration
+extension EmitterConfigurationReader {
+    func toConfiguration() -> EmitterConfiguration {
+        let emitterConfig = EmitterConfiguration()
 
-        if let m = method {
-            networkConfig = NetworkConfiguration(endpoint: endpoint, method: m == "get" ? .get : .post)
-        } else {
-            networkConfig = NetworkConfiguration(endpoint: endpoint, method: .post)
+        if let s = serverAnonymisation {
+            emitterConfig.serverAnonymisation(s)
         }
-
-        if let c = customPostPath {
-            networkConfig.customPostPath(c)
-        }
-        return networkConfig
+        
+        return emitterConfig
     }
 }

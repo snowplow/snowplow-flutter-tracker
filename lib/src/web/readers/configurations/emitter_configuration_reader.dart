@@ -9,23 +9,19 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import 'package:snowplow_tracker/configurations/network_configuration.dart';
+import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
 
-class NetworkConfigurationReader extends NetworkConfiguration {
-  NetworkConfigurationReader(dynamic map)
-      : super(
-            endpoint: map['endpoint'],
-            method: map['method'] == null
-                ? null
-                : Method.values.byName(map['method']),
-            customPostPath: map['customPostPath']);
+class EmitterConfigurationReader extends EmitterConfiguration {
+  EmitterConfigurationReader(dynamic map)
+      : super(serverAnonymisation: map['serverAnonymisation']);
 
   void addTrackerOptions(dynamic options) {
-    if (method != null) {
-      options['eventMethod'] = method?.name;
+    var anonymousTracking = {};
+    if (serverAnonymisation != null) {
+      anonymousTracking['withServerAnonymisation'] = serverAnonymisation;
     }
-    if (customPostPath != null) {
-      options['postPath'] = '/$customPostPath';
+    if (anonymousTracking.isNotEmpty) {
+      options['anonymousTracking'] = anonymousTracking;
     }
   }
 }

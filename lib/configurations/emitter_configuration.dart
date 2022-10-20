@@ -11,12 +11,13 @@
 
 import 'package:flutter/foundation.dart';
 
-/// Configuration of the collector network endpoint.
+/// Configuration of the event emitter.
 ///
 /// {@category Initialization and configuration}
 @immutable
 class EmitterConfiguration {
-  /// TODO
+  /// Adds a request header ('SP-anonymous') that prevents the event collector
+  /// from adding a network_userid cookie, as well as anonymising the user's IP address.
   final bool? serverAnonymisation;
 
   const EmitterConfiguration({this.serverAnonymisation});

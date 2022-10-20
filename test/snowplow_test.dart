@@ -80,7 +80,10 @@ void main() {
         method: Method.post,
         customPostPath: 'com.custom',
         trackerConfig: const TrackerConfiguration(
-            devicePlatform: DevicePlatform.iot, base64Encoding: true),
+            devicePlatform: DevicePlatform.iot,
+            base64Encoding: true,
+            sessionContext: true,
+            userAnonymisation: false),
         gdprConfig: const GdprConfiguration(
             basisForProcessing: 'b',
             documentId: 'd',
@@ -96,7 +99,12 @@ void main() {
             'method': 'post',
             'customPostPath': 'com.custom'
           },
-          'trackerConfig': {'devicePlatform': 'iot', 'base64Encoding': true},
+          'trackerConfig': {
+            'devicePlatform': 'iot',
+            'base64Encoding': true,
+            'sessionContext': true,
+            'userAnonymisation': false
+          },
           'gdprConfig': {
             'basisForProcessing': 'b',
             'documentId': 'd',

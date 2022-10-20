@@ -19,6 +19,7 @@ struct TrackerConfigurationReader: Decodable {
     let platformContext: Bool?
     let geoLocationContext: Bool?
     let sessionContext: Bool?
+    let userAnonymisation: Bool?
     
     var devicePlatformType: DevicePlatform? {
         if let devicePlatform = self.devicePlatform { return SPStringToDevicePlatform(devicePlatform) }
@@ -37,7 +38,7 @@ extension TrackerConfigurationReader {
         trackerConfig.lifecycleAutotracking(false)
         trackerConfig.installAutotracking(false)
         trackerConfig.exceptionAutotracking(false)
-        trackerConfig.diagnosticAutotracking(false)
+        trackerConfig.userAnonymisation(false)
         
         return trackerConfig
     }
@@ -51,6 +52,7 @@ extension TrackerConfigurationReader {
         if let pc = self.platformContext { trackerConfig.platformContext(pc) }
         if let gc = self.geoLocationContext { trackerConfig.geoLocationContext(gc) }
         if let sc = self.sessionContext { trackerConfig.sessionContext(sc) }
+        if let ua = self.userAnonymisation { trackerConfig.userAnonymisation(ua) }
 
         return trackerConfig
     }

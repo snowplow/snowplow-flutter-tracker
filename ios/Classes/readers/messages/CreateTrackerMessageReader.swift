@@ -18,4 +18,5 @@ struct CreateTrackerMessageReader: Decodable {
     let trackerConfig: TrackerConfigurationReader?
     let subjectConfig: SubjectConfigurationReader?
     let gdprConfig: GdprConfigurationReader?
+    let emitterConfig: EmitterConfigurationReader?
 }
