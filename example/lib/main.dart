@@ -20,8 +20,10 @@ Future<void> main() async {
   final SnowplowTracker tracker = await Snowplow.createTracker(
       namespace: "ns1",
       endpoint: const String.fromEnvironment('ENDPOINT',
-          defaultValue: 'http://0.0.0.0:9090'),
+          defaultValue: 'https://29ba-82-26-43-253.ngrok.io'),
       trackerConfig: const TrackerConfiguration(
+          userAnonymisation: true,
+          sessionContext: false,
           webPageContext: false,
           webActivityTracking:
               WebActivityTracking(minimumVisitLength: 15, heartbeatDelay: 10)),
