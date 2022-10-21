@@ -17,7 +17,7 @@ class EmitterConfigurationReader extends EmitterConfiguration {
 
   void addTrackerOptions(dynamic options) {
     var anonymousTracking = {};
-    if (serverAnonymisation != null) {
+    if (serverAnonymisation == true) {
       anonymousTracking['withServerAnonymisation'] = serverAnonymisation;
     }
     if (anonymousTracking.isNotEmpty) {
