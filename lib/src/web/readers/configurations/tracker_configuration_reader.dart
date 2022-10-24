@@ -39,9 +39,15 @@ class TrackerConfigurationReader extends TrackerConfiguration {
     if (base64Encoding != null) {
       options['encodeBase64'] = base64Encoding;
     }
-    if (userAnonymisation != null) {
+
+    var anonymousTracking = {};
+    if ((userAnonymisation == true) && sessionContext != true) {
       options['anonymousTracking'] = userAnonymisation;
+    } else if ((userAnonymisation == true) && sessionContext == true) {
+      anonymousTracking['withSessionTracking'] = true;
+      options['anonymousTracking'] = anonymousTracking;
     }
+
     var contexts = {};
     if (geoLocationContext != null) {
       contexts['geolocation'] = geoLocationContext;
