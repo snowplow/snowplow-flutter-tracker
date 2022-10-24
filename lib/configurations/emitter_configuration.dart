@@ -18,6 +18,7 @@ import 'package:flutter/foundation.dart';
 class EmitterConfiguration {
   /// Adds a request header ('SP-anonymous') that prevents the event collector
   /// from adding a network_userid cookie, as well as anonymising the user's IP address.
+  /// Setting serverAnonymisation also enables (and overrides) TrackerConfiguration.userAnonymisation.
   final bool? serverAnonymisation;
 
   const EmitterConfiguration({this.serverAnonymisation});

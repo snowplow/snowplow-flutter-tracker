@@ -38,6 +38,7 @@ extension TrackerConfigurationReader {
         trackerConfig.lifecycleAutotracking(false)
         trackerConfig.installAutotracking(false)
         trackerConfig.exceptionAutotracking(false)
+        trackerConfig.diagnosticAutotracking(false)
         trackerConfig.userAnonymisation(false)
         
         return trackerConfig
