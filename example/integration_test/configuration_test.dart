@@ -12,6 +12,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
 import 'package:snowplow_tracker/snowplow_tracker.dart';
 
 import 'helpers.dart';
@@ -132,6 +133,56 @@ void main() {
             (events.length == 1) &&
             (events[0]['event']['app_id'] == 'App Z') &&
             (events[0]['event']['platform'] == 'iot')),
+        isTrue);
+  });
+
+  testWidgets("sets userAnonymisation", (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'app-platform',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            userAnonymisation: true,
+            sessionContext: true,
+            platformContext: true));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            (events[0]['event']['domain_userid'] == null)),
+        isTrue);
+
+    dynamic clientSession;
+    await SnowplowTests.checkMicroGood((dynamic events) {
+      Iterable sessions = events[0]['event']['contexts']['data']
+          .where((x) => x['schema'].toString().contains('client_session'));
+      if (sessions.length == 1) {
+        clientSession = sessions.first;
+
+        expect(clientSession['data']['userId'],
+            equals('00000000-0000-0000-0000-000000000000'));
+      }
+      return true;
+    });
+  });
+
+  testWidgets("sets serverAnonymisation", (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'app-platform',
+        endpoint: SnowplowTests.microEndpoint,
+        emitterConfig: const EmitterConfiguration(serverAnonymisation: true));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            (events[0]['event']['network_userid'] ==
+                '00000000-0000-0000-0000-000000000000') &&
+            (events[0]['event']['user_ipaddress'] == 'unknown')),
         isTrue);
   });
 }
