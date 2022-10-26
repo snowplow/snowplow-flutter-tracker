@@ -10,7 +10,6 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter/material.dart';
-import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
 import 'package:snowplow_tracker/snowplow_tracker.dart';
 import 'main_page.dart';
 
