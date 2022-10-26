@@ -138,7 +138,7 @@ void main() {
 
   testWidgets("sets userAnonymisation", (WidgetTester tester) async {
     SnowplowTracker tracker = await Snowplow.createTracker(
-        namespace: 'app-platform',
+        namespace: 'user-anonymisation',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(
             userAnonymisation: true,
