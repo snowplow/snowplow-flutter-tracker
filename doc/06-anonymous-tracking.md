@@ -2,25 +2,17 @@
 
 Anonymous tracking is a tracker feature that enables anonymising various user and session identifiers to support user privacy in case consent for tracking the identifiers is not given.
 
-On mobile, the affected user and session identifiers are stored in two context entities: [Session](http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/client_session/jsonschema/1-0-2) and [Platform context](http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/mobile_context/jsonschema/1-0-2). The Session context entity contains user and session identifiers, while the Platform context entity contains user identifiers. 
-
-On web, the affected user and session identifiers are stored in the cookies.
-
 Concretely, the following user and session identifiers can be anonymised:
 
-* Mobile client-side user identifiers: the `userId` in Session context entity and the IDFA identifiers (`appleIdfa` and `appleIdfv`, and their Android equivalents) in the Platform context entity.
-* Mobile client-side session identifiers: `sessionId` in Session context entity.
-* Web client-side user identifiers: the `domain_userid` in the sp_id cookie.
-* Web client-side session identifiers: `sessionId` in Session context entity, `domain_sessionid`, and `domain_sessionidx` from the sp_id cookie.
-* Server-side user identifiers: `network_userid` and `user_ipaddress` event properties.
+* Mobile client-side identifiers: the `userId` and `sessionId` in the [Session](http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/client_session/jsonschema/1-0-2) context entity, and the IDFA identifiers (`appleIdfa` and `appleIdfv` for iOS, `androidIdfa` for Android) in the [Platform](http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/mobile_context/jsonschema/1-0-2) context entity.
+* Web client-side identifiers: `domain_userid`, `domain_sessionid`, and `domain_sessionidx` in the event, which are also added to the Session entity as `userId`,`sessionId`, and `sessionIndex`.
+* Server-side identifiers: `network_userid` and `user_ipaddress` event properties.
 
 There are several levels to the anonymisation depending on which of the three categories are affected:
 
 ## 1. Full client-side anonymisation
 
-In this case, we want to anonymise both the client-side user identifiers as well as the client-side session identifiers.
-
-On mobile, setting `userAnonymisation` affects properties in the Session and Platform entities. If neither is present, it has no effect. In the Platform context entity, the IDFA identifiers are anonymised. Here the Session entity is not configured: no session information will be tracked at all.
+In this case, we want to anonymise both the client-side user identifiers as well as the client-side session identifiers. Here the Session entity is not configured: no session information will be tracked at all.
 
 ```dart
 const TrackerConfiguration()
@@ -29,25 +21,22 @@ const TrackerConfiguration()
     .platformContext(true) // only relevant for mobile
 ```
 
-On web, setting `userAnonymisation` stops any user identifiers or session information being stored in cookies or localStorage. This means that `domain_userid`, `domain_sessionid`, and `domain_sessionidx` will be anonymised. Again, no session information will be tracked at all.
+On web, setting `userAnonymisation` stops any user identifiers or session information being stored in cookies or localStorage. This means that `domain_userid`, `domain_sessionid`, and `domain_sessionidx` will be anonymised. These properties are already not present in any mobile events. 
 
-```dart
-const TrackerConfiguration().userAnonymisation(true)
-```
+On mobile, setting `userAnonymisation` affects properties in the Session and Platform entities. In this example, the Platform entity is enabled. The `appleIdfv` Platform property would be anonymised, as well as `appleIdfa`/`androidIdfa` if your app is [configured](https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/react-native-tracker/advanced-usage/#tracking-user-identifiers) to track those.
+
 
 ## 2. Client-side anonymisation with session tracking
 
-For mobile only, this setting disables client-side user identifiers but tracks session information.
+This setting disables client-side user identifiers but tracks session information.
 
 ```dart
 const TrackerConfiguration()
     .userAnonymisation(true)
     .sessionContext(true)
-    .platformContext(true)
+    .platformContext(true) // only relevant for mobile
 ```
-On mobile, enabling both `userAnonymisation` and `sessionContext` means that events will have the Session context entity, but the `userId` property will be anonymised to a null UUID (`00000000-0000-0000-0000-000000000000`). As above, if the Platform context entity is enabled, the IDFA identifiers will not be present.
-
-On web, enabling both `userAnonymisation` and `sessionContext` is the same as enabling just `userAnonymisation`; the Session entity is not added to events.
+Enabling both `userAnonymisation` and `sessionContext` means that events will have the Session context entity, but the `userId` property will be anonymised to a null UUID (`00000000-0000-0000-0000-000000000000`). The `sessionId` and `sessionIndex` are still present, as are `domain_sessionid` and `domain_sessionidx` for web events. As above, if the Platform context entity is enabled, the IDFA identifiers will not be present.
 
 ## 3. Server-side anonymisation
 
