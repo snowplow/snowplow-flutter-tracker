@@ -170,7 +170,7 @@ void main() {
 
   testWidgets("sets serverAnonymisation", (WidgetTester tester) async {
     SnowplowTracker tracker = await Snowplow.createTracker(
-        namespace: 'app-platform',
+        namespace: 'server-anonymisation',
         endpoint: SnowplowTests.microEndpoint,
         emitterConfig: const EmitterConfiguration(serverAnonymisation: true));
 
