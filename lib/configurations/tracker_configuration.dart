@@ -56,6 +56,16 @@ class TrackerConfiguration {
   /// Only available on Web, defaults to true.
   final bool? webPageContext;
 
+  /// Indicates whether screen context should be attached to tracked events.
+  ///
+  /// Defaults to true on iOS and Android. Not available on Web.
+  final bool? screenContext;
+
+  /// Indicates whether application context should be attached to tracked events.
+  ///
+  /// Defaults to true on iOS and Android. Not available on Web.
+  final bool? applicationContext;
+
   /// Configuration for activity tracking on the Web and use of `PageViewEvent`
   /// events in auto tracking from [SnowplowObserver] observers.
   final WebActivityTracking? webActivityTracking;
@@ -68,6 +78,8 @@ class TrackerConfiguration {
       this.geoLocationContext,
       this.sessionContext,
       this.webPageContext,
+      this.screenContext,
+      this.applicationContext,
       this.webActivityTracking});
 
   Map<String, Object?> toMap() {
@@ -79,6 +91,8 @@ class TrackerConfiguration {
       'geoLocationContext': geoLocationContext,
       'sessionContext': sessionContext,
       'webPageContext': webPageContext,
+      'screenContext': screenContext,
+      'applicationContext': applicationContext,
       'webActivityTracking': webActivityTracking?.toMap(),
     };
     conf.removeWhere((key, value) => value == null);
