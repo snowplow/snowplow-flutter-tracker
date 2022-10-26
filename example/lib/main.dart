@@ -21,13 +21,9 @@ Future<void> main() async {
   final SnowplowTracker tracker = await Snowplow.createTracker(
       namespace: "ns1",
       endpoint: const String.fromEnvironment('ENDPOINT',
-          defaultValue: 'https://aa45-82-26-43-253.ngrok.io'),
-      emitterConfig: const EmitterConfiguration(serverAnonymisation: true),
+          defaultValue: 'http://0.0.0.0:9090'),
       trackerConfig: const TrackerConfiguration(
           webPageContext: false,
-          sessionContext: true,
-          userAnonymisation: true,
-          platformContext: true,
           webActivityTracking:
               WebActivityTracking(minimumVisitLength: 15, heartbeatDelay: 10)),
       gdprConfig: const GdprConfiguration(

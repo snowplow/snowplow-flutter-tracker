@@ -181,8 +181,7 @@ void main() {
         await SnowplowTests.checkMicroGood((events) =>
             (events.length == 1) &&
             (events[0]['event']['network_userid'] ==
-                '00000000-0000-0000-0000-000000000000') &&
-            (events[0]['event']['user_ipaddress'] == 'unknown')),
+                '00000000-0000-0000-0000-000000000000')),
         isTrue);
   });
 }
