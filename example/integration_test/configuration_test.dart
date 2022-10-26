@@ -23,6 +23,8 @@ void main() {
     await SnowplowTests.resetMicro();
   });
 
+  // Use a different namespace for every tracker test
+
   testWidgets("sets and changes user id", (WidgetTester tester) async {
     SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'test',
@@ -133,5 +135,63 @@ void main() {
             (events[0]['event']['app_id'] == 'App Z') &&
             (events[0]['event']['platform'] == 'iot')),
         isTrue);
+  });
+
+  testWidgets("screenContext and applicationContext on by default",
+      (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'screen-on', endpoint: SnowplowTests.microEndpoint);
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    await SnowplowTests.checkMicroGood((dynamic events) {
+      if (events.length != 1) {
+        return false;
+      }
+      String eventType =
+          events[0]['event']['v_tracker'].toString().substring(0, 2);
+      // screenContext/applicationContext are not available on web
+      if (eventType == 'and' || eventType == 'ios') {
+        Iterable appContexts = events[0]['event']['contexts']['data']
+            .where((x) => x['schema'].toString().contains('application'));
+        expect(appContexts.isNotEmpty, isTrue);
+
+        Iterable screenContexts = events[0]['event']['contexts']['data']
+            .where((x) => x['schema'].toString().contains('screen\\/'));
+        expect(screenContexts.isNotEmpty, isTrue);
+      }
+      return true;
+    });
+
+    await SnowplowTests.resetMicro();
+
+    SnowplowTracker tracker2 = await Snowplow.createTracker(
+        namespace: 'screen-off',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            screenContext: false, applicationContext: false));
+
+    await tracker2
+        .track(const Structured(category: 'category', action: 'action'));
+
+    await SnowplowTests.checkMicroGood((dynamic events) {
+      if (events.length != 1) {
+        return false;
+      }
+      String eventType =
+          events[0]['event']['v_tracker'].toString().substring(0, 2);
+      // screenContext/applicationContext are not available on web
+      if (eventType == 'and' || eventType == 'ios') {
+        Iterable appContexts = events[0]['event']['contexts']['data']
+            .where((x) => x['schema'].toString().contains('application'));
+        expect(appContexts.isEmpty, isTrue);
+
+        Iterable screenContexts = events[0]['event']['contexts']['data']
+            .where((x) => x['schema'].toString().contains('screen\\/'));
+        expect(screenContexts.isEmpty, isTrue);
+      }
+      return true;
+    });
   });
 }
