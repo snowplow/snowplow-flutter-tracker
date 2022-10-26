@@ -158,7 +158,7 @@ void main() {
         expect(appContexts.isNotEmpty, isTrue);
 
         Iterable screenContexts = events[0]['event']['contexts']['data']
-            .where((x) => x['schema'].toString().contains('screen\\/'));
+            .where((x) => x['schema'].toString().contains('screen'));
         expect(screenContexts.isNotEmpty, isTrue);
       }
       return true;
@@ -188,7 +188,7 @@ void main() {
         expect(appContexts.isEmpty, isTrue);
 
         Iterable screenContexts = events[0]['event']['contexts']['data']
-            .where((x) => x['schema'].toString().contains('screen\\/'));
+            .where((x) => x['schema'].toString().contains('screen'));
         expect(screenContexts.isEmpty, isTrue);
       }
       return true;
