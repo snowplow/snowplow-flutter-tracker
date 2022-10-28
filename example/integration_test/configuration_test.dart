@@ -9,6 +9,9 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:uuid/uuid.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -22,6 +25,8 @@ void main() {
   setUp(() async {
     await SnowplowTests.resetMicro();
   });
+
+  // Use a different namespace for every tracker test
 
   testWidgets("sets and changes user id", (WidgetTester tester) async {
     SnowplowTracker tracker = await Snowplow.createTracker(
@@ -133,5 +138,62 @@ void main() {
             (events[0]['event']['app_id'] == 'App Z') &&
             (events[0]['event']['platform'] == 'iot')),
         isTrue);
+  });
+
+  testWidgets("screenContext and applicationContext on by default",
+      (WidgetTester tester) async {
+    // screenContext/applicationContext are not available on web
+    if (kIsWeb) {
+      return;
+    }
+
+    SnowplowTracker trackerDefault = await Snowplow.createTracker(
+        namespace: 'screen-on', endpoint: SnowplowTests.microEndpoint);
+
+    // track a screenView first to enable screenContext for subsequent events
+    String id = const Uuid().v4();
+    await trackerDefault.track(ScreenView(id: id, name: 'name'));
+    await trackerDefault
+        .track(const Structured(category: 'category', action: 'action'));
+
+    await SnowplowTests.checkMicroGood((dynamic events) {
+      if (events.length != 2) {
+        return false;
+      }
+      Iterable appContexts = events[1]['event']['contexts']['data']
+          .where((x) => x['schema'].toString().contains('application'));
+      expect(appContexts.isNotEmpty, isTrue);
+
+      Iterable screenContexts = events[1]['event']['contexts']['data']
+          .where((x) => x['schema'].toString().contains('screen'));
+      expect(screenContexts.isNotEmpty, isTrue);
+      return true;
+    });
+
+    await SnowplowTests.resetMicro();
+
+    SnowplowTracker trackerConfigured = await Snowplow.createTracker(
+        namespace: 'screen-off',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            screenContext: false, applicationContext: false));
+
+    await trackerConfigured.track(ScreenView(id: id, name: 'name'));
+    await trackerConfigured
+        .track(const Structured(category: 'category', action: 'action'));
+
+    await SnowplowTests.checkMicroGood((dynamic events) {
+      if (events.length != 2) {
+        return false;
+      }
+      Iterable appContexts = events[1]['event']['contexts']['data']
+          .where((x) => x['schema'].toString().contains('application'));
+      expect(appContexts.isEmpty, isTrue);
+
+      Iterable screenContexts = events[1]['event']['contexts']['data']
+          .where((x) => x['schema'].toString().contains('screen'));
+      expect(screenContexts.isEmpty, isTrue);
+      return true;
+    });
   });
 }
