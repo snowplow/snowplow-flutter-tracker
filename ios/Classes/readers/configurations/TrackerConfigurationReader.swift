@@ -52,7 +52,7 @@ extension TrackerConfigurationReader {
         if let gc = self.geoLocationContext { trackerConfig.geoLocationContext(gc) }
         if let sc = self.sessionContext { trackerConfig.sessionContext(sc) }
         if let scr = self.screenContext { trackerConfig.screenContext(scr) }
-        if let ac = self.sessionContext { trackerConfig.applicationContext(ac) }
+        if let ac = self.applicationContext { trackerConfig.applicationContext(ac) }
 
         return trackerConfig
     }
