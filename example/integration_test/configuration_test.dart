@@ -9,6 +9,8 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -139,6 +141,11 @@ void main() {
 
   testWidgets("screenContext and applicationContext on by default",
       (WidgetTester tester) async {
+    // screenContext/applicationContext are not available on web
+    if (kIsWeb) {
+      return;
+    }
+
     SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'screen-on', endpoint: SnowplowTests.microEndpoint);
 
@@ -149,18 +156,14 @@ void main() {
       if (events.length != 1) {
         return false;
       }
-      String eventType =
-          events[0]['event']['v_tracker'].toString().substring(0, 2);
-      // screenContext/applicationContext are not available on web
-      if (eventType == 'and' || eventType == 'ios') {
-        Iterable appContexts = events[0]['event']['contexts']['data']
-            .where((x) => x['schema'].toString().contains('application'));
-        expect(appContexts.isNotEmpty, isTrue);
 
-        Iterable screenContexts = events[0]['event']['contexts']['data']
-            .where((x) => x['schema'].toString().contains('screen'));
-        expect(screenContexts.isNotEmpty, isTrue);
-      }
+      Iterable appContexts = events[0]['event']['contexts']['data']
+          .where((x) => x['schema'].toString().contains('application'));
+      expect(appContexts.isNotEmpty, isTrue);
+
+      Iterable screenContexts = events[0]['event']['contexts']['data']
+          .where((x) => x['schema'].toString().contains('screen'));
+      expect(screenContexts.isNotEmpty, isTrue);
       return true;
     });
 
@@ -179,18 +182,14 @@ void main() {
       if (events.length != 1) {
         return false;
       }
-      String eventType =
-          events[0]['event']['v_tracker'].toString().substring(0, 2);
-      // screenContext/applicationContext are not available on web
-      if (eventType == 'and' || eventType == 'ios') {
-        Iterable appContexts = events[0]['event']['contexts']['data']
-            .where((x) => x['schema'].toString().contains('application'));
-        expect(appContexts.isEmpty, isTrue);
 
-        Iterable screenContexts = events[0]['event']['contexts']['data']
-            .where((x) => x['schema'].toString().contains('screen'));
-        expect(screenContexts.isEmpty, isTrue);
-      }
+      Iterable appContexts = events[0]['event']['contexts']['data']
+          .where((x) => x['schema'].toString().contains('application'));
+      expect(appContexts.isEmpty, isTrue);
+
+      Iterable screenContexts = events[0]['event']['contexts']['data']
+          .where((x) => x['schema'].toString().contains('screen'));
+      expect(screenContexts.isEmpty, isTrue);
       return true;
     });
   });
