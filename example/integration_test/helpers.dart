@@ -44,12 +44,12 @@ class SnowplowTests {
 
   static Future<bool> checkMicroResponse(
       String api, bool Function(dynamic body) validation) async {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 20; i++) {
       final response = await http.get(Uri.parse(microEndpoint + api));
       if (validation(jsonDecode(response.body))) {
         return true;
       }
-      await Future.delayed(const Duration(seconds: 1), () {});
+      await Future.delayed(const Duration(milliseconds: 100), () {});
     }
     return false;
   }

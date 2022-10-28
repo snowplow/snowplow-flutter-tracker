@@ -10,6 +10,7 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -146,22 +147,24 @@ void main() {
       return;
     }
 
-    SnowplowTracker tracker = await Snowplow.createTracker(
+    SnowplowTracker trackerDefault = await Snowplow.createTracker(
         namespace: 'screen-on', endpoint: SnowplowTests.microEndpoint);
 
-    await tracker
+    // track a screenView first to enable screenContext for subsequent events
+    String id = const Uuid().v4();
+    await trackerDefault.track(ScreenView(id: id, name: 'name'));
+    await trackerDefault
         .track(const Structured(category: 'category', action: 'action'));
 
     await SnowplowTests.checkMicroGood((dynamic events) {
-      if (events.length != 1) {
+      if (events.length != 2) {
         return false;
       }
-
-      Iterable appContexts = events[0]['event']['contexts']['data']
+      Iterable appContexts = events[1]['event']['contexts']['data']
           .where((x) => x['schema'].toString().contains('application'));
       expect(appContexts.isNotEmpty, isTrue);
 
-      Iterable screenContexts = events[0]['event']['contexts']['data']
+      Iterable screenContexts = events[1]['event']['contexts']['data']
           .where((x) => x['schema'].toString().contains('screen'));
       expect(screenContexts.isNotEmpty, isTrue);
       return true;
@@ -169,25 +172,25 @@ void main() {
 
     await SnowplowTests.resetMicro();
 
-    SnowplowTracker tracker2 = await Snowplow.createTracker(
+    SnowplowTracker trackerConfigured = await Snowplow.createTracker(
         namespace: 'screen-off',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(
             screenContext: false, applicationContext: false));
 
-    await tracker2
+    await trackerConfigured.track(ScreenView(id: id, name: 'name'));
+    await trackerConfigured
         .track(const Structured(category: 'category', action: 'action'));
 
     await SnowplowTests.checkMicroGood((dynamic events) {
-      if (events.length != 1) {
+      if (events.length != 2) {
         return false;
       }
-
-      Iterable appContexts = events[0]['event']['contexts']['data']
+      Iterable appContexts = events[1]['event']['contexts']['data']
           .where((x) => x['schema'].toString().contains('application'));
       expect(appContexts.isEmpty, isTrue);
 
-      Iterable screenContexts = events[0]['event']['contexts']['data']
+      Iterable screenContexts = events[1]['event']['contexts']['data']
           .where((x) => x['schema'].toString().contains('screen'));
       expect(screenContexts.isEmpty, isTrue);
       return true;
