@@ -25,6 +25,8 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
     val platformContext: Boolean? by valuesDefault
     val geoLocationContext: Boolean? by valuesDefault
     val sessionContext: Boolean? by valuesDefault
+    val screenContext: Boolean? by valuesDefault
+    val applicationContext: Boolean? by valuesDefault
 
     fun toConfiguration(context: Context): TrackerConfiguration {
         val trackerConfig = DefaultTrackerConfiguration.toConfiguration(appId, context)
@@ -45,6 +47,8 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
         platformContext?.let { trackerConfig.platformContext(it) }
         geoLocationContext?.let { trackerConfig.geoLocationContext(it) }
         sessionContext?.let { trackerConfig.sessionContext(it) }
+        screenContext?.let { trackerConfig.screenContext(it) }
+        applicationContext?.let { trackerConfig.applicationContext(it) }
 
         return trackerConfig
     }
@@ -54,9 +58,7 @@ object DefaultTrackerConfiguration {
     fun toConfiguration(appId: String?, context: Context): TrackerConfiguration {
         val trackerConfig = TrackerConfiguration(appId ?: context.getPackageName())
                 .trackerVersionSuffix(TrackerVersion.TRACKER_VERSION)
-
-        trackerConfig.applicationContext(false)
-        trackerConfig.screenContext(false)
+        
         trackerConfig.screenViewAutotracking(false)
         trackerConfig.lifecycleAutotracking(false)
         trackerConfig.installAutotracking(false)
