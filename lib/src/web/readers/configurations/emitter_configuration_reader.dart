@@ -22,14 +22,6 @@ class EmitterConfigurationReader extends EmitterConfiguration {
             : options['anonymousTracking']
         : {};
 
-    // var anonymousTracking = options.containsKey('anonymousTracking')
-    //     ? options['anonymousTracking']
-    //     : {};
-
-    // if (anonymousTracking is bool) {
-    //   anonymousTracking = {};
-    // }
-
     if (serverAnonymisation == true) {
       anonymousTracking['withServerAnonymisation'] = serverAnonymisation;
     }
