@@ -38,11 +38,13 @@ Setting a custom POST path can be useful in avoiding adblockers; it replaces the
 | `appId` | `String?` | Identifier of the app. | ✔ | ✔ | ✔ | null on Web, bundle identifier on iOS/Android |
 | `devicePlatform` | `DevicePlatform?` | The device platform the tracker runs on. Available options are provided by the `DevicePlatform` enum. | ✔ | ✔ | ✔ | "web" on Web, "mob" on iOS/Android |
 | `base64Encoding` | `bool?` | Indicates whether payload JSON data should be base64 encoded. | ✔ | ✔ | ✔ | true |
-| `platformContext` | `bool?` | Indicates whether platform context should be attached to tracked events. | ✔ | ✔ | | true |
-| `geoLocationContext` | `bool?` | Indicates whether geo-location context should be attached to tracked events. | ✔ | ✔ | ✔ | false |
-| `sessionContext` | `bool?` | Indicates whether session context should be attached to tracked events. | ✔ | ✔ | ✔ | true |
-| `webPageContext` | `bool?` | Indicates whether context about current web page should be attached to tracked events. | | | ✔ | true |
-| `webActivityTracking` | `WebActivityTracking?` | Enables activity tracking using page views and pings on the Web. | | | ✔ | true |
+| `platformContext` | `bool?` | Indicates whether [platform](http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/mobile_context/jsonschema/1-0-2) (mobile) context should be attached to tracked events. | ✔ | ✔ | | true |
+| `geoLocationContext` | `bool?` | Indicates whether [geo-location](http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/geolocation_context/jsonschema/1-1-0) context should be attached to tracked events. | ✔ | ✔ | ✔ | false |
+| `sessionContext` | `bool?` | Indicates whether [session](http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/client_session/jsonschema/1-0-2) context should be attached to tracked events. | ✔ | ✔ | ✔ | true |
+| `webPageContext` | `bool?` | Indicates whether context about current [web page](http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/web_page/jsonschema/1-0-0) should be attached to tracked events. | | | ✔ | true |
+| `screenContext` | `bool?` | Indicates whether [screen](http://iglucentral.com/schemas/com.snowplowanalytics.mobile/screen/jsonschema/1-0-0) context should be attached to tracked events. | ✔ | ✔ | | true |
+| `applicationContext` | `bool?` | Indicates whether [application](http://iglucentral.com/schemas/com.snowplowanalytics.mobile/application/jsonschema/1-0-0) context should be attached to tracked events. | ✔ | ✔ | | true |
+| `webActivityTracking` | WebActivityTracking?` | Enables activity tracking using page views and pings on the Web. | | | ✔ | true |
 | `userAnonymisation` | `bool?` | Anonymises certain user identifiers. | ✔ | ✔ | ✔ | false |
 
 The optional `WebActivityTracking` property configures page tracking on Web. Initializing the configuration will inform `SnowplowObserver` observers (see section on auto-tracking in "Tracking events") to auto track `PageViewEvent` events instead of `ScreenView` events on navigation changes. Further, setting the `minimumVisitLength` and `heartbeatDelay` properties of the `WebActivityTracking` instance will enable activity tracking using 'page ping' events on Web.

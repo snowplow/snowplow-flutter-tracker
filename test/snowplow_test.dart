@@ -51,7 +51,10 @@ void main() {
         namespace: 'tns1',
         endpoint: 'https://snowplowanalytics.com',
         trackerConfig: const TrackerConfiguration(
-            devicePlatform: DevicePlatform.iot, base64Encoding: true),
+            devicePlatform: DevicePlatform.iot,
+            base64Encoding: true,
+            screenContext: false,
+            applicationContext: true),
         gdprConfig: const GdprConfiguration(
             basisForProcessing: 'b',
             documentId: 'd',
@@ -63,7 +66,12 @@ void main() {
         isMethodCall('createTracker', arguments: {
           'namespace': 'tns1',
           'networkConfig': {'endpoint': 'https://snowplowanalytics.com'},
-          'trackerConfig': {'devicePlatform': 'iot', 'base64Encoding': true},
+          'trackerConfig': {
+            'devicePlatform': 'iot',
+            'base64Encoding': true,
+            'screenContext': false,
+            'applicationContext': true
+          },
           'gdprConfig': {
             'basisForProcessing': 'b',
             'documentId': 'd',
