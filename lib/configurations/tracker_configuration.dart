@@ -70,6 +70,9 @@ class TrackerConfiguration {
   /// events in auto tracking from [SnowplowObserver] observers.
   final WebActivityTracking? webActivityTracking;
 
+  /// Indicates whether user identifiers should be anonymised.
+  final bool? userAnonymisation;
+
   const TrackerConfiguration(
       {this.appId,
       this.devicePlatform,
@@ -80,7 +83,8 @@ class TrackerConfiguration {
       this.webPageContext,
       this.screenContext,
       this.applicationContext,
-      this.webActivityTracking});
+      this.webActivityTracking,
+      this.userAnonymisation});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -94,6 +98,7 @@ class TrackerConfiguration {
       'screenContext': screenContext,
       'applicationContext': applicationContext,
       'webActivityTracking': webActivityTracking?.toMap(),
+      'userAnonymisation': userAnonymisation
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

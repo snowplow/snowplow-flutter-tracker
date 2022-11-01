@@ -9,14 +9,20 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import Foundation
-import SnowplowTracker
+package com.snowplowanalytics.snowplow_tracker.readers.configurations
 
-struct CreateTrackerMessageReader: Decodable {
-    let namespace: String
-    let networkConfig: NetworkConfigurationReader
-    let trackerConfig: TrackerConfigurationReader?
-    let subjectConfig: SubjectConfigurationReader?
-    let gdprConfig: GdprConfigurationReader?
-    let emitterConfig: EmitterConfigurationReader?
+import com.snowplowanalytics.snowplow.configuration.EmitterConfiguration
+
+class EmitterConfigurationReader(values: Map<String, Any>) {
+    private val valuesDefault = values.withDefault { null }
+
+    val serverAnonymisation: Boolean? by valuesDefault
+
+    fun toConfiguration(): EmitterConfiguration {
+        val emitterConfig = EmitterConfiguration()
+
+        serverAnonymisation?.let { emitterConfig.serverAnonymisation(it) }
+
+        return emitterConfig
+    }
 }

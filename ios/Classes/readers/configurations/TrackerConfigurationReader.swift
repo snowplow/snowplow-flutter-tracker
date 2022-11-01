@@ -19,6 +19,7 @@ struct TrackerConfigurationReader: Decodable {
     let platformContext: Bool?
     let geoLocationContext: Bool?
     let sessionContext: Bool?
+    let userAnonymisation: Bool?
     let screenContext: Bool?
     let applicationContext: Bool?
     
@@ -38,6 +39,7 @@ extension TrackerConfigurationReader {
         trackerConfig.installAutotracking(false)
         trackerConfig.exceptionAutotracking(false)
         trackerConfig.diagnosticAutotracking(false)
+        trackerConfig.userAnonymisation(false)
         
         return trackerConfig
     }
@@ -51,6 +53,7 @@ extension TrackerConfigurationReader {
         if let pc = self.platformContext { trackerConfig.platformContext(pc) }
         if let gc = self.geoLocationContext { trackerConfig.geoLocationContext(gc) }
         if let sc = self.sessionContext { trackerConfig.sessionContext(sc) }
+        if let ua = self.userAnonymisation { trackerConfig.userAnonymisation(ua) }
         if let scr = self.screenContext { trackerConfig.screenContext(scr) }
         if let ac = self.applicationContext { trackerConfig.applicationContext(ac) }
 

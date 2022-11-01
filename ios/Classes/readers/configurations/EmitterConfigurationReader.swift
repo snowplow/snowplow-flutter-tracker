@@ -12,11 +12,18 @@
 import Foundation
 import SnowplowTracker
 
-struct CreateTrackerMessageReader: Decodable {
-    let namespace: String
-    let networkConfig: NetworkConfigurationReader
-    let trackerConfig: TrackerConfigurationReader?
-    let subjectConfig: SubjectConfigurationReader?
-    let gdprConfig: GdprConfigurationReader?
-    let emitterConfig: EmitterConfigurationReader?
+struct EmitterConfigurationReader: Decodable {
+    let serverAnonymisation: Bool?
+}
+
+extension EmitterConfigurationReader {
+    func toConfiguration() -> EmitterConfiguration {
+        let emitterConfig = EmitterConfiguration()
+
+        if let s = serverAnonymisation {
+            emitterConfig.serverAnonymisation(s)
+        }
+        
+        return emitterConfig
+    }
 }

@@ -26,7 +26,8 @@ class TrackerConfigurationReader extends TrackerConfiguration {
             webPageContext: map['webPageContext'],
             webActivityTracking: map['webActivityTracking'] == null
                 ? null
-                : WebActivityTrackingReader(map['webActivityTracking']));
+                : WebActivityTrackingReader(map['webActivityTracking']),
+            userAnonymisation: map['userAnonymisation']);
 
   void addTrackerOptions(dynamic options) {
     if (appId != null) {
@@ -38,6 +39,15 @@ class TrackerConfigurationReader extends TrackerConfiguration {
     if (base64Encoding != null) {
       options['encodeBase64'] = base64Encoding;
     }
+
+    var anonymousTracking = {};
+    if ((userAnonymisation == true) && sessionContext != true) {
+      options['anonymousTracking'] = userAnonymisation;
+    } else if ((userAnonymisation == true) && sessionContext == true) {
+      anonymousTracking['withSessionTracking'] = true;
+      options['anonymousTracking'] = anonymousTracking;
+    }
+
     var contexts = {};
     if (geoLocationContext != null) {
       contexts['geolocation'] = geoLocationContext;

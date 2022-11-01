@@ -14,6 +14,7 @@ import 'gdpr_configuration_reader.dart';
 import 'network_configuration_reader.dart';
 import 'subject_configuration_reader.dart';
 import 'tracker_configuration_reader.dart';
+import 'emitter_configuration_reader.dart';
 
 class ConfigurationReader extends Configuration {
   ConfigurationReader(dynamic map)
@@ -27,6 +28,9 @@ class ConfigurationReader extends Configuration {
                 : null,
             gdprConfig: map['gdprConfig'] != null
                 ? GdprConfigurationReader(map['gdprConfig'])
+                : null,
+            emitterConfig: map['emitterConfig'] != null
+                ? EmitterConfigurationReader(map['emitterConfig'])
                 : null);
 
   dynamic getTrackerOptions() {
@@ -35,6 +39,9 @@ class ConfigurationReader extends Configuration {
     (networkConfig as NetworkConfigurationReader).addTrackerOptions(options);
     if (trackerConfig != null) {
       (trackerConfig as TrackerConfigurationReader).addTrackerOptions(options);
+    }
+    if (emitterConfig != null) {
+      (emitterConfig as EmitterConfigurationReader).addTrackerOptions(options);
     }
 
     return options;
