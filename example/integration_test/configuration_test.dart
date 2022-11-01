@@ -245,4 +245,5 @@ void main() {
       expect(screenContexts.isEmpty, isTrue);
       return true;
     });
+  });
 }
