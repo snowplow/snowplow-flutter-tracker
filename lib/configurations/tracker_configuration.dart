@@ -56,9 +56,22 @@ class TrackerConfiguration {
   /// Only available on Web, defaults to true.
   final bool? webPageContext;
 
+  /// Indicates whether screen context should be attached to tracked events.
+  ///
+  /// Defaults to true on iOS and Android. Not available on Web.
+  final bool? screenContext;
+
+  /// Indicates whether application context should be attached to tracked events.
+  ///
+  /// Defaults to true on iOS and Android. Not available on Web.
+  final bool? applicationContext;
+
   /// Configuration for activity tracking on the Web and use of `PageViewEvent`
   /// events in auto tracking from [SnowplowObserver] observers.
   final WebActivityTracking? webActivityTracking;
+
+  /// Indicates whether user identifiers should be anonymised.
+  final bool? userAnonymisation;
 
   const TrackerConfiguration(
       {this.appId,
@@ -68,7 +81,10 @@ class TrackerConfiguration {
       this.geoLocationContext,
       this.sessionContext,
       this.webPageContext,
-      this.webActivityTracking});
+      this.screenContext,
+      this.applicationContext,
+      this.webActivityTracking,
+      this.userAnonymisation});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -79,7 +95,10 @@ class TrackerConfiguration {
       'geoLocationContext': geoLocationContext,
       'sessionContext': sessionContext,
       'webPageContext': webPageContext,
+      'screenContext': screenContext,
+      'applicationContext': applicationContext,
       'webActivityTracking': webActivityTracking?.toMap(),
+      'userAnonymisation': userAnonymisation
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

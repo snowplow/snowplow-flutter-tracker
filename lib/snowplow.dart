@@ -13,6 +13,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:snowplow_tracker/configurations/configuration.dart';
+import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
 import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
 import 'package:snowplow_tracker/configurations/network_configuration.dart';
 import 'package:snowplow_tracker/configurations/subject_configuration.dart';
@@ -40,14 +41,16 @@ class Snowplow {
       String? customPostPath,
       TrackerConfiguration? trackerConfig,
       SubjectConfiguration? subjectConfig,
-      GdprConfiguration? gdprConfig}) async {
+      GdprConfiguration? gdprConfig,
+      EmitterConfiguration? emitterConfig}) async {
     final configuration = Configuration(
         namespace: namespace,
         networkConfig: NetworkConfiguration(
             endpoint: endpoint, method: method, customPostPath: customPostPath),
         trackerConfig: trackerConfig,
         subjectConfig: subjectConfig,
-        gdprConfig: gdprConfig);
+        gdprConfig: gdprConfig,
+        emitterConfig: emitterConfig);
     await _channel.invokeMethod('createTracker', configuration.toMap());
     return SnowplowTracker(configuration: configuration);
   }

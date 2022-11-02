@@ -39,6 +39,9 @@ object SnowplowTrackerController {
         val gdprConfigReader = messageReader.gdprConfig
         gdprConfigReader?.let { controllers.add(it.toConfiguration()) }
 
+        val emitterConfigReader = messageReader.emitterConfig
+        emitterConfigReader?.let { controllers.add(it.toConfiguration()) }
+
         Snowplow.createTracker(
                 context,
                 messageReader.namespace,

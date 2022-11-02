@@ -27,6 +27,9 @@ class SnowplowTrackerController {
         if let gdprConfig = message.gdprConfig {
             controllers.append(gdprConfig.toConfiguration())
         }
+        if let emitterConfig = message.emitterConfig {
+            controllers.append(emitterConfig.toConfiguration())
+        }
         
         Snowplow.createTracker(
             namespace: message.namespace,
