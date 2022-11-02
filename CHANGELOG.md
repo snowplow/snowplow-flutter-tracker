@@ -1,3 +1,7 @@
+# 0.3.0
+* Enable screen and application context on mobile (#27)  
+* Add anonymous tracking features (#16)
+
 # 0.2.0
 * Configure custom POST path (#15)  
 * Upgrade underlying mobile native trackers to version 4 (#17)  

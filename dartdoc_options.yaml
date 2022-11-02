@@ -15,7 +15,10 @@ dartdoc:
     "Sessions and data model":
       markdown: doc/05-sessions.md
       name: Sessions and data model
-  categoryOrder: ["Getting started", "Initialization and configuration", "Tracking events", "Adding data to your events", "Sessions and data model"]
+    "Anonymous tracking":
+      markdown: doc/06-anonymous-tracking.md
+      name: Anonymous tracking
+  categoryOrder: ["Getting started", "Initialization and configuration", "Tracking events", "Adding data to your events", "Sessions and data model", "Anonymous tracking"]
   showUndocumentedCategories: true
   errors:
     - unresolved-doc-reference

@@ -47,7 +47,7 @@ This will add a line with the dependency like this to your `pubspec.yaml`:
 
 ```yml
 dependencies:
-    snowplow_tracker: ^0.2.0
+    snowplow_tracker: ^0.3.0
 ```
 
 Import the package into your Dart code:
