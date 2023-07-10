@@ -24,7 +24,26 @@ struct TrackerConfigurationReader: Decodable {
     let applicationContext: Bool?
     
     var devicePlatformType: DevicePlatform? {
-        if let devicePlatform = self.devicePlatform { return SPStringToDevicePlatform(devicePlatform) }
+        if let devicePlatform = self.devicePlatform {
+            switch devicePlatform {
+            case "web":
+                return DevicePlatform.web
+            case "srv":
+                return DevicePlatform.serverSideApp
+            case "pc":
+                return DevicePlatform.desktop
+            case "app":
+                return DevicePlatform.general
+            case "tv":
+                return DevicePlatform.connectedTV
+            case "cnsl":
+                return DevicePlatform.gameConsole
+            case "iot":
+                return DevicePlatform.internetOfThings
+            default:
+                return DevicePlatform.mobile
+            }
+        }
         return nil
     }
 }

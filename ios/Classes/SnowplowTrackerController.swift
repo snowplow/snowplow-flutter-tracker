@@ -14,7 +14,7 @@ import SnowplowTracker
 
 class SnowplowTrackerController {
     static func createTracker(_ message: CreateTrackerMessageReader, arguments: [String: Any]) {
-        var controllers: [Configuration] = []
+        var controllers: [ConfigurationProtocol] = []
         
         if let trackerConfig = message.trackerConfig {
             controllers.append(trackerConfig.toConfiguration())
