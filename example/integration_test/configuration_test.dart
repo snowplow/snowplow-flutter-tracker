@@ -246,4 +246,21 @@ void main() {
       return true;
     });
   });
+
+  testWidgets("sets custom request headers", (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'custom-headers',
+        endpoint: SnowplowTests.microEndpoint,
+        requestHeaders: {'Warning': 'works'});
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            (events[0]['rawEvent']['context']['headers']
+                .contains('Warning: works'))),
+        isTrue);
+  });
 }

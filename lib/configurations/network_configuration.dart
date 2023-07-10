@@ -26,8 +26,14 @@ class NetworkConfiguration {
   /// You will need to configure your collector to accept your custom path.
   final String? customPostPath;
 
+  /// Custom HTTP headers to add to HTTP requests to the collector.
+  final Map<String, String>? requestHeaders;
+
   const NetworkConfiguration(
-      {required this.endpoint, this.method, this.customPostPath});
+      {required this.endpoint,
+      this.method,
+      this.customPostPath,
+      this.requestHeaders});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -35,7 +41,8 @@ class NetworkConfiguration {
       'method': method?.name,
       'customPostPath': customPostPath?[0] == '/'
           ? customPostPath?.substring(1)
-          : customPostPath
+          : customPostPath,
+      'requestHeaders': requestHeaders
     };
     conf.removeWhere((key, value) => value == null);
     return conf;
