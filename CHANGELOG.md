@@ -1,8 +1,17 @@
+# 0.4.0
+
+* Add configuration for setting custom HTTP headers for requests to the collector (#34)
+* Upgrade underlying iOS and Android trackers to version 5 (#36)
+* Remove deprecated kotlin-android-extensions plugin in example app (#35)
+* Upgrade JavaScript tracker in the example app to version 3.13
+
 # 0.3.0
+
 * Enable screen and application context on mobile (#27)  
 * Add anonymous tracking features (#16)
 
 # 0.2.0
+
 * Configure custom POST path (#15)  
 * Upgrade underlying mobile native trackers to version 4 (#17)  
 * Fix schema link in documentation for ScreenView (#12)  
