@@ -122,6 +122,23 @@ void main() {
         }));
   });
 
+  test('createsTrackerWithCustomRequestHeaders', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        requestHeaders: {'header1': 'value1', 'header2': 'value2'});
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {
+            'endpoint': 'https://snowplowanalytics.com',
+            'requestHeaders': {'header1': 'value1', 'header2': 'value2'}
+          }
+        }));
+  });
+
   test('createsTrackerWithEmitterConfig', () async {
     await Snowplow.createTracker(
         namespace: 'tns1',

@@ -20,6 +20,7 @@ class NetworkConfigurationReader(values: Map<String, Any>) {
     val endpoint: String by values
     val method: String? by valuesDefault
     val customPostPath: String? by valuesDefault
+    val requestHeaders: Map<String, String>? by valuesDefault
 
     fun toConfiguration(): NetworkConfiguration {
         val networkConfig: NetworkConfiguration = if (method != null) {
@@ -31,6 +32,7 @@ class NetworkConfigurationReader(values: Map<String, Any>) {
             NetworkConfiguration(endpoint)
         }
         customPostPath?.let { networkConfig.customPostPath(it) }
+        requestHeaders?.let { networkConfig.requestHeaders(it) }
         return networkConfig
     }
 }

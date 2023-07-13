@@ -21,7 +21,7 @@ struct TimingReader: Decodable {
 
 extension TimingReader {
     func toTiming() -> Timing {
-        let event = Timing(category: category, variable: variable, timing: NSNumber(value: timing))
+        let event = Timing(category: category, variable: variable, timing: timing)
         if let label = self.label { event.label(label) }
         return event
     }

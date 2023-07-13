@@ -16,6 +16,7 @@ struct NetworkConfigurationReader: Decodable {
     let endpoint: String
     let method: String?
     let customPostPath: String?
+    let requestHeaders: [String: String]?
 }
 
 extension NetworkConfigurationReader {
@@ -30,6 +31,9 @@ extension NetworkConfigurationReader {
 
         if let c = customPostPath {
             networkConfig.customPostPath(c)
+        }
+        if let h = requestHeaders {
+            networkConfig.requestHeaders(h)
         }
         return networkConfig
     }

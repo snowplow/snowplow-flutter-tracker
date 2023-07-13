@@ -34,11 +34,13 @@ class Snowplow {
   /// [endpoint] refers to the Snowplow collector endpoint.
   /// [method] is the HTTP method used to send events to collector and it defaults to POST.
   /// [customPostPath] is an optional string for custom POST collector paths.
+  /// [requestHeaders] is an optional map of custom HTTP headers to add to requests to the collector.
   static Future<SnowplowTracker> createTracker(
       {required String namespace,
       required String endpoint,
       Method? method,
       String? customPostPath,
+      Map<String, String>? requestHeaders,
       TrackerConfiguration? trackerConfig,
       SubjectConfiguration? subjectConfig,
       GdprConfiguration? gdprConfig,
@@ -46,7 +48,10 @@ class Snowplow {
     final configuration = Configuration(
         namespace: namespace,
         networkConfig: NetworkConfiguration(
-            endpoint: endpoint, method: method, customPostPath: customPostPath),
+            endpoint: endpoint,
+            method: method,
+            customPostPath: customPostPath,
+            requestHeaders: requestHeaders),
         trackerConfig: trackerConfig,
         subjectConfig: subjectConfig,
         gdprConfig: gdprConfig,

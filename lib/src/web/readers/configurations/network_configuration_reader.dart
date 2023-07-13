@@ -18,7 +18,10 @@ class NetworkConfigurationReader extends NetworkConfiguration {
             method: map['method'] == null
                 ? null
                 : Method.values.byName(map['method']),
-            customPostPath: map['customPostPath']);
+            customPostPath: map['customPostPath'],
+            requestHeaders: map['requestHeaders'] == null
+                ? null
+                : (map['requestHeaders'] as Map<Object?, Object?>).cast());
 
   void addTrackerOptions(dynamic options) {
     if (method != null) {
@@ -26,6 +29,9 @@ class NetworkConfigurationReader extends NetworkConfiguration {
     }
     if (customPostPath != null) {
       options['postPath'] = '/$customPostPath';
+    }
+    if (requestHeaders != null) {
+      options['customHeaders'] = requestHeaders;
     }
   }
 }

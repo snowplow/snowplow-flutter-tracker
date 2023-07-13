@@ -27,7 +27,7 @@ extension ConsentGrantedReader {
         if let name = self.name { event.name(name) }
         if let description = self.documentDescription { event.documentDescription(description) }
         if let documents = self.consentDocuments {
-            let jsons = documents.map { $0.toConsentDocument().getPayload() }
+            let jsons = documents.map { $0.toConsentDocument().payload }
             event.documents(jsons)
         }
         return event
