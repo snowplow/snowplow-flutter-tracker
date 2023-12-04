@@ -28,6 +28,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
     val userAnonymisation: Boolean? by valuesDefault
     val screenContext: Boolean? by valuesDefault
     val applicationContext: Boolean? by valuesDefault
+    val lifecycleAutotracking: Boolean? by valuesDefault
 
 
     fun toConfiguration(context: Context): TrackerConfiguration {
@@ -52,6 +53,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
         userAnonymisation?.let { trackerConfig.userAnonymisation(it) }
         screenContext?.let { trackerConfig.screenContext(it) }
         applicationContext?.let { trackerConfig.applicationContext(it) }
+        lifecycleAutotracking?.let { trackerConfig.lifecycleAutotracking(it) }
 
         return trackerConfig
     }

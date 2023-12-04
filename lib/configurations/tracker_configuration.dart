@@ -73,6 +73,11 @@ class TrackerConfiguration {
   /// Indicates whether user identifiers should be anonymised.
   final bool? userAnonymisation;
 
+  /// Indicates whether to enable automatic tracking of background and foreground transitions.
+  ///
+  /// Defaults to false on iOS and Android. Not available on Web.
+  final bool? lifecycleAutotracking;
+
   const TrackerConfiguration(
       {this.appId,
       this.devicePlatform,
@@ -84,7 +89,8 @@ class TrackerConfiguration {
       this.screenContext,
       this.applicationContext,
       this.webActivityTracking,
-      this.userAnonymisation});
+      this.userAnonymisation,
+      this.lifecycleAutotracking});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -98,7 +104,8 @@ class TrackerConfiguration {
       'screenContext': screenContext,
       'applicationContext': applicationContext,
       'webActivityTracking': webActivityTracking?.toMap(),
-      'userAnonymisation': userAnonymisation
+      'userAnonymisation': userAnonymisation,
+      'lifecycleAutotracking': lifecycleAutotracking
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

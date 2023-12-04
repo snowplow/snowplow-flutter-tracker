@@ -22,6 +22,7 @@ struct TrackerConfigurationReader: Decodable {
     let userAnonymisation: Bool?
     let screenContext: Bool?
     let applicationContext: Bool?
+    let lifecycleAutotracking: Bool?
     
     var devicePlatformType: DevicePlatform? {
         if let devicePlatform = self.devicePlatform {
@@ -75,6 +76,7 @@ extension TrackerConfigurationReader {
         if let ua = self.userAnonymisation { trackerConfig.userAnonymisation(ua) }
         if let scr = self.screenContext { trackerConfig.screenContext(scr) }
         if let ac = self.applicationContext { trackerConfig.applicationContext(ac) }
+        if let lc = self.lifecycleAutotracking { trackerConfig.lifecycleAutotracking(lc) }
 
         return trackerConfig
     }
