@@ -1,3 +1,7 @@
+# 0.5.0
+
+*  Add lifecycle autotracking config option (#39)
+
 # 0.4.0
 
 * Add configuration for setting custom HTTP headers for requests to the collector (#34)
