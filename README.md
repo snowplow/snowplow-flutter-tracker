@@ -20,18 +20,19 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 
 ## Features
 
-| Feature | Android | iOS | Web |
-|---|---|---|---|
-| Manual tracking of events: screen views, self-describing, structured, timing, consent granted and withdrawal | ✔ | ✔ | ✔ |
-| Automatic tracking of views events from Navigator API | ✔ | ✔ | ✔ |
-| Adding custom context entities to events | ✔ | ✔ | ✔ |
-| Support for multiple trackers | ✔ | ✔ | ✔ |
-| Configurable subject properties | ✔ | ✔ | partly |
-| Session context entity added to events | ✔ | ✔ | ✔ |
-| Geo-location context entity | ✔ | ✔ | ✔ |
-| Mobile platform context entity | ✔ | ✔ | |
-| Web page context entity | | | ✔ |
-| Configurable GDPR context entity | ✔ | ✔ | ✔ |
+| Feature                                                                                                      | Android | iOS | Web    |
+|--------------------------------------------------------------------------------------------------------------|---|---|--------|
+| Manual tracking of events: screen views, self-describing, structured, timing, consent granted and withdrawal | ✔ | ✔ | ✔      |
+| Automatic tracking of views events from Navigator API                                                        | ✔ | ✔ | ✔      |
+| Adding custom context entities to events                                                                     | ✔ | ✔ | ✔      |
+| Support for multiple trackers                                                                                | ✔ | ✔ | ✔      |
+| Configurable subject properties                                                                              | ✔ | ✔ | partly |
+| Session context entity added to events                                                                       | ✔ | ✔ | ✔      |
+| Geo-location context entity                                                                                  | ✔ | ✔ | ✔      |
+| Mobile platform context entity                                                                               | ✔ | ✔ |        |
+| Web page context entity                                                                                      | | | ✔      |
+| Configurable GDPR context entity                                                                             | ✔ | ✔ | ✔      |
+| Lifecycle autotracking                                                                                       | ✔ | ✔ |        |
 
 ## Quick Start
 
@@ -47,7 +48,7 @@ This will add a line with the dependency like this to your `pubspec.yaml`:
 
 ```yml
 dependencies:
-    snowplow_tracker: ^0.4.0
+    snowplow_tracker: ^0.5.0
 ```
 
 Import the package into your Dart code:
