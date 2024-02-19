@@ -197,10 +197,14 @@ void main() {
     await tester.pumpWidget(MyApp(tracker: SnowplowTests.tracker!));
 
     expect(
-        await SnowplowTests.checkMicroGood((events) =>
-            (events.length == 1) &&
-            (events[0]['event']['unstruct_event']['data']['data']['name'] ==
-                '/')),
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          dynamic screenViews = events
+              .where((event) => event['event']['event_name'] == 'screen_view');
+
+          return (screenViews.length == 1) &&
+              (events[0]['event']['unstruct_event']['data']['data']['name'] ==
+                  '/');
+        }),
         isTrue);
   });
 
