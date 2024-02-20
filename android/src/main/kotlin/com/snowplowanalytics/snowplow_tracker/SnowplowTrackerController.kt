@@ -71,6 +71,20 @@ object SnowplowTrackerController {
         trackerController?.track(screenView)
     }
 
+    fun trackScrollChanged(eventReader: EventMessageReader) {
+        val trackerController = Snowplow.getTracker(eventReader.tracker)
+        val scroll = eventReader.toScrollChangedWithContexts()
+
+        trackerController?.track(scroll)
+    }
+
+    fun trackListItemView(eventReader: EventMessageReader) {
+        val trackerController = Snowplow.getTracker(eventReader.tracker)
+        val listItem = eventReader.toListItemViewWithContexts()
+
+        trackerController?.track(listItem)
+    }
+
     fun trackTiming(eventReader: EventMessageReader) {
         val trackerController = Snowplow.getTracker(eventReader.tracker)
         val timing = eventReader.toTimingWithContexts()

@@ -43,6 +43,18 @@ class EventMessageReader(val values: Map<String, Any>) {
         return screenView
     }
 
+    fun toScrollChangedWithContexts(): ScrollChanged {
+        val scrollChanged = ScrollChangedReader(eventData).toScrollChanged()
+        contextsJsons?.let { scrollChanged.entities.addAll(it) }
+        return scrollChanged
+    }
+
+    fun toListItemViewWithContexts(): ListItemView {
+        val listItemView = ListItemViewReader(eventData).toListItemView()
+        contextsJsons?.let { listItemView.entities.addAll(it) }
+        return listItemView
+    }
+
     fun toTimingWithContexts(): Timing {
         val timing = TimingReader(eventData).toTiming()
         contextsJsons?.let { timing.entities.addAll(it) }

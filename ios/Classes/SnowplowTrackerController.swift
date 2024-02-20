@@ -54,6 +54,16 @@ class SnowplowTrackerController {
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)
     }
     
+    static func trackScrollChanged(_ message: TrackScrollChangedMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toScrollChanged()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+    
+    static func trackListItemView(_ message: TrackListItemViewMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toListItemView()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+    
     static func trackTiming(_ message: TrackTimingMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
         let event = message.toTiming()
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)

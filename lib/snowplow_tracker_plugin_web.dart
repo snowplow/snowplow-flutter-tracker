@@ -40,6 +40,10 @@ class SnowplowTrackerPluginWeb {
         return onTrackSelfDescribing(call);
       case 'trackScreenView':
         return onTrackScreenView(call);
+      case 'trackScrollChanged':
+        return onTrackScrollChanged(call);
+      case 'trackListItemView':
+        return onTrackListItemView(call);
       case 'trackTiming':
         return onTrackTiming(call);
       case 'trackConsentGranted':
@@ -82,6 +86,16 @@ class SnowplowTrackerPluginWeb {
 
   void onTrackScreenView(MethodCall call) {
     var message = EventMessageReader.withScreenView(call.arguments);
+    SnowplowTrackerController.trackEvent(message);
+  }
+
+  void onTrackScrollChanged(MethodCall call) {
+    var message = EventMessageReader.withScrollChanged(call.arguments);
+    SnowplowTrackerController.trackEvent(message);
+  }
+
+  void onTrackListItemView(MethodCall call) {
+    var message = EventMessageReader.withListItemView(call.arguments);
     SnowplowTrackerController.trackEvent(message);
   }
 

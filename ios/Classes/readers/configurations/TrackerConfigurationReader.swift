@@ -23,6 +23,7 @@ struct TrackerConfigurationReader: Decodable {
     let screenContext: Bool?
     let applicationContext: Bool?
     let lifecycleAutotracking: Bool?
+    let screenEngagementAutotracking: Bool?
     
     var devicePlatformType: DevicePlatform? {
         if let devicePlatform = self.devicePlatform {
@@ -55,7 +56,8 @@ extension TrackerConfigurationReader {
         trackerConfig.trackerVersionSuffix(TrackerVersion.TRACKER_VERSION)
 
         trackerConfig.screenViewAutotracking(false)
-        trackerConfig.lifecycleAutotracking(false)
+        trackerConfig.lifecycleAutotracking(true)
+        trackerConfig.screenEngagementAutotracking(true)
         trackerConfig.installAutotracking(false)
         trackerConfig.exceptionAutotracking(false)
         trackerConfig.diagnosticAutotracking(false)
@@ -77,6 +79,7 @@ extension TrackerConfigurationReader {
         if let scr = self.screenContext { trackerConfig.screenContext(scr) }
         if let ac = self.applicationContext { trackerConfig.applicationContext(ac) }
         if let lc = self.lifecycleAutotracking { trackerConfig.lifecycleAutotracking(lc) }
+        if let se = self.screenEngagementAutotracking { trackerConfig.screenEngagementAutotracking(se) }
 
         return trackerConfig
     }

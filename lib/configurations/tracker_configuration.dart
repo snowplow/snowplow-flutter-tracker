@@ -75,8 +75,14 @@ class TrackerConfiguration {
 
   /// Indicates whether to enable automatic tracking of background and foreground transitions.
   ///
-  /// Defaults to false on iOS and Android. Not available on Web.
+  /// Defaults to true on iOS and Android. Not available on Web.
   final bool? lifecycleAutotracking;
+
+  /// Whether to enable tracking of the screen end event and the screen summary context entity.
+  ///
+  /// Make sure that you have lifecycle autotracking enabled for screen summary to have complete information.
+  /// Defaults to true on iOS and Android. Not available on Web.
+  final bool? screenEngagementAutotracking;
 
   const TrackerConfiguration(
       {this.appId,
@@ -90,7 +96,8 @@ class TrackerConfiguration {
       this.applicationContext,
       this.webActivityTracking,
       this.userAnonymisation,
-      this.lifecycleAutotracking});
+      this.lifecycleAutotracking,
+      this.screenEngagementAutotracking});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -105,7 +112,8 @@ class TrackerConfiguration {
       'applicationContext': applicationContext,
       'webActivityTracking': webActivityTracking?.toMap(),
       'userAnonymisation': userAnonymisation,
-      'lifecycleAutotracking': lifecycleAutotracking
+      'lifecycleAutotracking': lifecycleAutotracking,
+      'screenEngagementAutotracking': screenEngagementAutotracking
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

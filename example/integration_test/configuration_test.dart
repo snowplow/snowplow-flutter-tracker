@@ -198,7 +198,10 @@ void main() {
     }
 
     SnowplowTracker trackerDefault = await Snowplow.createTracker(
-        namespace: 'screen-on', endpoint: SnowplowTests.microEndpoint);
+        namespace: 'screen-on',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            screenEngagementAutotracking: false, lifecycleAutotracking: false));
 
     // track a screenView first to enable screenContext for subsequent events
     String id = const Uuid().v4();
@@ -226,7 +229,10 @@ void main() {
         namespace: 'screen-off',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(
-            screenContext: false, applicationContext: false));
+            screenContext: false,
+            applicationContext: false,
+            lifecycleAutotracking: false,
+            screenEngagementAutotracking: false));
 
     await trackerConfigured.track(ScreenView(id: id, name: 'name'));
     await trackerConfigured

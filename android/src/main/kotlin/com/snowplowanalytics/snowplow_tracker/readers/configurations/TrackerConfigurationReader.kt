@@ -29,6 +29,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
     val screenContext: Boolean? by valuesDefault
     val applicationContext: Boolean? by valuesDefault
     val lifecycleAutotracking: Boolean? by valuesDefault
+    val screenEngagementAutotracking: Boolean? by valuesDefault
 
 
     fun toConfiguration(context: Context): TrackerConfiguration {
@@ -54,6 +55,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
         screenContext?.let { trackerConfig.screenContext(it) }
         applicationContext?.let { trackerConfig.applicationContext(it) }
         lifecycleAutotracking?.let { trackerConfig.lifecycleAutotracking(it) }
+        screenEngagementAutotracking?.let { trackerConfig.screenEngagementAutotracking(it) }
 
         return trackerConfig
     }
@@ -65,7 +67,8 @@ object DefaultTrackerConfiguration {
                 .trackerVersionSuffix(TrackerVersion.TRACKER_VERSION)
         
         trackerConfig.screenViewAutotracking(false)
-        trackerConfig.lifecycleAutotracking(false)
+        trackerConfig.lifecycleAutotracking(true)
+        trackerConfig.screenEngagementAutotracking(true)
         trackerConfig.installAutotracking(false)
         trackerConfig.exceptionAutotracking(false)
         trackerConfig.diagnosticAutotracking(false)

@@ -30,9 +30,10 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 | Session context entity added to events                                                                       | ✔ | ✔ | ✔      |
 | Geo-location context entity                                                                                  | ✔ | ✔ | ✔      |
 | Mobile platform context entity                                                                               | ✔ | ✔ |        |
-| Web page context entity                                                                                      | | | ✔      |
+| Web page context entity                                                                                      |   |   | ✔      |
 | Configurable GDPR context entity                                                                             | ✔ | ✔ | ✔      |
 | Lifecycle autotracking                                                                                       | ✔ | ✔ |        |
+| Engagement tracking (activity tracking on Web, mobile screen engagement on mobile)                           | ✔ | ✔ | ✔      |
 
 ## Quick Start
 

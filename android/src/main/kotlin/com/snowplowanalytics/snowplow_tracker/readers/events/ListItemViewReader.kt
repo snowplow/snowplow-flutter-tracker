@@ -9,22 +9,19 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-export 'snowplow.dart';
-export 'tracker.dart';
-export 'snowplow_observer.dart';
+package com.snowplowanalytics.snowplow_tracker.readers.events
 
-export 'configurations/gdpr_configuration.dart';
-export 'configurations/network_configuration.dart';
-export 'configurations/subject_configuration.dart';
-export 'configurations/tracker_configuration.dart';
-export 'configurations/web_activity_tracking.dart';
+import com.snowplowanalytics.snowplow.event.ListItemView
+import java.util.*
 
-export 'events/consent_granted.dart';
-export 'events/consent_withdrawn.dart';
-export 'events/screen_view.dart';
-export 'events/self_describing.dart';
-export 'events/structured.dart';
-export 'events/timing.dart';
-export 'events/page_view_event.dart';
-export 'events/scroll_changed.dart';
-export 'events/list_item_view.dart';
+class ListItemViewReader(val values: Map<String, Any>) {
+    private val valuesDefault = values.withDefault { null }
+
+    val index: Int by values
+    val itemsCount: Int? by valuesDefault
+
+    fun toListItemView(): ListItemView {
+        val listItemView = ListItemView(index = index, itemsCount = itemsCount)
+        return listItemView
+    }
+}
