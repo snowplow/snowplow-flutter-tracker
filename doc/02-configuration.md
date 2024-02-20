@@ -49,6 +49,7 @@ Setting a custom POST path can be useful in avoiding adblockers; it replaces the
 | `userAnonymisation`     | `bool?` | Anonymises certain user identifiers.                                                                                                                                              | ✔ | ✔ | ✔ | false                                         |
 | `lifecycleAutotracking` | `bool?` | Indicates whether the [lifecycle](iglu:com.snowplowanalytics.mobile/application_lifecycle/jsonschema/1-0-0) entity and foreground and background events should be autotracked.    | ✔ | ✔ | | true                                         |
 | `screenEngagementAutotracking` | `bool?` | Indicates whether to enable tracking of the screen end event and the screen summary context entity.    | ✔ | ✔ | | true                                         |
+| `platformContextProperties` | `PlatformContextProperties?` | Overrides for the values for properties of the platform context entity.    | ✔ | ✔ | | null                                         |
 
 The optional `WebActivityTracking` property configures page tracking on Web. Initializing the configuration will inform `SnowplowObserver` observers (see section on auto-tracking in "Tracking events") to auto track `PageViewEvent` events instead of `ScreenView` events on navigation changes. Further, setting the `minimumVisitLength` and `heartbeatDelay` properties of the `WebActivityTracking` instance will enable activity tracking using 'page ping' events on Web.
 

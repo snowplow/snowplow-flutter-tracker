@@ -14,6 +14,7 @@ package com.snowplowanalytics.snowplow_tracker.readers.configurations
 import android.content.Context
 import com.snowplowanalytics.snowplow.configuration.TrackerConfiguration
 import com.snowplowanalytics.snowplow.tracker.DevicePlatform
+import com.snowplowanalytics.snowplow.tracker.PlatformContextRetriever
 import com.snowplowanalytics.snowplow_tracker.TrackerVersion
 
 class TrackerConfigurationReader(values: Map<String, Any>) {
@@ -30,7 +31,10 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
     val applicationContext: Boolean? by valuesDefault
     val lifecycleAutotracking: Boolean? by valuesDefault
     val screenEngagementAutotracking: Boolean? by valuesDefault
-
+    val platformContextProperties: Map<String, Any>? by valuesDefault
+    private val platformContextRetriever: PlatformContextRetriever? by lazy {
+        platformContextProperties?.let { PlatformContextPropertiesReader(it).toPlatformContextRetriever() }
+    }
 
     fun toConfiguration(context: Context): TrackerConfiguration {
         val trackerConfig = DefaultTrackerConfiguration.toConfiguration(appId, context)
@@ -56,6 +60,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
         applicationContext?.let { trackerConfig.applicationContext(it) }
         lifecycleAutotracking?.let { trackerConfig.lifecycleAutotracking(it) }
         screenEngagementAutotracking?.let { trackerConfig.screenEngagementAutotracking(it) }
+        platformContextRetriever?.let { trackerConfig.platformContextRetriever(it) }
 
         return trackerConfig
     }

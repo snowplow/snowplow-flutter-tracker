@@ -24,6 +24,7 @@ struct TrackerConfigurationReader: Decodable {
     let applicationContext: Bool?
     let lifecycleAutotracking: Bool?
     let screenEngagementAutotracking: Bool?
+    let platformContextProperties: PlatformContextPropertiesReader?
     
     var devicePlatformType: DevicePlatform? {
         if let devicePlatform = self.devicePlatform {
@@ -80,6 +81,10 @@ extension TrackerConfigurationReader {
         if let ac = self.applicationContext { trackerConfig.applicationContext(ac) }
         if let lc = self.lifecycleAutotracking { trackerConfig.lifecycleAutotracking(lc) }
         if let se = self.screenEngagementAutotracking { trackerConfig.screenEngagementAutotracking(se) }
+        if let pcp = self.platformContextProperties {
+            let retriever = pcp.toPlatformContextRetriever()
+            trackerConfig.platformContextRetriever(retriever)
+        }
 
         return trackerConfig
     }
