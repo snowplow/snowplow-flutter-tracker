@@ -38,14 +38,16 @@ void main() {
   setUp(() {
     methodCall = null;
     returnValue = null;
-    channel.setMockMethodCallHandler((MethodCall call) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall call) async {
       methodCall = call;
       return returnValue;
     });
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (message) => null);
   });
 
   test('createsTrackerWithConfiguration', () async {

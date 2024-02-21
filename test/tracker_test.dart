@@ -27,7 +27,8 @@ void main() {
   setUp(() async {
     returnValue = null;
 
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
       method = methodCall.method;
       arguments = methodCall.arguments;
       return returnValue;
@@ -39,7 +40,8 @@ void main() {
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
   });
 
   test('tracks structured event', () async {
