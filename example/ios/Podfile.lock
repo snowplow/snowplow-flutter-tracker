@@ -2,7 +2,7 @@ PODS:
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
-  - snowplow_tracker (0.5.0):
+  - snowplow_tracker (0.6.0):
     - Flutter
     - SnowplowTracker (~> 6.0)
   - SnowplowTracker (6.0.1)
@@ -27,7 +27,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   integration_test: 13825b8a9334a850581300559b8839134b124670
-  snowplow_tracker: d017e9d177dacf89a815b5136a334bb020b946ab
+  snowplow_tracker: a923965616497850376bbc3ca3c99f6e4ec32997
   SnowplowTracker: 6b19c331d5b765bda8b97b1c70ab52491524da60
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
