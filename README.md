@@ -212,7 +212,7 @@ To run the integration tests on Web:
 
 ## Copyright and License
 
-The Snowplow Flutter Tracker is copyright 2022 Snowplow Analytics Ltd.
+The Snowplow Flutter Tracker is copyright 2022-present Snowplow Analytics Ltd.
 
 Licensed under the **[Apache License, Version 2.0][license]** (the "License");
 you may not use this software except in compliance with the License.
