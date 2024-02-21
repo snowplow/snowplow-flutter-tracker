@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
 A package for tracking Snowplow events in Flutter apps.
                        DESC
-  s.homepage         = 'https://github.com/snowplow-incubator/snowplow-flutter-tracker'
+  s.homepage         = 'https://github.com/snowplow/snowplow-flutter-tracker'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Snowplow Analytics Ltd' => 'support@snowplowanalytics.com' }
   s.source           = { :path => '.' }
