@@ -3,7 +3,7 @@ name: Publish package to pub.dev and make a GitHub release
 on:
   push:
     tags:
-    - '*.*.*'
+      - '[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   test:
@@ -13,8 +13,8 @@ jobs:
       matrix:
         flutter: ['3.19.0']
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.flutter }}
           channel: 'stable'
@@ -28,7 +28,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup Node
       uses: actions/setup-node@v2
@@ -61,26 +61,29 @@ jobs:
         fi
 
   publish_pubdev:
-    needs: ["test", "version_check"]
     runs-on: ubuntu-latest
-    container:
-      image: google/dart:latest
+    needs: ["test", "version_check"]
+    permissions:
+      id-token: write
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup credentials
-      run: | 
-        mkdir -p ~/.pub-cache 
-        cat <<EOF > ~/.pub-cache/credentials.json
-        {
-          "accessToken":"${{ secrets.ACCESS_TOKEN }}",
-          "refreshToken":"${{ secrets.REFRESH_TOKEN }}",
-          "tokenEndpoint":"https://accounts.google.com/o/oauth2/token",
-          "scopes": [ "openid", "https://www.googleapis.com/auth/userinfo.email" ],
-          "expiration": 1643122520446
-        }
-        EOF
-    - name: Publish package
-      run: pub publish -f
+      - uses: actions/checkout@v4
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Check Flutter version
+        run: flutter --version
+
+      - name: Publish to pub.dev
+        run: flutter pub publish --force
 
   release:
     needs: ["test", "publish_pubdev", "version_check"]
@@ -88,7 +91,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Release
       uses: softprops/action-gh-release@v0.1.7

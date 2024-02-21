@@ -8,8 +8,8 @@ jobs:
       matrix:
         flutter: ['3.19.0']
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.flutter }}
           channel: 'stable'
@@ -20,8 +20,8 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
@@ -33,7 +33,7 @@ jobs:
     name: Integration tests on Android
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions/setup-java@v1
         with:
           java-version: "11.x"
@@ -58,7 +58,7 @@ jobs:
         run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
 
       # -- Integration tests --
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
@@ -77,7 +77,7 @@ jobs:
     name: Integration tests on iOS
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # -- Micro --
       - name: Cache Micro
@@ -106,7 +106,7 @@ jobs:
           erase_before_boot: true
           shutdown_after_job: true
 
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
@@ -122,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # -- Micro --
       - name: Cache Micro
@@ -144,7 +144,7 @@ jobs:
         run: while ! nc -z '0.0.0.0' 9090; do sleep 1; done
 
       # -- Integration tests --
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
