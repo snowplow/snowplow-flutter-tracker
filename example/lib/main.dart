@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -24,7 +24,11 @@ Future<void> main() async {
       trackerConfig: const TrackerConfiguration(
           webPageContext: false,
           webActivityTracking:
-              WebActivityTracking(minimumVisitLength: 15, heartbeatDelay: 10)),
+              WebActivityTracking(minimumVisitLength: 15, heartbeatDelay: 10),
+          platformContextProperties: PlatformContextProperties(
+            appleIdfa: '12345678-1234-1234-1234-123456789012',
+            androidIdfa: '12345678-1234-1234-1234-123456789012',
+          )),
       gdprConfig: const GdprConfiguration(
           basisForProcessing: 'consent',
           documentId: 'consentDoc-abc123',

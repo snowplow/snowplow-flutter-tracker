@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -69,6 +69,20 @@ object SnowplowTrackerController {
         val screenView = eventReader.toScreenViewWithContexts()
 
         trackerController?.track(screenView)
+    }
+
+    fun trackScrollChanged(eventReader: EventMessageReader) {
+        val trackerController = Snowplow.getTracker(eventReader.tracker)
+        val scroll = eventReader.toScrollChangedWithContexts()
+
+        trackerController?.track(scroll)
+    }
+
+    fun trackListItemView(eventReader: EventMessageReader) {
+        val trackerController = Snowplow.getTracker(eventReader.tracker)
+        val listItem = eventReader.toListItemViewWithContexts()
+
+        trackerController?.track(listItem)
     }
 
     fun trackTiming(eventReader: EventMessageReader) {

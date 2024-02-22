@@ -26,7 +26,7 @@ If you see an issue you would like to work on, please let us know in the issue! 
 not doubling the amount of work.
 
 If you don't know where to start contributing, you can look at
-[the issues labeled `good first issue`](https://github.com/snowplow-incubator/snowplow-flutter-tracker/labels/category%3Agood_first_issue).
+[the issues labeled `good first issue`](https://github.com/snowplow/snowplow-flutter-tracker/labels/category%3Agood_first_issue).
 
 ## Pull requests
 
@@ -68,7 +68,7 @@ If your pull request is fairly chunky, there might be a non-trivial delay betwee
 ### Contributor license agreement
 
 We require outside contributors to sign a Contributor license agreement (or CLA) before we can merge their pull requests.  
-You can find more information on the topic in [the dedicated wiki page](https://github.com/snowplow/snowplow/wiki/CLA).  
+You can find more information on the topic in [the dedicated wiki page](https://docs.snowplow.io/docs/contributing/contributor-license-agreement/).  
 The @snowplowcla bot will guide you through the process.
 
 ## Getting in touch

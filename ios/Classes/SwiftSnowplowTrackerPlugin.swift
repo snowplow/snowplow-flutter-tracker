@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -29,6 +29,10 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
             onTrackSelfDescribing(call, result: result)
         case "trackScreenView":
             onTrackScreenView(call, result: result)
+        case "trackScrollChanged":
+            onTrackScrollChanged(call, result: result)
+        case "trackListItemView":
+            onTrackListItemView(call, result: result)
         case "trackTiming":
             onTrackTiming(call, result: result)
         case "trackConsentGranted":
@@ -75,6 +79,22 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
         if let (message, arguments): (TrackScreenViewMessageReader, [String: Any]) = decodeCall(call),
            let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
             SnowplowTrackerController.trackScreenView(message, eventMessage: eventMessage, arguments: arguments)
+        }
+        result(nil)
+    }
+    
+    private func onTrackScrollChanged(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, arguments): (TrackScrollChangedMessageReader, [String: Any]) = decodeCall(call),
+           let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.trackScrollChanged(message, eventMessage: eventMessage, arguments: arguments)
+        }
+        result(nil)
+    }
+
+    private func onTrackListItemView(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, arguments): (TrackListItemViewMessageReader, [String: Any]) = decodeCall(call),
+           let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.trackListItemView(message, eventMessage: eventMessage, arguments: arguments)
         }
         result(nil)
     }

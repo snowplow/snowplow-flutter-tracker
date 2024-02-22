@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -12,5 +12,5 @@
 package com.snowplowanalytics.snowplow_tracker
 
 object TrackerVersion {
-    val TRACKER_VERSION = "flutter-0.5.0"
+    val TRACKER_VERSION = "flutter-0.6.0"
 }

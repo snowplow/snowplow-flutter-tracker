@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -45,6 +45,8 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "trackStructured" -> onTrackStructured(call, result)
             "trackSelfDescribing" -> onTrackSelfDescribing(call, result)
             "trackScreenView" -> onTrackScreenView(call, result)
+            "trackScrollChanged" -> onTrackScrollChanged(call, result)
+            "trackListItemView" -> onTrackListItemView(call, result)
             "trackTiming" -> onTrackTiming(call, result)
             "trackConsentGranted" -> onTrackConsentGranted(call, result)
             "trackConsentWithdrawn" -> onTrackConsentWithdrawn(call, result)
@@ -87,6 +89,20 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
     private fun onTrackScreenView(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
             SnowplowTrackerController.trackScreenView(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackScrollChanged(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackScrollChanged(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackListItemView(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackListItemView(EventMessageReader(it))
         }
         result.success(null)
     }

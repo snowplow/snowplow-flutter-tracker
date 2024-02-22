@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -9,6 +9,7 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
+import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:uuid/uuid.dart';
 
@@ -198,7 +199,10 @@ void main() {
     }
 
     SnowplowTracker trackerDefault = await Snowplow.createTracker(
-        namespace: 'screen-on', endpoint: SnowplowTests.microEndpoint);
+        namespace: 'screen-on',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            screenEngagementAutotracking: false, lifecycleAutotracking: false));
 
     // track a screenView first to enable screenContext for subsequent events
     String id = const Uuid().v4();
@@ -226,7 +230,10 @@ void main() {
         namespace: 'screen-off',
         endpoint: SnowplowTests.microEndpoint,
         trackerConfig: const TrackerConfiguration(
-            screenContext: false, applicationContext: false));
+            screenContext: false,
+            applicationContext: false,
+            lifecycleAutotracking: false,
+            screenEngagementAutotracking: false));
 
     await trackerConfigured.track(ScreenView(id: id, name: 'name'));
     await trackerConfigured
@@ -261,6 +268,89 @@ void main() {
             (events.length == 1) &&
             (events[0]['rawEvent']['context']['headers']
                 .contains('Warning: works'))),
+        isTrue);
+  });
+
+  testWidgets("sets platform context properties overrides",
+      (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'custom-headers',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            platformContextProperties: PlatformContextProperties(
+          osType: 'osType',
+          osVersion: 'osVersion',
+          deviceVendor: 'deviceVendor',
+          deviceModel: 'deviceModel',
+          carrier: 'carrier',
+          networkType: NetworkType.wifi,
+          networkTechnology: 'networkTechnology',
+          appleIdfa: '12345678-1234-1234-1234-123456789012',
+          appleIdfv: '22345678-1234-1234-1234-123456789012',
+          availableStorage: 1000000,
+          totalStorage: 2000000,
+          physicalMemory: 3000000,
+          appAvailableMemory: 4000000,
+          batteryLevel: 99,
+          batteryState: BatteryState.full,
+          lowPowerMode: true,
+          isPortrait: true,
+          resolution: '1000x2000',
+          scale: 3.5,
+          language: 'sk',
+          androidIdfa: '32345678-1234-1234-1234-123456789012',
+          systemAvailableMemory: 5000000,
+          appSetId: '32345678-1234-1234-1234-123456789012',
+          appSetIdScope: AppSetIdScope.app,
+        )));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          dynamic context = events[0]['event']['contexts']['data'].firstWhere(
+              (x) => x['schema'].toString().contains('mobile_context'));
+
+          return (context['data']['osType'] == 'osType') &&
+              (context['data']['osVersion'] == 'osVersion') &&
+              (context['data']['deviceManufacturer'] == 'deviceVendor') &&
+              (context['data']['deviceModel'] == 'deviceModel') &&
+              (context['data']['carrier'] == 'carrier') &&
+              (context['data']['networkType'] == 'wifi') &&
+              (context['data']['networkTechnology'] == 'networkTechnology') &&
+              (!Platform.isIOS ||
+                  context['data']['appleIdfa'] ==
+                      '12345678-1234-1234-1234-123456789012') &&
+              (!Platform.isIOS ||
+                  context['data']['appleIdfv'] ==
+                      '22345678-1234-1234-1234-123456789012') &&
+              (context['data']['availableStorage'] == 1000000) &&
+              (context['data']['totalStorage'] == 2000000) &&
+              (context['data']['physicalMemory'] == 3000000) &&
+              (!Platform.isIOS ||
+                  context['data']['appAvailableMemory'] == 4000000) &&
+              (context['data']['batteryLevel'] == 99) &&
+              (context['data']['batteryState'] == 'full') &&
+              (!Platform.isIOS || context['data']['lowPowerMode'] == true) &&
+              (context['data']['isPortrait'] == true) &&
+              (context['data']['resolution'] == '1000x2000') &&
+              (context['data']['scale'] == 3.5) &&
+              (context['data']['language'] == 'sk') &&
+              (!Platform.isAndroid ||
+                  context['data']['androidIdfa'] ==
+                      '32345678-1234-1234-1234-123456789012') &&
+              (!Platform.isAndroid ||
+                  context['data']['systemAvailableMemory'] == 5000000) &&
+              (!Platform.isAndroid ||
+                  context['data']['appSetId'] ==
+                      '32345678-1234-1234-1234-123456789012') &&
+              (!Platform.isAndroid ||
+                  context['data']['appSetIdScope'] == 'app');
+        }),
         isTrue);
   });
 }

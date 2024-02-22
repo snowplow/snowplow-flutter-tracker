@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -40,6 +40,10 @@ class SnowplowTrackerPluginWeb {
         return onTrackSelfDescribing(call);
       case 'trackScreenView':
         return onTrackScreenView(call);
+      case 'trackScrollChanged':
+        return onTrackScrollChanged(call);
+      case 'trackListItemView':
+        return onTrackListItemView(call);
       case 'trackTiming':
         return onTrackTiming(call);
       case 'trackConsentGranted':
@@ -82,6 +86,16 @@ class SnowplowTrackerPluginWeb {
 
   void onTrackScreenView(MethodCall call) {
     var message = EventMessageReader.withScreenView(call.arguments);
+    SnowplowTrackerController.trackEvent(message);
+  }
+
+  void onTrackScrollChanged(MethodCall call) {
+    var message = EventMessageReader.withScrollChanged(call.arguments);
+    SnowplowTrackerController.trackEvent(message);
+  }
+
+  void onTrackListItemView(MethodCall call) {
+    var message = EventMessageReader.withListItemView(call.arguments);
     SnowplowTrackerController.trackEvent(message);
   }
 

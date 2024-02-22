@@ -119,6 +119,27 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
             ),
             ElevatedButton(
               onPressed: () {
+                const event = ListItemView(index: 3, itemsCount: 15);
+                trackEvent(event);
+              },
+              child: const Text('Send List Item View Event'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                const event = ScrollChanged(
+                  yOffset: 1,
+                  xOffset: 2,
+                  viewHeight: 20,
+                  viewWidth: 10,
+                  contentHeight: 100,
+                  contentWidth: 200,
+                );
+                trackEvent(event);
+              },
+              child: const Text('Send Scroll Changed Event'),
+            ),
+            ElevatedButton(
+              onPressed: () {
                 const event = Timing(
                   category: 'category',
                   variable: 'variable',

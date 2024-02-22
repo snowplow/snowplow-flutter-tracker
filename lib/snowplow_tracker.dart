@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -18,6 +18,7 @@ export 'configurations/network_configuration.dart';
 export 'configurations/subject_configuration.dart';
 export 'configurations/tracker_configuration.dart';
 export 'configurations/web_activity_tracking.dart';
+export 'configurations/platform_context_properties.dart';
 
 export 'events/consent_granted.dart';
 export 'events/consent_withdrawn.dart';
@@ -26,3 +27,5 @@ export 'events/self_describing.dart';
 export 'events/structured.dart';
 export 'events/timing.dart';
 export 'events/page_view_event.dart';
+export 'events/scroll_changed.dart';
+export 'events/list_item_view.dart';

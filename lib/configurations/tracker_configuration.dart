@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -10,6 +10,7 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter/foundation.dart';
+import 'package:snowplow_tracker/configurations/platform_context_properties.dart';
 import 'package:snowplow_tracker/configurations/web_activity_tracking.dart';
 
 /// Configuration of the tracker and the core tracker properties.
@@ -75,8 +76,18 @@ class TrackerConfiguration {
 
   /// Indicates whether to enable automatic tracking of background and foreground transitions.
   ///
-  /// Defaults to false on iOS and Android. Not available on Web.
+  /// Defaults to true on iOS and Android. Not available on Web.
   final bool? lifecycleAutotracking;
+
+  /// Whether to enable tracking of the screen end event and the screen summary context entity.
+  ///
+  /// Make sure that you have lifecycle autotracking enabled for screen summary to have complete information.
+  /// Defaults to true on iOS and Android. Not available on Web.
+  final bool? screenEngagementAutotracking;
+
+  /// Overrides for the values for properties of the platform context.
+  /// Only available on mobile apps (Android and iOS), not on Web.
+  final PlatformContextProperties? platformContextProperties;
 
   const TrackerConfiguration(
       {this.appId,
@@ -90,7 +101,9 @@ class TrackerConfiguration {
       this.applicationContext,
       this.webActivityTracking,
       this.userAnonymisation,
-      this.lifecycleAutotracking});
+      this.lifecycleAutotracking,
+      this.screenEngagementAutotracking,
+      this.platformContextProperties});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -105,7 +118,9 @@ class TrackerConfiguration {
       'applicationContext': applicationContext,
       'webActivityTracking': webActivityTracking?.toMap(),
       'userAnonymisation': userAnonymisation,
-      'lifecycleAutotracking': lifecycleAutotracking
+      'lifecycleAutotracking': lifecycleAutotracking,
+      'screenEngagementAutotracking': screenEngagementAutotracking,
+      'platformContextProperties': platformContextProperties?.toMap()
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

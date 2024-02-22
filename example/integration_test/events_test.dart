@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -83,6 +83,54 @@ void main() {
                 id.toLowerCase()) &&
             (events[0]['event']['unstruct_event']['data']['data']['name'] ==
                 'name')),
+        isTrue);
+  });
+
+  testWidgets(
+      "tracks screen summary using the list item view and scroll changed events",
+      (WidgetTester tester) async {
+    // screen engagement events are not available on web
+    if (kIsWeb) {
+      return;
+    }
+
+    // first screen view
+    await Snowplow.track(ScreenView(name: "s1", id: const Uuid().v4()),
+        tracker: 'test');
+
+    // screen engagement events
+    await Snowplow.track(const ListItemView(index: 2, itemsCount: 15),
+        tracker: 'test');
+    await Snowplow.track(
+        const ScrollChanged(yOffset: 1, viewHeight: 10, contentHeight: 100),
+        tracker: 'test');
+
+    // second screen view
+    await Snowplow.track(ScreenView(name: "s2", id: const Uuid().v4()),
+        tracker: 'test');
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) {
+          dynamic event = events.firstWhere(
+              (event) =>
+                  event['event']['event_name'] == 'screen_end' &&
+                  event['event']['contexts']['data'].firstWhere((x) =>
+                          x['schema']
+                              .toString()
+                              .contains('screen/'))['data']['name'] ==
+                      's1',
+              orElse: () => null);
+          if (event == null) {
+            return false;
+          }
+          dynamic context = event['event']['contexts']['data'].firstWhere(
+              (x) => x['schema'].toString().contains('screen_summary'));
+          return context['data']['min_y_offset'] == 1 &&
+              context['data']['max_y_offset'] == 11 &&
+              context['data']['content_height'] == 100 &&
+              context['data']['items_count'] == 15 &&
+              context['data']['last_item_index'] == 2;
+        }),
         isTrue);
   });
 
@@ -197,10 +245,14 @@ void main() {
     await tester.pumpWidget(MyApp(tracker: SnowplowTests.tracker!));
 
     expect(
-        await SnowplowTests.checkMicroGood((events) =>
-            (events.length == 1) &&
-            (events[0]['event']['unstruct_event']['data']['data']['name'] ==
-                '/')),
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          dynamic screenViews = events
+              .where((event) => event['event']['event_name'] == 'screen_view');
+
+          return (screenViews.length == 1) &&
+              (events[0]['event']['unstruct_event']['data']['data']['name'] ==
+                  '/');
+        }),
         isTrue);
   });
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -51,6 +51,16 @@ class SnowplowTrackerController {
     
     static func trackScreenView(_ message: TrackScreenViewMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
         let event = message.toScreenView()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+    
+    static func trackScrollChanged(_ message: TrackScrollChangedMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toScrollChanged()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+    
+    static func trackListItemView(_ message: TrackListItemViewMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toListItemView()
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)
     }
     

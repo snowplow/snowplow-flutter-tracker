@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -19,6 +19,8 @@ import 'package:snowplow_tracker/events/consent_granted.dart';
 import 'package:snowplow_tracker/events/consent_withdrawn.dart';
 import 'package:snowplow_tracker/events/event.dart';
 import 'package:snowplow_tracker/events/screen_view.dart';
+import 'package:snowplow_tracker/events/scroll_changed.dart';
+import 'package:snowplow_tracker/events/list_item_view.dart';
 import 'package:snowplow_tracker/events/self_describing.dart';
 import 'package:snowplow_tracker/events/structured.dart';
 import 'package:snowplow_tracker/events/timing.dart';
@@ -36,14 +38,16 @@ void main() {
   setUp(() {
     methodCall = null;
     returnValue = null;
-    channel.setMockMethodCallHandler((MethodCall call) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall call) async {
       methodCall = call;
       return returnValue;
     });
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (message) => null);
   });
 
   test('createsTrackerWithConfiguration', () async {
@@ -214,6 +218,47 @@ void main() {
         isMethodCall('trackScreenView', arguments: {
           'tracker': 'tns2',
           'eventData': {'name': 'screen1', 'id': id}
+        }));
+  });
+
+  test('tracks scroll changed event', () async {
+    Event event = const ScrollChanged(
+      yOffset: 10,
+      xOffset: 20,
+      viewHeight: 100,
+      viewWidth: 200,
+      contentHeight: 300,
+      contentWidth: 400,
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('trackScrollChanged', arguments: {
+          'tracker': 'tns1',
+          'eventData': {
+            'yOffset': 10,
+            'xOffset': 20,
+            'viewHeight': 100,
+            'viewWidth': 200,
+            'contentHeight': 300,
+            'contentWidth': 400,
+          }
+        }));
+  });
+
+  test('tracks list item view event', () async {
+    Event event = const ListItemView(index: 1, itemsCount: 10);
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('trackListItemView', arguments: {
+          'tracker': 'tns1',
+          'eventData': {
+            'index': 1,
+            'itemsCount': 10,
+          }
         }));
   });
 

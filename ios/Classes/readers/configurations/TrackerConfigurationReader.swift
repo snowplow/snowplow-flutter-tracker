@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -23,6 +23,8 @@ struct TrackerConfigurationReader: Decodable {
     let screenContext: Bool?
     let applicationContext: Bool?
     let lifecycleAutotracking: Bool?
+    let screenEngagementAutotracking: Bool?
+    let platformContextProperties: PlatformContextPropertiesReader?
     
     var devicePlatformType: DevicePlatform? {
         if let devicePlatform = self.devicePlatform {
@@ -55,7 +57,8 @@ extension TrackerConfigurationReader {
         trackerConfig.trackerVersionSuffix(TrackerVersion.TRACKER_VERSION)
 
         trackerConfig.screenViewAutotracking(false)
-        trackerConfig.lifecycleAutotracking(false)
+        trackerConfig.lifecycleAutotracking(true)
+        trackerConfig.screenEngagementAutotracking(true)
         trackerConfig.installAutotracking(false)
         trackerConfig.exceptionAutotracking(false)
         trackerConfig.diagnosticAutotracking(false)
@@ -77,6 +80,11 @@ extension TrackerConfigurationReader {
         if let scr = self.screenContext { trackerConfig.screenContext(scr) }
         if let ac = self.applicationContext { trackerConfig.applicationContext(ac) }
         if let lc = self.lifecycleAutotracking { trackerConfig.lifecycleAutotracking(lc) }
+        if let se = self.screenEngagementAutotracking { trackerConfig.screenEngagementAutotracking(se) }
+        if let pcp = self.platformContextProperties {
+            let retriever = pcp.toPlatformContextRetriever()
+            trackerConfig.platformContextRetriever(retriever)
+        }
 
         return trackerConfig
     }

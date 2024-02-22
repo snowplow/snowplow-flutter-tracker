@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Snowplow Analytics Ltd. All rights reserved.
+// Copyright (c) 2022-present Snowplow Analytics Ltd. All rights reserved.
 //
 // This program is licensed to you under the Apache License Version 2.0,
 // and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -14,6 +14,7 @@ package com.snowplowanalytics.snowplow_tracker.readers.configurations
 import android.content.Context
 import com.snowplowanalytics.snowplow.configuration.TrackerConfiguration
 import com.snowplowanalytics.snowplow.tracker.DevicePlatform
+import com.snowplowanalytics.snowplow.tracker.PlatformContextRetriever
 import com.snowplowanalytics.snowplow_tracker.TrackerVersion
 
 class TrackerConfigurationReader(values: Map<String, Any>) {
@@ -29,7 +30,11 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
     val screenContext: Boolean? by valuesDefault
     val applicationContext: Boolean? by valuesDefault
     val lifecycleAutotracking: Boolean? by valuesDefault
-
+    val screenEngagementAutotracking: Boolean? by valuesDefault
+    val platformContextProperties: Map<String, Any>? by valuesDefault
+    private val platformContextRetriever: PlatformContextRetriever? by lazy {
+        platformContextProperties?.let { PlatformContextPropertiesReader(it).toPlatformContextRetriever() }
+    }
 
     fun toConfiguration(context: Context): TrackerConfiguration {
         val trackerConfig = DefaultTrackerConfiguration.toConfiguration(appId, context)
@@ -54,6 +59,8 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
         screenContext?.let { trackerConfig.screenContext(it) }
         applicationContext?.let { trackerConfig.applicationContext(it) }
         lifecycleAutotracking?.let { trackerConfig.lifecycleAutotracking(it) }
+        screenEngagementAutotracking?.let { trackerConfig.screenEngagementAutotracking(it) }
+        platformContextRetriever?.let { trackerConfig.platformContextRetriever(it) }
 
         return trackerConfig
     }
@@ -65,7 +72,8 @@ object DefaultTrackerConfiguration {
                 .trackerVersionSuffix(TrackerVersion.TRACKER_VERSION)
         
         trackerConfig.screenViewAutotracking(false)
-        trackerConfig.lifecycleAutotracking(false)
+        trackerConfig.lifecycleAutotracking(true)
+        trackerConfig.screenEngagementAutotracking(true)
         trackerConfig.installAutotracking(false)
         trackerConfig.exceptionAutotracking(false)
         trackerConfig.diagnosticAutotracking(false)

@@ -30,9 +30,10 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 | Session context entity added to events                                                                       | ✔ | ✔ | ✔      |
 | Geo-location context entity                                                                                  | ✔ | ✔ | ✔      |
 | Mobile platform context entity                                                                               | ✔ | ✔ |        |
-| Web page context entity                                                                                      | | | ✔      |
+| Web page context entity                                                                                      |   |   | ✔      |
 | Configurable GDPR context entity                                                                             | ✔ | ✔ | ✔      |
 | Lifecycle autotracking                                                                                       | ✔ | ✔ |        |
+| Engagement tracking (activity tracking on Web, mobile screen engagement on mobile)                           | ✔ | ✔ | ✔      |
 
 ## Quick Start
 
@@ -48,7 +49,7 @@ This will add a line with the dependency like this to your `pubspec.yaml`:
 
 ```yml
 dependencies:
-    snowplow_tracker: ^0.5.0
+    snowplow_tracker: ^0.6.0
 ```
 
 Import the package into your Dart code:
@@ -61,7 +62,7 @@ import 'package:snowplow_tracker/snowplow_tracker.dart'
 
 If using the tracker within a Flutter app for Web, you will also need to import the Snowplow JavaScript Tracker in your `index.html` file. Please load the JS tracker with the Snowplow tag as [described in the official documentation](https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/javascript-trackers/javascript-tracker/javascript-tracker-v3/tracker-setup/loading/). Do not change the global function name `snowplow` that is used to access the tracker – the Flutter APIs assume that it remains the default as shown in documentation.
 
-Make sure to use JavaScript tracker version `3.5` or newer. You may also refer to the [example project](https://github.com/snowplow-incubator/snowplow-flutter-tracker/tree/main/example) in the Flutter tracker repository to see this in action.
+Make sure to use JavaScript tracker version `3.5` or newer. You may also refer to the [example project](https://github.com/snowplow/snowplow-flutter-tracker/tree/main/example) in the Flutter tracker repository to see this in action.
 
 ### Using the Tracker
 
@@ -146,7 +147,7 @@ Assuming [Flutter SDK](https://docs.flutter.dev/get-started/install) is set up a
 #### Clone Repository
 
 ```bash
-git clone https://github.com/snowplow-incubator/snowplow-flutter-tracker.git
+git clone https://github.com/snowplow/snowplow-flutter-tracker.git
 ```
 
 ## Example App
@@ -211,7 +212,7 @@ To run the integration tests on Web:
 
 ## Copyright and License
 
-The Snowplow Flutter Tracker is copyright 2022 Snowplow Analytics Ltd.
+The Snowplow Flutter Tracker is copyright 2022-present Snowplow Analytics Ltd.
 
 Licensed under the **[Apache License, Version 2.0][license]** (the "License");
 you may not use this software except in compliance with the License.
@@ -227,8 +228,8 @@ limitations under the License.
 [docs]: https://docs.snowplow.io/
 [flutter-docs]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/flutter-tracker/
 
-[gh-actions]: https://github.com/snowplow-incubator/snowplow-flutter-tracker/actions/workflows/build.yml
-[gh-actions-image]: https://github.com/snowplow-incubator/snowplow-flutter-tracker/actions/workflows/build.yml/badge.svg
+[gh-actions]: https://github.com/snowplow/snowplow-flutter-tracker/actions/workflows/build.yml
+[gh-actions-image]: https://github.com/snowplow/snowplow-flutter-tracker/actions/workflows/build.yml/badge.svg
 
 [license]: https://www.apache.org/licenses/LICENSE-2.0
 [license-image]: https://img.shields.io/badge/license-Apache--2-blue.svg?style=flat
