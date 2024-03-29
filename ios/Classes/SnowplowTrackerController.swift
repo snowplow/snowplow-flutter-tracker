@@ -95,10 +95,168 @@ class SnowplowTrackerController {
         let trackerController = Snowplow.tracker(namespace: message.tracker)
         trackerController?.subject?.userId = message.userId
     }
-    
+
+    static func startMediaTracking(_ message: StartMediaTrackingMessageReader, arguments: [String: Any]) {
+        let configurationArguments = arguments["configuration"] as? [String: Any] ?? [:]
+        let mediaTrackingConfiguration = message.configuration.toMediaTrackingConfiguration(arguments: configurationArguments)
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        trackerController?.media.startMediaTracking(configuration: mediaTrackingConfiguration)
+    }
+
+    static func endMediaTracking(_ message: EndMediaTrackingMessageReader) {
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        trackerController?.media.endMediaTracking(id: message.mediaTrackingId)
+    }
+
+    static func updateMediaTracking(_ message: UpdateMediaTrackingMessageReader) {
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        if let media = trackerController?.media.mediaTracking(id: message.mediaTrackingId) {
+            media.update(
+                player: message.player?.toMediaPlayerEntity(),
+                ad: message.ad?.toMediaAdEntity(),
+                adBreak: message.adBreak?.toMediaAdBreakEntity()
+            )
+        }
+    }
+    static func trackMediaAdBreakEndEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdBreakEndEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdBreakStartEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdBreakStartEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdClickEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdClickEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdCompleteEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdCompleteEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdFirstQuartileEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdFirstQuartileEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdMidpointEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdMidpointEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdPauseEvent(_ message: TrackMediaAdEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdPauseEvent(percentProgress: message.eventData.percentProgress)
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdResumeEvent(_ message: TrackMediaAdEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdResumeEvent(percentProgress: message.eventData.percentProgress)
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdSkipEvent(_ message: TrackMediaAdEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdSkipEvent(percentProgress: message.eventData.percentProgress)
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdStartEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdStartEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaAdThirdQuartileEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdThirdQuartileEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaBufferEndEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaBufferEndEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaBufferStartEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaBufferStartEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaEndEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaEndEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaErrorEvent(_ message: TrackMediaErrorEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toMediaErrorEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaFullscreenChangeEvent(_ message: TrackMediaFullscreenChangeEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toMediaFullscreenChangeEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaPauseEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaPauseEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaPictureInPictureChangeEvent(_ message: TrackMediaPictureInPictureChangeEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toMediaPictureInPictureChangeEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaPlayEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaPlayEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    // static func trackMediaPlaybackRateChangeEvent(_ message: TrackMediaPlaybackRateChangeEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+    //     let event = message.toMediaPlaybackRateChangeEvent()
+    //     trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    // }
+
+    static func trackMediaQualityChangeEvent(_ message: TrackMediaQualityChangeEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toMediaQualityChangeEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaReadyEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaReadyEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaSeekEndEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaSeekEndEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaSeekStartEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = MediaSeekStartEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMediaVolumeChangeEvent(_ message: TrackMediaVolumeChangeEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toMediaVolumeChangeEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
     private static func trackEvent(_ event: Event, eventMessage: EventMessageReader, arguments: [String: Any]) {
         eventMessage.addContextsToEvent(event, arguments: arguments)
         let trackerController = Snowplow.tracker(namespace: eventMessage.tracker)
-        trackerController?.track(event)
+        if let mediaTrackingId = eventMessage.mediaTrackingId {
+            if let media = trackerController?.media.mediaTracking(id: mediaTrackingId) {
+                media.track(
+                    event,
+                    player: eventMessage.player?.toMediaPlayerEntity(),
+                    ad: eventMessage.ad?.toMediaAdEntity(),
+                    adBreak: eventMessage.adBreak?.toMediaAdBreakEntity()
+                )
+            }
+        } else {
+            trackerController?.track(event)
+        }
     }
 }

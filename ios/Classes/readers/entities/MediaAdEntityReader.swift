@@ -12,23 +12,23 @@
 import Foundation
 import SnowplowTracker
 
-struct EventMessageReader: Decodable {
-    let tracker: String
-    let contexts: [SelfDescribingJsonReader]?
-    let mediaTrackingId: String?
-    let player: MediaPlayerEntityReader?
-    let ad: MediaAdEntityReader?
-    let adBreak: MediaAdBreakEntityReader?
+struct MediaAdEntityReader: Decodable {
+    let name: String?
+    let adId: String
+    let creativeId: String?
+    let podPosition: Int?
+    let duration: Double?
+    let skippable: Bool?
 }
 
-extension EventMessageReader {
-    func addContextsToEvent(_ event: Event, arguments: [String: Any]) {
-        if let readers = self.contexts,
-           let readersArgs = arguments["contexts"] as? [[String: Any]] {
-            let entities = zip(readers, readersArgs).map { (reader, readerArgs) in
-                reader.toSelfDescribingJson(arguments: readerArgs)
-            }.compactMap { $0 }
-            event.entities(entities)
-        }
+extension MediaAdEntityReader {
+    func toMediaAdEntity() -> MediaAdEntity {
+        return MediaAdEntity(
+            adId: self.adId,
+            name: self.name,
+            creativeId: self.creativeId,
+            duration: self.duration,
+            skippable: self.skippable
+        )
     }
 }

@@ -12,23 +12,39 @@
 import Foundation
 import SnowplowTracker
 
-struct EventMessageReader: Decodable {
-    let tracker: String
+struct MediaTrackingConfigurationReader: Decodable {
+    let id: String
+    let boundaries: [Int]?
     let contexts: [SelfDescribingJsonReader]?
-    let mediaTrackingId: String?
     let player: MediaPlayerEntityReader?
-    let ad: MediaAdEntityReader?
-    let adBreak: MediaAdBreakEntityReader?
+    let pings: Bool
+    let pingInterval: Int?
+    let maxPausedPings: Int?
+    let session: Bool
 }
 
-extension EventMessageReader {
-    func addContextsToEvent(_ event: Event, arguments: [String: Any]) {
+extension MediaTrackingConfigurationReader {
+    func toMediaTrackingConfiguration(arguments: [String: Any]) -> MediaTrackingConfiguration {
+        let configuration = MediaTrackingConfiguration(
+            id: self.id,
+            pings: self.pings,
+            player: self.player?.toMediaPlayerEntity(),
+            session: self.session
+        )
+        
+        if let boundaries = self.boundaries { configuration.boundaries = boundaries }
+        
         if let readers = self.contexts,
            let readersArgs = arguments["contexts"] as? [[String: Any]] {
             let entities = zip(readers, readersArgs).map { (reader, readerArgs) in
                 reader.toSelfDescribingJson(arguments: readerArgs)
             }.compactMap { $0 }
-            event.entities(entities)
+            configuration.entities = entities
         }
+        
+        if let pingInterval = self.pingInterval { configuration.pingInterval = pingInterval }
+        if let maxPausedPings = self.maxPausedPings { configuration.maxPausedPings = maxPausedPings }
+        
+        return configuration
     }
 }

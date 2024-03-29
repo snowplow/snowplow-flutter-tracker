@@ -15,11 +15,16 @@ import 'package:flutter/services.dart';
 import 'package:snowplow_tracker/configurations/configuration.dart';
 import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
 import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
+import 'package:snowplow_tracker/configurations/media_tracking_configuration.dart';
 import 'package:snowplow_tracker/configurations/network_configuration.dart';
 import 'package:snowplow_tracker/configurations/subject_configuration.dart';
 import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
+import 'package:snowplow_tracker/entities/media_ad_break_entity.dart';
+import 'package:snowplow_tracker/entities/media_ad_entity.dart';
+import 'package:snowplow_tracker/entities/media_player_entity.dart';
 import 'package:snowplow_tracker/events/event.dart';
 import 'package:snowplow_tracker/events/self_describing.dart';
+import 'package:snowplow_tracker/media_tracking.dart';
 import 'package:snowplow_tracker/tracker.dart';
 
 /// Main interface for the package mainly used to initialize trackers and track events.
@@ -99,5 +104,57 @@ class Snowplow {
   /// The [tracker] namespace is required but ignored on Web where all trackers share the same session.
   static Future<int?> getSessionIndex({required String tracker}) async {
     return await _channel.invokeMethod('getSessionIndex', {'tracker': tracker});
+  }
+
+  /// Starts media tracking with the given [configuration].
+  static Future<MediaTracking> startMediaTracking(
+      {required String tracker,
+      required MediaTrackingConfiguration configuration}) async {
+    await _channel.invokeMethod('startMediaTracking',
+        {'tracker': tracker, 'configuration': configuration.toMap()});
+    return MediaTracking(id: configuration.id, tracker: tracker);
+  }
+
+  /// Ends media tracking with the given [tracker] namespace and [id] of the media tracking.
+  static Future<void> endMediaTracking(
+      {required String tracker, required String id}) async {
+    await _channel.invokeMethod(
+        'endMediaTracking', {'tracker': tracker, 'mediaTrackingId': id});
+  }
+
+  static Future<void> updateMediaTracking({
+    required String tracker,
+    required String id,
+    MediaPlayerEntity? player,
+    MediaAdEntity? ad,
+    MediaAdBreakEntity? adBreak,
+  }) async {
+    await _channel.invokeMethod('updateMediaTracking', {
+      'tracker': tracker,
+      'mediaTrackingId': id,
+      'player': player?.toMap(),
+      'ad': ad?.toMap(),
+      'adBreak': adBreak?.toMap(),
+    });
+  }
+
+  static Future<void> trackMediaEvent({
+    required String tracker,
+    required String id,
+    required Event event,
+    List<SelfDescribing>? contexts,
+    MediaPlayerEntity? player,
+    MediaAdEntity? ad,
+    MediaAdBreakEntity? adBreak,
+  }) async {
+    await _channel.invokeMethod(event.endpoint(), {
+      'tracker': tracker,
+      'mediaTrackingId': id,
+      'eventData': event.toMap(),
+      'contexts': contexts?.map((c) => c.toMap()).toList(),
+      'player': player?.toMap(),
+      'ad': ad?.toMap(),
+      'adBreak': adBreak?.toMap(),
+    });
   }
 }
