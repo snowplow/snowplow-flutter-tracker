@@ -13,6 +13,9 @@ import Foundation
 import SnowplowTracker
 
 class SnowplowTrackerController {
+    // TODO: remove after 6.0.2 release of iOS tracker is published
+    private static var mediaTrackings: [String: MediaTracking] = [:]
+
     static func createTracker(_ message: CreateTrackerMessageReader, arguments: [String: Any]) {
         var controllers: [ConfigurationProtocol] = []
         
@@ -100,17 +103,19 @@ class SnowplowTrackerController {
         let configurationArguments = arguments["configuration"] as? [String: Any] ?? [:]
         let mediaTrackingConfiguration = message.configuration.toMediaTrackingConfiguration(arguments: configurationArguments)
         let trackerController = Snowplow.tracker(namespace: message.tracker)
-        trackerController?.media.startMediaTracking(configuration: mediaTrackingConfiguration)
+        let mediaTracking = trackerController?.media.startMediaTracking(configuration: mediaTrackingConfiguration)
+        self.mediaTrackings[mediaTrackingConfiguration.id] = mediaTracking
     }
 
     static func endMediaTracking(_ message: EndMediaTrackingMessageReader) {
         let trackerController = Snowplow.tracker(namespace: message.tracker)
         trackerController?.media.endMediaTracking(id: message.mediaTrackingId)
+        self.mediaTrackings.removeValue(forKey: message.mediaTrackingId)
     }
 
     static func updateMediaTracking(_ message: UpdateMediaTrackingMessageReader) {
         let trackerController = Snowplow.tracker(namespace: message.tracker)
-        if let media = trackerController?.media.mediaTracking(id: message.mediaTrackingId) {
+        if let media = self.mediaTrackings[message.mediaTrackingId] {
             media.update(
                 player: message.player?.toMediaPlayerEntity(),
                 ad: message.ad?.toMediaAdEntity(),
@@ -247,7 +252,7 @@ class SnowplowTrackerController {
         eventMessage.addContextsToEvent(event, arguments: arguments)
         let trackerController = Snowplow.tracker(namespace: eventMessage.tracker)
         if let mediaTrackingId = eventMessage.mediaTrackingId {
-            if let media = trackerController?.media.mediaTracking(id: mediaTrackingId) {
+            if let media = self.mediaTrackings[mediaTrackingId] {
                 media.track(
                     event,
                     player: eventMessage.player?.toMediaPlayerEntity(),

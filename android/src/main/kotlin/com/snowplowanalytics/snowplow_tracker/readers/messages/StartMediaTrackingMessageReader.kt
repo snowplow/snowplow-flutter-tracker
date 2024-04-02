@@ -9,18 +9,14 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-package com.snowplowanalytics.snowplow_tracker.readers.events
+package com.snowplowanalytics.snowplow_tracker.readers.messages
 
-import com.snowplowanalytics.snowplow.event.ListItemView
+import com.snowplowanalytics.snowplow_tracker.readers.configurations.MediaTrackingConfigurationReader
 
-class ListItemViewReader(val values: Map<String, Any>) {
-    private val valuesDefault = values.withDefault { null }
+class StartMediaTrackingMessageReader(val values: Map<String, Any>) {
+    val tracker: String by values
 
-    val index: Int by values
-    val itemsCount: Int? by valuesDefault
-
-    fun toListItemView(): ListItemView {
-        val listItemView = ListItemView(index = index, itemsCount = itemsCount)
-        return listItemView
+    val configuration: MediaTrackingConfigurationReader by lazy {
+        MediaTrackingConfigurationReader(values.get("configuration") as Map<String, Any>)
     }
 }

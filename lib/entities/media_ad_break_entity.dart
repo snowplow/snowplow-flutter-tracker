@@ -33,9 +33,6 @@ class MediaAdBreakEntity {
   /// An identifier for the ad break
   final String breakId;
 
-  /// Playback time in seconds at the start of the ad break.
-  final double? startTime;
-
   /// Type of ads within the break
   final MediaAdBreakType? breakType;
 
@@ -43,17 +40,12 @@ class MediaAdBreakEntity {
   final int? podSize;
 
   const MediaAdBreakEntity(
-      {this.name,
-      required this.breakId,
-      this.startTime,
-      this.breakType,
-      this.podSize});
+      {this.name, required this.breakId, this.breakType, this.podSize});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
       'name': name,
       'breakId': breakId,
-      'startTime': startTime,
       'breakType': breakType?.name,
       'podSize': podSize,
     };

@@ -11,16 +11,24 @@
 
 package com.snowplowanalytics.snowplow_tracker.readers.events
 
-import com.snowplowanalytics.snowplow.event.ListItemView
+import com.snowplowanalytics.snowplow.media.event.MediaQualityChangeEvent
 
-class ListItemViewReader(val values: Map<String, Any>) {
+class MediaQualityChangeEventReader(val values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
 
-    val index: Int by values
-    val itemsCount: Int? by valuesDefault
+    val previousQuality: String? by valuesDefault
+    val newQuality: String? by valuesDefault
+    val bitrate: Int? by valuesDefault
+    val framesPerSecond: Int? by valuesDefault
+    val automatic: Boolean? by valuesDefault
 
-    fun toListItemView(): ListItemView {
-        val listItemView = ListItemView(index = index, itemsCount = itemsCount)
-        return listItemView
+    fun toMediaQualityChangeEvent(): MediaQualityChangeEvent {
+        return MediaQualityChangeEvent(
+            previousQuality = previousQuality,
+            newQuality = newQuality,
+            bitrate = bitrate,
+            framesPerSecond = framesPerSecond,
+            automatic = automatic
+        )
     }
 }

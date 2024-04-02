@@ -14,10 +14,7 @@ package com.snowplowanalytics.snowplow_tracker
 import androidx.annotation.NonNull
 
 import android.content.Context
-import com.snowplowanalytics.snowplow_tracker.readers.messages.CreateTrackerMessageReader
-import com.snowplowanalytics.snowplow_tracker.readers.messages.EventMessageReader
-import com.snowplowanalytics.snowplow_tracker.readers.messages.GetParameterMessageReader
-import com.snowplowanalytics.snowplow_tracker.readers.messages.SetUserIdMessageReader
+import com.snowplowanalytics.snowplow_tracker.readers.messages.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -54,6 +51,34 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "getSessionUserId" -> onGetSessionUserId(call, result)
             "getSessionId" -> onGetSessionId(call, result)
             "getSessionIndex" -> onGetSessionIndex(call, result)
+            "startMediaTracking" -> onStartMediaTracking(call, result)
+            "endMediaTracking" -> onEndMediaTracking(call, result)
+            "updateMediaTracking" -> onUpdateMediaTracking(call, result)
+            "trackMediaAdBreakEndEvent" -> onTrackMediaAdBreakEndEvent(call, result)
+            "trackMediaAdBreakStartEvent" -> onTrackMediaAdBreakStartEvent(call, result)
+            "trackMediaAdClickEvent" -> onTrackMediaAdClickEvent(call, result)
+            "trackMediaAdCompleteEvent" -> onTrackMediaAdCompleteEvent(call, result)
+            "trackMediaAdFirstQuartileEvent" -> onTrackMediaAdFirstQuartileEvent(call, result)
+            "trackMediaAdMidpointEvent" -> onTrackMediaAdMidpointEvent(call, result)
+            "trackMediaAdPauseEvent" -> onTrackMediaAdPauseEvent(call, result)
+            "trackMediaAdResumeEvent" -> onTrackMediaAdResumeEvent(call, result)
+            "trackMediaAdSkipEvent" -> onTrackMediaAdSkipEvent(call, result)
+            "trackMediaAdStartEvent" -> onTrackMediaAdStartEvent(call, result)
+            "trackMediaAdThirdQuartileEvent" -> onTrackMediaAdThirdQuartileEvent(call, result)
+            "trackMediaBufferEndEvent" -> onTrackMediaBufferEndEvent(call, result)
+            "trackMediaBufferStartEvent" -> onTrackMediaBufferStartEvent(call, result)
+            "trackMediaEndEvent" -> onTrackMediaEndEvent(call, result)
+            "trackMediaErrorEvent" -> onTrackMediaErrorEvent(call, result)
+            "trackMediaFullscreenChangeEvent" -> onTrackMediaFullscreenChangeEvent(call, result)
+            "trackMediaPauseEvent" -> onTrackMediaPauseEvent(call, result)
+            "trackMediaPictureInPictureChangeEvent" -> onTrackMediaPictureInPictureChangeEvent(call, result)
+            "trackMediaPlayEvent" -> onTrackMediaPlayEvent(call, result)
+            "trackMediaPlaybackRateChangeEvent" -> onTrackMediaPlaybackRateChangeEvent(call, result)
+            "trackMediaQualityChangeEvent" -> onTrackMediaQualityChangeEvent(call, result)
+            "trackMediaReadyEvent" -> onTrackMediaReadyEvent(call, result)
+            "trackMediaSeekEndEvent" -> onTrackMediaSeekEndEvent(call, result)
+            "trackMediaSeekStartEvent" -> onTrackMediaSeekStartEvent(call, result)
+            "trackMediaVolumeChangeEvent" -> onTrackMediaVolumeChangeEvent(call, result)
             else -> result.notImplemented()
         }
     }
@@ -155,5 +180,202 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
         }
         result.success(sessionIndex)
     }
+
+    private fun onStartMediaTracking(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.startMediaTracking(StartMediaTrackingMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onEndMediaTracking(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.endMediaTracking(EndMediaTrackingMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onUpdateMediaTracking(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.updateMediaTracking(UpdateMediaTrackingMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdBreakEndEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdBreakEndEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdBreakStartEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdBreakStartEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdClickEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdClickEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdCompleteEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdCompleteEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdFirstQuartileEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdFirstQuartileEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdMidpointEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdMidpointEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdPauseEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdPauseEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdResumeEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdResumeEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdSkipEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdSkipEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdStartEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdStartEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaAdThirdQuartileEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaAdThirdQuartileEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaBufferEndEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaBufferEndEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaBufferStartEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaBufferStartEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaEndEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaEndEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaErrorEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaErrorEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaFullscreenChangeEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaFullscreenChangeEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaPauseEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaPauseEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaPictureInPictureChangeEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaPictureInPictureChangeEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaPlayEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaPlayEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaPlaybackRateChangeEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaPlaybackRateChangeEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaQualityChangeEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaQualityChangeEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaReadyEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaReadyEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaSeekEndEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaSeekEndEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaSeekStartEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaSeekStartEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMediaVolumeChangeEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMediaVolumeChangeEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
 
 }

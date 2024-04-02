@@ -11,16 +11,18 @@
 
 package com.snowplowanalytics.snowplow_tracker.readers.events
 
-import com.snowplowanalytics.snowplow.event.ListItemView
+import com.snowplowanalytics.snowplow.media.event.MediaVolumeChangeEvent
 
-class ListItemViewReader(val values: Map<String, Any>) {
+class MediaVolumeChangeEventReader(val values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
 
-    val index: Int by values
-    val itemsCount: Int? by valuesDefault
+    val previousVolume: Int? by valuesDefault
+    val newVolume: Int by values
 
-    fun toListItemView(): ListItemView {
-        val listItemView = ListItemView(index = index, itemsCount = itemsCount)
-        return listItemView
+    fun toMediaVolumeChangeEvent(): MediaVolumeChangeEvent {
+        return MediaVolumeChangeEvent(
+            previousVolume = previousVolume,
+            newVolume = newVolume
+        )
     }
 }

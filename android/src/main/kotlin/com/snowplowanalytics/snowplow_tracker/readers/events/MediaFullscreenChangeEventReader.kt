@@ -11,16 +11,14 @@
 
 package com.snowplowanalytics.snowplow_tracker.readers.events
 
-import com.snowplowanalytics.snowplow.event.ListItemView
+import com.snowplowanalytics.snowplow.media.event.MediaFullscreenChangeEvent
 
-class ListItemViewReader(val values: Map<String, Any>) {
-    private val valuesDefault = values.withDefault { null }
+class MediaFullscreenChangeEventReader(val values: Map<String, Any>) {
+    val fullscreen: Boolean by values
 
-    val index: Int by values
-    val itemsCount: Int? by valuesDefault
-
-    fun toListItemView(): ListItemView {
-        val listItemView = ListItemView(index = index, itemsCount = itemsCount)
-        return listItemView
+    fun toMediaFullscreenChangeEvent(): MediaFullscreenChangeEvent {
+        return MediaFullscreenChangeEvent(
+            fullscreen = fullscreen
+        )
     }
 }

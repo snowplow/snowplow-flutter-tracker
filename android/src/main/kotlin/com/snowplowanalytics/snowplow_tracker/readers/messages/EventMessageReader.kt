@@ -12,7 +12,11 @@
 package com.snowplowanalytics.snowplow_tracker.readers.messages
 
 import com.snowplowanalytics.snowplow.event.*
+import com.snowplowanalytics.snowplow.media.event.*
 import com.snowplowanalytics.snowplow.payload.SelfDescribingJson
+import com.snowplowanalytics.snowplow_tracker.readers.entities.MediaAdBreakEntityReader
+import com.snowplowanalytics.snowplow_tracker.readers.entities.MediaAdEntityReader
+import com.snowplowanalytics.snowplow_tracker.readers.entities.MediaPlayerEntityReader
 import com.snowplowanalytics.snowplow_tracker.readers.events.*
 
 class EventMessageReader(val values: Map<String, Any>) {
@@ -24,52 +28,222 @@ class EventMessageReader(val values: Map<String, Any>) {
     private val contextsJsons: List<SelfDescribingJson>? by lazy {
         contexts?.let { it.map { item -> SelfDescribingJsonReader(item).toSelfDescribingJson() } }
     }
+    val mediaTrackingId: String? by valuesDefault
+    val player: MediaPlayerEntityReader? by lazy {
+        values.get("player")?.let {
+            MediaPlayerEntityReader(it as Map<String, Any>)
+        }
+    }
+    val ad: MediaAdEntityReader? by lazy {
+        values.get("ad")?.let {
+            MediaAdEntityReader(it as Map<String, Any>)
+        }
+    }
+    val adBreak: MediaAdBreakEntityReader? by lazy {
+        values.get("adBreak")?.let {
+            MediaAdBreakEntityReader(it as Map<String, Any>)
+        }
+    }
 
     fun toStructuredWithContexts(): Structured {
         val structured = StructuredReader(eventData).toStructured()
-        contextsJsons?.let { structured.entities.addAll(it) }
+        addContext(structured)
         return structured
     }
 
     fun toSelfDescribingWithContexts(): SelfDescribing {
         val selfDescribing = SelfDescribingJsonReader(eventData).toSelfDescribing()
-        contextsJsons?.let { selfDescribing.entities.addAll(it) }
+        addContext(selfDescribing)
         return selfDescribing
     }
 
     fun toScreenViewWithContexts(): ScreenView {
         val screenView = ScreenViewReader(eventData).toScreenView()
-        contextsJsons?.let { screenView.entities.addAll(it) }
+        addContext(screenView)
         return screenView
     }
 
     fun toScrollChangedWithContexts(): ScrollChanged {
         val scrollChanged = ScrollChangedReader(eventData).toScrollChanged()
-        contextsJsons?.let { scrollChanged.entities.addAll(it) }
+        addContext(scrollChanged)
         return scrollChanged
     }
 
     fun toListItemViewWithContexts(): ListItemView {
         val listItemView = ListItemViewReader(eventData).toListItemView()
-        contextsJsons?.let { listItemView.entities.addAll(it) }
+        addContext(listItemView)
         return listItemView
     }
 
     fun toTimingWithContexts(): Timing {
         val timing = TimingReader(eventData).toTiming()
-        contextsJsons?.let { timing.entities.addAll(it) }
+        addContext(timing)
         return timing
     }
 
     fun toConsentGrantedWithContexts(): ConsentGranted {
         val consentGranted = ConsentGrantedReader(eventData).toConsentGranted()
-        contextsJsons?.let { consentGranted.entities.addAll(it) }
+        addContext(consentGranted)
         return consentGranted
     }
 
     fun toConsentWithdrawnWithContexts(): ConsentWithdrawn {
         val consentWithdrawn = ConsentWithdrawnReader(eventData).toConsentWithdrawn()
-        contextsJsons?.let { consentWithdrawn.entities.addAll(it) }
+        addContext(consentWithdrawn)
         return consentWithdrawn
+    }
+
+    fun toMediaAdBreakEndEvent(): MediaAdBreakEndEvent {
+        val event = MediaAdBreakEndEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdBreakStartEvent(): MediaAdBreakStartEvent {
+        val event = MediaAdBreakStartEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdClickEvent(): MediaAdClickEvent {
+        val event = MediaAdClickEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdCompleteEvent(): MediaAdCompleteEvent {
+        val event = MediaAdCompleteEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdFirstQuartileEvent(): MediaAdFirstQuartileEvent {
+        val event = MediaAdFirstQuartileEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdMidpointEvent(): MediaAdMidpointEvent {
+        val event = MediaAdMidpointEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdPauseEvent(): MediaAdPauseEvent {
+        val event = MediaAdEventReader(eventData).toMediaAdPauseEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdResumeEvent(): MediaAdResumeEvent {
+        val event = MediaAdEventReader(eventData).toMediaAdResumeEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdSkipEvent(): MediaAdSkipEvent {
+        val event = MediaAdEventReader(eventData).toMediaAdSkipEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdStartEvent(): MediaAdStartEvent {
+        val event = MediaAdStartEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaAdThirdQuartileEvent(): MediaAdThirdQuartileEvent {
+        val event = MediaAdThirdQuartileEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaBufferEndEvent(): MediaBufferEndEvent {
+        val event = MediaBufferEndEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaBufferStartEvent(): MediaBufferStartEvent {
+        val event = MediaBufferStartEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaEndEvent(): MediaEndEvent {
+        val event = MediaEndEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaErrorEvent(): MediaErrorEvent {
+        val event = MediaErrorEventReader(eventData).toMediaErrorEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaFullscreenChangeEvent(): MediaFullscreenChangeEvent {
+        val event = MediaFullscreenChangeEventReader(eventData).toMediaFullscreenChangeEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaPauseEvent(): MediaPauseEvent {
+        val event = MediaPauseEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaPictureInPictureChangeEvent(): MediaPictureInPictureChangeEvent {
+        val event = MediaPictureInPictureChangeEventReader(eventData).toMediaPictureInPictureChangeEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaPlayEvent(): MediaPlayEvent {
+        val event = MediaPlayEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaPlaybackRateChangeEvent(): MediaPlaybackRateChangeEvent {
+        val event = MediaPlaybackRateChangeEventReader(eventData).toMediaPlaybackRateChangeEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaQualityChangeEvent(): MediaQualityChangeEvent {
+        val event = MediaQualityChangeEventReader(eventData).toMediaQualityChangeEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaReadyEvent(): MediaReadyEvent {
+        val event = MediaReadyEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaSeekEndEvent(): MediaSeekEndEvent {
+        val event = MediaSeekEndEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaSeekStartEvent(): MediaSeekStartEvent {
+        val event = MediaSeekStartEvent()
+        addContext(event)
+        return event
+    }
+
+    fun toMediaVolumeChangeEvent(): MediaVolumeChangeEvent {
+        val event = MediaVolumeChangeEventReader(eventData).toMediaVolumeChangeEvent()
+        addContext(event)
+        return event
+    }
+
+    private fun addContext(event: Event) {
+        contextsJsons?.let { event.entities.addAll(it) }
     }
 }

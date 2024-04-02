@@ -15,7 +15,6 @@ import SnowplowTracker
 struct MediaAdBreakEntityReader: Decodable {
     let name: String?
     let breakId: String
-    let startTime: Double?
     let breakType: String?
     let podSize: Int?
     
@@ -44,9 +43,6 @@ extension MediaAdBreakEntityReader {
             breakType: self.breakTypeEnum,
             podSize: self.podSize
         )
-        if let startTime = self.startTime {
-            entity.startTime = startTime
-        }
         return entity
     }
 }

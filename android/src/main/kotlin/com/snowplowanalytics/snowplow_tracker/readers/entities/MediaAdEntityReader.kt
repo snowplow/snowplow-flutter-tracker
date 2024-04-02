@@ -9,18 +9,28 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-package com.snowplowanalytics.snowplow_tracker.readers.events
+package com.snowplowanalytics.snowplow_tracker.readers.entities
 
-import com.snowplowanalytics.snowplow.event.ListItemView
+import com.snowplowanalytics.snowplow.media.entity.MediaAdEntity
 
-class ListItemViewReader(val values: Map<String, Any>) {
+class MediaAdEntityReader(values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
 
-    val index: Int by values
-    val itemsCount: Int? by valuesDefault
+    val name: String? by valuesDefault
+    val adId: String by values
+    val creativeId: String? by valuesDefault
+    val podPosition: Int? by valuesDefault
+    val duration: Double? by valuesDefault
+    val skippable: Boolean? by valuesDefault
 
-    fun toListItemView(): ListItemView {
-        val listItemView = ListItemView(index = index, itemsCount = itemsCount)
-        return listItemView
+    fun toMediaAdEntity(): MediaAdEntity {
+        return MediaAdEntity(
+            adId = adId,
+            name = name,
+            creativeId = creativeId,
+            podPosition = podPosition,
+            duration = duration,
+            skippable = skippable
+        )
     }
 }

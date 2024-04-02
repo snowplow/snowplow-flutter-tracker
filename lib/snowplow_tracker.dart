@@ -56,3 +56,7 @@ export 'events/media_ready_event.dart';
 export 'events/media_seek_end_event.dart';
 export 'events/media_seek_start_event.dart';
 export 'events/media_volume_change_event.dart';
+
+export 'entities/media_ad_break_entity.dart';
+export 'entities/media_ad_entity.dart';
+export 'entities/media_player_entity.dart';

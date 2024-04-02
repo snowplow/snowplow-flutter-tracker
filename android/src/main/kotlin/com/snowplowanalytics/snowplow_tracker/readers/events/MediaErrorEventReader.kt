@@ -11,16 +11,20 @@
 
 package com.snowplowanalytics.snowplow_tracker.readers.events
 
-import com.snowplowanalytics.snowplow.event.ListItemView
+import com.snowplowanalytics.snowplow.media.event.MediaErrorEvent
 
-class ListItemViewReader(val values: Map<String, Any>) {
+class MediaErrorEventReader(val values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
 
-    val index: Int by values
-    val itemsCount: Int? by valuesDefault
+    val errorCode: String? by valuesDefault
+    val errorName: String? by valuesDefault
+    val errorDescription: String? by valuesDefault
 
-    fun toListItemView(): ListItemView {
-        val listItemView = ListItemView(index = index, itemsCount = itemsCount)
-        return listItemView
+    fun toMediaErrorEvent(): MediaErrorEvent {
+        return MediaErrorEvent(
+            errorCode = errorCode,
+            errorName = errorName,
+            errorDescription = errorDescription
+        )
     }
 }

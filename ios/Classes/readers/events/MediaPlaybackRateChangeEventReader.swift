@@ -19,7 +19,6 @@
 
 // extension MediaPlaybackRateChangeEventReader {
 //     func toMediaPlaybackRateChangeEvent() -> MediaPlaybackRateChangeEvent {
-//         let event = MediaPlaybackRateChangeEvent()
 //         return MediaPlaybackRateChangeEvent(
 //             previousRate: self.previousRate,
 //             newRate: self.newRate

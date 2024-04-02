@@ -11,16 +11,24 @@
 
 package com.snowplowanalytics.snowplow_tracker.readers.events
 
-import com.snowplowanalytics.snowplow.event.ListItemView
+import com.snowplowanalytics.snowplow.media.event.MediaAdPauseEvent
+import com.snowplowanalytics.snowplow.media.event.MediaAdResumeEvent
+import com.snowplowanalytics.snowplow.media.event.MediaAdSkipEvent
 
-class ListItemViewReader(val values: Map<String, Any>) {
+class MediaAdEventReader(val values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
 
-    val index: Int by values
-    val itemsCount: Int? by valuesDefault
+    val percentProgress: Int? by valuesDefault
 
-    fun toListItemView(): ListItemView {
-        val listItemView = ListItemView(index = index, itemsCount = itemsCount)
-        return listItemView
+    fun toMediaAdPauseEvent(): MediaAdPauseEvent {
+        return MediaAdPauseEvent(percentProgress = percentProgress)
+    }
+
+    fun toMediaAdResumeEvent(): MediaAdResumeEvent {
+        return MediaAdResumeEvent(percentProgress = percentProgress)
+    }
+
+    fun toMediaAdSkipEvent(): MediaAdSkipEvent {
+        return MediaAdSkipEvent(percentProgress = percentProgress)
     }
 }
