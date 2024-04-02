@@ -10,9 +10,6 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter/foundation.dart';
-import 'package:snowplow_tracker/entities/media_ad_break_entity.dart';
-import 'package:snowplow_tracker/entities/media_ad_entity.dart';
-import 'package:snowplow_tracker/entities/media_player_entity.dart';
 import 'package:snowplow_tracker/events/event.dart';
 import 'package:snowplow_tracker/snowplow_tracker.dart';
 

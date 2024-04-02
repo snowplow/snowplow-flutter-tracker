@@ -13,7 +13,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:snowplow_tracker/configurations/media_tracking_configuration.dart';
-import 'package:snowplow_tracker/entities/media_player_entity.dart';
 import 'package:snowplow_tracker/events/event.dart';
 import 'package:snowplow_tracker/events/self_describing.dart';
 import 'package:snowplow_tracker/media_tracking.dart';

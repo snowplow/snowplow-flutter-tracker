@@ -11,7 +11,6 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:snowplow_tracker/snowplow_tracker.dart';
-import 'package:snowplow_tracker/entities/media_player_entity.dart';
 
 /// Configuration for a `MediaTracking` instance.
 @immutable
