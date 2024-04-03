@@ -9,28 +9,14 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import 'package:snowplow_tracker/events/self_describing.dart';
-import 'event_reader.dart';
+import 'package:flutter/foundation.dart';
 
-class SelfDescribingReader extends SelfDescribing implements EventReader {
-  final bool isMedia;
+@immutable
+class EndMediaTrackingMessageReader {
+  final String tracker;
+  final String mediaTrackingId;
 
-  SelfDescribingReader(dynamic map, {this.isMedia = false})
-      : super(schema: map['schema'], data: map['data']);
-
-  @override
-  String endpoint() {
-    return isMedia
-        ? 'trackMediaSelfDescribingEvent'
-        : 'trackSelfDescribingEvent';
-  }
-
-  Map json() {
-    return {'schema': schema, 'data': data};
-  }
-
-  @override
-  Map eventData() {
-    return {'event': json()};
-  }
+  EndMediaTrackingMessageReader(dynamic map)
+      : tracker = map['tracker'],
+        mediaTrackingId = map['mediaTrackingId'];
 }

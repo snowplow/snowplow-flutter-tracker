@@ -89,6 +89,12 @@ class TrackerConfiguration {
   /// Only available on mobile apps (Android and iOS), not on Web.
   final PlatformContextProperties? platformContextProperties;
 
+  /// The URL of the media plugin for the JavaScript tracker.
+  /// Required in order to track media events on Web.
+  /// You may use it from CDN as:
+  /// `https://cdn.jsdelivr.net/npm/@snowplow/browser-plugin-media@latest/dist/index.umd.min.js`
+  final String? jsMediaPluginURL;
+
   const TrackerConfiguration(
       {this.appId,
       this.devicePlatform,
@@ -103,7 +109,8 @@ class TrackerConfiguration {
       this.userAnonymisation,
       this.lifecycleAutotracking,
       this.screenEngagementAutotracking,
-      this.platformContextProperties});
+      this.platformContextProperties,
+      this.jsMediaPluginURL});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -120,7 +127,8 @@ class TrackerConfiguration {
       'userAnonymisation': userAnonymisation,
       'lifecycleAutotracking': lifecycleAutotracking,
       'screenEngagementAutotracking': screenEngagementAutotracking,
-      'platformContextProperties': platformContextProperties?.toMap()
+      'platformContextProperties': platformContextProperties?.toMap(),
+      'jsMediaPluginURL': jsMediaPluginURL
     };
     conf.removeWhere((key, value) => value == null);
     return conf;
