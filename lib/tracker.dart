@@ -61,6 +61,8 @@ class SnowplowTracker {
   }
 
   /// Starts media tracking with the given [configuration].
+  /// Note: to track media events on Web, you will need to install the media JS
+  /// plugin by configuration [TrackerConfiguration.jsMediaPluginURL].
   Future<MediaTracking> startMediaTracking(
       MediaTrackingConfiguration configuration) async {
     return await Snowplow.startMediaTracking(

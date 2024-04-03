@@ -9,6 +9,7 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
+import 'package:snowplow_tracker/events/self_describing.dart';
 import 'package:snowplow_tracker/snowplow_tracker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -237,6 +238,68 @@ void main() {
                   (event) => event['event']['event_name'] == 'end_event',
                   orElse: () => null) !=
               null;
+        }),
+        isTrue);
+  });
+
+  testWidgets("tracks custom context entities", (WidgetTester tester) async {
+    MediaTracking mediaTracking = await Snowplow.startMediaTracking(
+        tracker: "test",
+        configuration:
+            const MediaTrackingConfiguration(id: "media_id", contexts: [
+          SelfDescribing(
+              schema:
+                  "iglu:com.snowplowanalytics.iglu/anything-a/jsonschema/1-0-0",
+              data: {"key": "value"})
+        ]));
+
+    await mediaTracking.track(MediaPlayEvent(), contexts: [
+      const SelfDescribing(
+          schema: "iglu:com.snowplowanalytics.iglu/anything-b/jsonschema/1-0-0",
+          data: {"key": "other_value"})
+    ]);
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length < 1) {
+            return false;
+          }
+          dynamic event = events.firstWhere(
+              (event) => event['event']['event_name'] == 'play_event');
+          event['contexts']
+              .firstWhere((x) => x.toString().contains('anything-a'));
+          event['contexts']
+              .firstWhere((x) => x.toString().contains('anything-b'));
+          return true;
+        }),
+        isTrue);
+  });
+
+  testWidgets("tracks a custom event with the media context entities",
+      (WidgetTester tester) async {
+    MediaTracking mediaTracking = await Snowplow.startMediaTracking(
+        tracker: "test",
+        configuration: const MediaTrackingConfiguration(
+            id: "media_id",
+            player: MediaPlayerEntity(
+              duration: 100,
+              label: "My Label",
+            )));
+
+    await mediaTracking.track(const SelfDescribing(
+        schema: "iglu:com.snowplowanalytics.iglu/anything-a/jsonschema/1-0-0",
+        data: {"key": "other_value"}));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length < 1) {
+            return false;
+          }
+          dynamic event = events.firstWhere(
+              (event) => event['event']['event_name'] == 'anything-a');
+          event['contexts']
+              .firstWhere((x) => x.toString().contains('media_player'));
+          return true;
         }),
         isTrue);
   });

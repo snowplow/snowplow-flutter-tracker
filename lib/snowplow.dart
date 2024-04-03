@@ -122,6 +122,8 @@ class Snowplow {
         'endMediaTracking', {'tracker': tracker, 'mediaTrackingId': id});
   }
 
+  /// Updates stored attributes of the media player such as the current playback.
+  /// Use this function to continually update the player attributes so that they can be sent in the background ping events.
   static Future<void> updateMediaTracking({
     required String tracker,
     required String id,
@@ -138,6 +140,7 @@ class Snowplow {
     });
   }
 
+  /// Tracks a media player event along with the media entities (e.g., player, session, ad).
   static Future<void> trackMediaEvent({
     required String tracker,
     required String id,
