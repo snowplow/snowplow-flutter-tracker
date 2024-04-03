@@ -13,8 +13,6 @@ import Foundation
 import SnowplowTracker
 
 class SnowplowTrackerController {
-    // TODO: remove after 6.0.2 release of iOS tracker is published
-    private static var mediaTrackings: [String: MediaTracking] = [:]
 
     static func createTracker(_ message: CreateTrackerMessageReader, arguments: [String: Any]) {
         var controllers: [ConfigurationProtocol] = []
@@ -34,7 +32,7 @@ class SnowplowTrackerController {
             controllers.append(emitterConfig.toConfiguration())
         }
         
-        Snowplow.createTracker(
+        _ = Snowplow.createTracker(
             namespace: message.namespace,
             network: message.networkConfig.toConfiguration(),
             configurations: controllers
@@ -103,19 +101,17 @@ class SnowplowTrackerController {
         let configurationArguments = arguments["configuration"] as? [String: Any] ?? [:]
         let mediaTrackingConfiguration = message.configuration.toMediaTrackingConfiguration(arguments: configurationArguments)
         let trackerController = Snowplow.tracker(namespace: message.tracker)
-        let mediaTracking = trackerController?.media.startMediaTracking(configuration: mediaTrackingConfiguration)
-        self.mediaTrackings[mediaTrackingConfiguration.id] = mediaTracking
+        _ = trackerController?.media.startMediaTracking(configuration: mediaTrackingConfiguration)
     }
 
     static func endMediaTracking(_ message: EndMediaTrackingMessageReader) {
         let trackerController = Snowplow.tracker(namespace: message.tracker)
         trackerController?.media.endMediaTracking(id: message.mediaTrackingId)
-        self.mediaTrackings.removeValue(forKey: message.mediaTrackingId)
     }
 
     static func updateMediaTracking(_ message: UpdateMediaTrackingMessageReader) {
         let trackerController = Snowplow.tracker(namespace: message.tracker)
-        if let media = self.mediaTrackings[message.mediaTrackingId] {
+        if let media = trackerController?.media.mediaTracking(id: message.mediaTrackingId) {
             media.update(
                 player: message.player?.toMediaPlayerEntity(),
                 ad: message.ad?.toMediaAdEntity(),
@@ -133,7 +129,7 @@ class SnowplowTrackerController {
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)
     }
 
-    static func trackMediaAdClickEvent(eventMessage: TrackMediaAdEventMessageReader, arguments: [String: Any]) {
+    static func trackMediaAdClickEvent(_ message: TrackMediaAdEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
         let event = MediaAdClickEvent(percentProgress: message.eventData.percentProgress)
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)
     }
@@ -218,10 +214,10 @@ class SnowplowTrackerController {
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)
     }
 
-    // static func trackMediaPlaybackRateChangeEvent(_ message: TrackMediaPlaybackRateChangeEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
-    //     let event = message.toMediaPlaybackRateChangeEvent()
-    //     trackEvent(event, eventMessage: eventMessage, arguments: arguments)
-    // }
+    static func trackMediaPlaybackRateChangeEvent(_ message: TrackMediaPlaybackRateChangeEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toMediaPlaybackRateChangeEvent()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
 
     static func trackMediaQualityChangeEvent(_ message: TrackMediaQualityChangeEventMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
         let event = message.toMediaQualityChangeEvent()
@@ -252,7 +248,7 @@ class SnowplowTrackerController {
         eventMessage.addContextsToEvent(event, arguments: arguments)
         let trackerController = Snowplow.tracker(namespace: eventMessage.tracker)
         if let mediaTrackingId = eventMessage.mediaTrackingId {
-            if let media = self.mediaTrackings[mediaTrackingId] {
+            if let media = trackerController?.media.mediaTracking(id: mediaTrackingId) {
                 media.track(
                     event,
                     player: eventMessage.player?.toMediaPlayerEntity(),
@@ -261,7 +257,7 @@ class SnowplowTrackerController {
                 )
             }
         } else {
-            trackerController?.track(event)
+            _ = trackerController?.track(event)
         }
     }
 }

@@ -14,6 +14,7 @@ package com.snowplowanalytics.snowplow_tracker.readers.events
 import com.snowplowanalytics.snowplow.media.event.MediaAdPauseEvent
 import com.snowplowanalytics.snowplow.media.event.MediaAdResumeEvent
 import com.snowplowanalytics.snowplow.media.event.MediaAdSkipEvent
+import com.snowplowanalytics.snowplow.media.event.MediaAdClickEvent
 
 class MediaAdEventReader(val values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
@@ -32,7 +33,7 @@ class MediaAdEventReader(val values: Map<String, Any>) {
         return MediaAdSkipEvent(percentProgress = percentProgress)
     }
 
-    fun toMediaAdClickEvent(): MediaAdSkipEvent {
+    fun toMediaAdClickEvent(): MediaAdClickEvent {
         return MediaAdClickEvent(percentProgress = percentProgress)
     }
 }

@@ -372,10 +372,10 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
     }
 
     private func onTrackMediaPlaybackRateChangeEvent(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        // if let (message, arguments): (TrackMediaPlaybackRateChangeEventMessageReader, [String: Any]) = decodeCall(call),
-        //     let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
-        //     SnowplowTrackerController.trackMediaPlaybackRateChangeEvent(message, eventMessage: eventMessage, arguments: arguments)
-        // }
+        if let (message, arguments): (TrackMediaPlaybackRateChangeEventMessageReader, [String: Any]) = decodeCall(call),
+            let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.trackMediaPlaybackRateChangeEvent(message, eventMessage: eventMessage, arguments: arguments)
+        }
         result(nil)
     }
 
