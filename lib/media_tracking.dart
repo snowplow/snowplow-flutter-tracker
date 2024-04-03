@@ -10,7 +10,6 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter/foundation.dart';
-import 'package:snowplow_tracker/events/event.dart';
 import 'package:snowplow_tracker/snowplow_tracker.dart';
 
 /// Media tracking instance with methods to track media events.
