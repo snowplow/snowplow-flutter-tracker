@@ -106,7 +106,7 @@ class EventMessageReader(val values: Map<String, Any>) {
     }
 
     fun toMediaAdClickEvent(): MediaAdClickEvent {
-        val event = MediaAdClickEvent()
+        val event = MediaAdEventReader(eventData).toMediaAdClickEvent()
         addContext(event)
         return event
     }

@@ -133,8 +133,8 @@ class SnowplowTrackerController {
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)
     }
 
-    static func trackMediaAdClickEvent(eventMessage: EventMessageReader, arguments: [String: Any]) {
-        let event = MediaAdClickEvent()
+    static func trackMediaAdClickEvent(eventMessage: TrackMediaAdEventMessageReader, arguments: [String: Any]) {
+        let event = MediaAdClickEvent(percentProgress: message.eventData.percentProgress)
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)
     }
 

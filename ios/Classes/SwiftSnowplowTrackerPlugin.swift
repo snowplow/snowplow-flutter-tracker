@@ -246,8 +246,9 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
     }
 
     private func onTrackMediaAdClickEvent(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (eventMessage, arguments): (EventMessageReader, [String: Any]) = decodeCall(call) {
-            SnowplowTrackerController.trackMediaAdClickEvent(eventMessage: eventMessage, arguments: arguments)
+        if let (message, arguments): (TrackMediaAdEventMessageReader, [String: Any]) = decodeCall(call),
+            let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.trackMediaAdClickEvent(message, eventMessage: eventMessage, arguments: arguments)
         }
         result(nil)
     }

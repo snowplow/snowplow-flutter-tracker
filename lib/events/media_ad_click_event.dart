@@ -22,6 +22,11 @@ import 'package:snowplow_tracker/events/event.dart';
 /// {@category Adding data to your events}
 @immutable
 class MediaAdClickEvent implements Event {
+  /// The percent of the way through the ad.
+  final int? percentProgress;
+
+  const MediaAdClickEvent({this.percentProgress});
+
   @override
   String endpoint() {
     return 'trackMediaAdClickEvent';
@@ -29,6 +34,10 @@ class MediaAdClickEvent implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    return <String, Object?>{};
+    final data = <String, Object?>{
+      'percentProgress': percentProgress,
+    };
+    data.removeWhere((key, value) => value == null);
+    return data;
   }
 }

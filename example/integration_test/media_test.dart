@@ -37,10 +37,25 @@ void main() {
         configuration: const MediaTrackingConfiguration(
             id: "media_id",
             player: MediaPlayerEntity(
-              duration: 100,
-              label: "My Label",
+              currentTime: 0, // The current playback time
+              duration:
+                  150, // A double-precision floating-point value indicating the duration of the media in seconds
+              ended: false, // If playback of the media has ended
+              livestream: false, // If the media is live
+              label: 'Sample video', // A human-readable title for the media
+              loop: false, // If the video should restart after ending
+              mediaType: MediaType.video, // The type of media
+              muted: false, // If the media element is muted
+              paused: false, // If the media element is paused
+              pictureInPicture:
+                  false, // If the media is in picture-in-picture mode
+              playerType: 'html5', // The type of player
+              playbackRate: 1.0, // Playback rate (1 is normal)
+              quality: '1080p', // The quality level of the playback
+              volume: 100, // Volume level
             )));
-    await mediaTracking.track(MediaReadyEvent());
+    await mediaTracking.track(MediaReadyEvent(),
+        player: const MediaPlayerEntity(currentTime: 30.0));
 
     expect(
         await SnowplowTests.checkMicroCounts(
@@ -56,8 +71,10 @@ void main() {
           dynamic session = events[0]['event']['contexts']['data']
               .firstWhere((x) => x['schema'].toString().contains('/session/'));
           return ((events[0]['event']['event_name'] == 'ready_event') &&
-              (player['data']['label'] == 'My Label') &&
-              (player['data']['duration'] == 100) &&
+              (player['data']['label'] == 'Sample video') &&
+              (player['data']['duration'] == 150) &&
+              (player['data']['currentTime'] == 30) &&
+              (player['data']['volume'] == 100) &&
               (session['data']['mediaSessionId'] == 'media_id'));
         }),
         isTrue);
@@ -299,6 +316,58 @@ void main() {
           event['contexts']
               .firstWhere((x) => x.toString().contains('media_player'));
           return true;
+        }),
+        isTrue);
+  });
+
+  testWidgets("tracks all media events", (WidgetTester tester) async {
+    MediaTracking mediaTracking = await Snowplow.startMediaTracking(
+        tracker: "test",
+        configuration:
+            const MediaTrackingConfiguration(id: "media_id", pings: false));
+
+    await mediaTracking.track(MediaAdBreakEndEvent());
+    await mediaTracking.track(MediaAdBreakStartEvent());
+    await mediaTracking.track(const MediaAdClickEvent(percentProgress: 20));
+    await mediaTracking.track(MediaAdCompleteEvent());
+    await mediaTracking.track(MediaAdFirstQuartileEvent());
+    await mediaTracking.track(MediaAdMidpointEvent());
+    await mediaTracking.track(const MediaAdPauseEvent(percentProgress: 10));
+    await mediaTracking.track(const MediaAdResumeEvent(percentProgress: 15));
+    await mediaTracking.track(const MediaAdSkipEvent(percentProgress: 20));
+    await mediaTracking.track(MediaAdStartEvent());
+    await mediaTracking.track(MediaAdThirdQuartileEvent());
+    await mediaTracking.track(MediaBufferEndEvent());
+    await mediaTracking.track(MediaBufferStartEvent());
+    await mediaTracking.track(MediaEndEvent());
+    await mediaTracking.track(const MediaErrorEvent(
+        errorCode: '1001',
+        errorName: 'MEDIA_ERR_ABORTED',
+        errorDescription:
+            'The fetching process for the media resource was aborted by the user agent at the user\'s request.'));
+    await mediaTracking
+        .track(const MediaFullscreenChangeEvent(fullscreen: true));
+    await mediaTracking.track(MediaPauseEvent());
+    await mediaTracking
+        .track(const MediaPictureInPictureChangeEvent(pictureInPicture: false));
+    await mediaTracking.track(MediaPlayEvent());
+    await mediaTracking.track(
+        const MediaPlaybackRateChangeEvent(newRate: 1.5, previousRate: 1.0));
+    await mediaTracking.track(const MediaQualityChangeEvent(
+        previousQuality: '720p',
+        newQuality: '1080p',
+        bitrate: 1000,
+        framesPerSecond: 30,
+        automatic: false));
+    await mediaTracking.track(MediaReadyEvent());
+    await mediaTracking.track(MediaSeekEndEvent());
+    await mediaTracking.track(MediaSeekStartEvent());
+    await mediaTracking
+        .track(const MediaVolumeChangeEvent(previousVolume: 30, newVolume: 50));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          return events.length == 25;
         }),
         isTrue);
   });

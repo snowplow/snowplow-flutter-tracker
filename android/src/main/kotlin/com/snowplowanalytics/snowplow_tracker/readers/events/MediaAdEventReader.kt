@@ -31,4 +31,8 @@ class MediaAdEventReader(val values: Map<String, Any>) {
     fun toMediaAdSkipEvent(): MediaAdSkipEvent {
         return MediaAdSkipEvent(percentProgress = percentProgress)
     }
+
+    fun toMediaAdClickEvent(): MediaAdSkipEvent {
+        return MediaAdClickEvent(percentProgress = percentProgress)
+    }
 }
