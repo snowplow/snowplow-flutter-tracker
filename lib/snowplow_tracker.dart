@@ -18,10 +18,12 @@ export 'configurations/gdpr_configuration.dart';
 export 'configurations/network_configuration.dart';
 export 'configurations/subject_configuration.dart';
 export 'configurations/tracker_configuration.dart';
+export 'configurations/emitter_configuration.dart';
 export 'configurations/web_activity_tracking.dart';
 export 'configurations/platform_context_properties.dart';
 export 'configurations/media_tracking_configuration.dart';
 
+export 'events/event.dart';
 export 'events/consent_granted.dart';
 export 'events/consent_withdrawn.dart';
 export 'events/screen_view.dart';
