@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 class SnowplowBDP extends StatelessWidget {
-  const SnowplowBDP({Key? key}) : super(key: key);
+  const SnowplowBDP({super.key});
 
   @override
   Widget build(BuildContext context) {

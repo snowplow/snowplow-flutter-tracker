@@ -8,10 +8,10 @@ import 'nested_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({
-    Key? key,
+    super.key,
     required this.tracker,
     this.mediaTracking,
-  }) : super(key: key);
+  });
 
   final SnowplowTracker tracker;
   final MediaTracking? mediaTracking;

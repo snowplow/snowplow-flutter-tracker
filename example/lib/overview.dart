@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 class Overview extends StatelessWidget {
-  const Overview({Key? key}) : super(key: key);
+  const Overview({super.key});
 
   @override
   Widget build(BuildContext context) {

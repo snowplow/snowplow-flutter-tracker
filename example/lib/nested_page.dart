@@ -5,7 +5,7 @@ import 'overview.dart';
 import 'snowplow_bdp.dart';
 
 class NestedPage extends StatefulWidget {
-  const NestedPage({required this.tracker, Key? key}) : super(key: key);
+  const NestedPage({required this.tracker, super.key});
 
   final SnowplowTracker tracker;
 

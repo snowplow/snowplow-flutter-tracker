@@ -50,11 +50,7 @@ Future<void> main() async {
 class MyApp extends StatefulWidget {
   final SnowplowTracker tracker;
   final MediaTracking? mediaTracking;
-  const MyApp({
-    Key? key,
-    required this.tracker,
-    this.mediaTracking,
-  }) : super(key: key);
+  const MyApp({super.key, required this.tracker, this.mediaTracking});
 
   @override
   State<MyApp> createState() => _MyAppState();
