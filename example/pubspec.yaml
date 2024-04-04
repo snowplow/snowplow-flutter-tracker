@@ -39,7 +39,7 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  http: ^0.13.5
+  http: "1.2.0"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
