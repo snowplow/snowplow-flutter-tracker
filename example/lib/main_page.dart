@@ -10,9 +10,11 @@ class MainPage extends StatefulWidget {
   const MainPage({
     Key? key,
     required this.tracker,
+    this.mediaTracking,
   }) : super(key: key);
 
   final SnowplowTracker tracker;
+  final MediaTracking? mediaTracking;
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -26,6 +28,14 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
 
   Future<void> trackEvent(event, {List<SelfDescribing>? contexts}) async {
     widget.tracker.track(event, contexts: contexts);
+
+    setState(() {
+      _numberOfEventsSent += 1;
+    });
+  }
+
+  Future<void> trackMediaEvent(event, {List<SelfDescribing>? contexts}) async {
+    widget.mediaTracking?.track(event, contexts: contexts);
 
     setState(() {
       _numberOfEventsSent += 1;
@@ -202,6 +212,18 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                 ]);
               },
               child: const Text('Send Structured Event With Context'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                trackMediaEvent(MediaPlayEvent());
+              },
+              child: const Text('Send Media Play Event'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                trackMediaEvent(MediaPauseEvent());
+              },
+              child: const Text('Send Media Pause Event'),
             ),
             const SizedBox(height: 24.0),
             Text('Session ID: $_sessionId'),
