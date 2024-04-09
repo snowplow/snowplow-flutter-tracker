@@ -15,6 +15,10 @@ import SnowplowTracker
 struct EventMessageReader: Decodable {
     let tracker: String
     let contexts: [SelfDescribingJsonReader]?
+    let mediaTrackingId: String?
+    let player: MediaPlayerEntityReader?
+    let ad: MediaAdEntityReader?
+    let adBreak: MediaAdBreakEntityReader?
 }
 
 extension EventMessageReader {

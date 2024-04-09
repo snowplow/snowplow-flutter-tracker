@@ -15,6 +15,7 @@ import android.content.Context
 
 import com.snowplowanalytics.snowplow.Snowplow;
 import com.snowplowanalytics.snowplow.configuration.Configuration;
+import com.snowplowanalytics.snowplow.event.Event
 import com.snowplowanalytics.snowplow_tracker.readers.configurations.DefaultTrackerConfiguration
 import com.snowplowanalytics.snowplow_tracker.readers.messages.*
 
@@ -51,59 +52,43 @@ object SnowplowTrackerController {
     }
 
     fun trackStructured(eventReader: EventMessageReader) {
-        val trackerController = Snowplow.getTracker(eventReader.tracker)
         val structured = eventReader.toStructuredWithContexts()
-
-        trackerController?.track(structured)
+        trackEvent(structured, eventReader)
     }
 
     fun trackSelfDescribing(eventReader: EventMessageReader) {
-        val trackerController = Snowplow.getTracker(eventReader.tracker)
         val selfDescribing = eventReader.toSelfDescribingWithContexts()
-
-        trackerController?.track(selfDescribing)
+        trackEvent(selfDescribing, eventReader)
     }
 
     fun trackScreenView(eventReader: EventMessageReader) {
-        val trackerController = Snowplow.getTracker(eventReader.tracker)
         val screenView = eventReader.toScreenViewWithContexts()
-
-        trackerController?.track(screenView)
+        trackEvent(screenView, eventReader)
     }
 
     fun trackScrollChanged(eventReader: EventMessageReader) {
-        val trackerController = Snowplow.getTracker(eventReader.tracker)
         val scroll = eventReader.toScrollChangedWithContexts()
-
-        trackerController?.track(scroll)
+        trackEvent(scroll, eventReader)
     }
 
     fun trackListItemView(eventReader: EventMessageReader) {
-        val trackerController = Snowplow.getTracker(eventReader.tracker)
         val listItem = eventReader.toListItemViewWithContexts()
-
-        trackerController?.track(listItem)
+        trackEvent(listItem, eventReader)
     }
 
     fun trackTiming(eventReader: EventMessageReader) {
-        val trackerController = Snowplow.getTracker(eventReader.tracker)
         val timing = eventReader.toTimingWithContexts()
-
-        trackerController?.track(timing)
+        trackEvent(timing, eventReader)
     }
 
     fun trackConsentGranted(eventReader: EventMessageReader) {
-        val trackerController = Snowplow.getTracker(eventReader.tracker)
         val consentGranted = eventReader.toConsentGrantedWithContexts()
-
-        trackerController?.track(consentGranted)
+        trackEvent(consentGranted, eventReader)
     }
 
     fun trackConsentWithdrawn(eventReader: EventMessageReader) {
-        val trackerController = Snowplow.getTracker(eventReader.tracker)
         val consentWithdrawn = eventReader.toConsentWithdrawnWithContexts()
-
-        trackerController?.track(consentWithdrawn)
+        trackEvent(consentWithdrawn, eventReader)
     }
 
     fun setUserId(messageReader: SetUserIdMessageReader) {
@@ -128,6 +113,169 @@ object SnowplowTrackerController {
         val trackerController = Snowplow.getTracker(messageReader.tracker)
 
         return trackerController?.session?.sessionIndex
+    }
+
+    fun startMediaTracking(messageReader: StartMediaTrackingMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+        trackerController?.media?.startMediaTracking(
+            messageReader.configuration.toConfiguration()
+        )
+    }
+
+    fun endMediaTracking(messageReader: EndMediaTrackingMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+        trackerController?.media?.endMediaTracking(messageReader.mediaTrackingId)
+    }
+
+    fun updateMediaTracking(messageReader: UpdateMediaTrackingMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+        val mediaTracking = trackerController?.media?.getMediaTracking(messageReader.mediaTrackingId)
+        mediaTracking?.update(
+            player = messageReader.player?.toMediaPlayerEntity(),
+            ad = messageReader.ad?.toMediaAdEntity(),
+            adBreak = messageReader.adBreak?.toMediaAdBreakEntity()
+        )
+    }
+
+    fun trackMediaAdBreakEndEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdBreakEndEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdBreakStartEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdBreakStartEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdClickEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdClickEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdCompleteEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdCompleteEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdFirstQuartileEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdFirstQuartileEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdMidpointEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdMidpointEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdPauseEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdPauseEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdResumeEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdResumeEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdSkipEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdSkipEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdStartEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdStartEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaAdThirdQuartileEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaAdThirdQuartileEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaBufferEndEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaBufferEndEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaBufferStartEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaBufferStartEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaEndEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaEndEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaErrorEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaErrorEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaFullscreenChangeEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaFullscreenChangeEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaPauseEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaPauseEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaPictureInPictureChangeEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaPictureInPictureChangeEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaPlayEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaPlayEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaPlaybackRateChangeEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaPlaybackRateChangeEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaQualityChangeEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaQualityChangeEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaReadyEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaReadyEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaSeekEndEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaSeekEndEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaSeekStartEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaSeekStartEvent()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackMediaVolumeChangeEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toMediaVolumeChangeEvent()
+        trackEvent(event, messageReader)
+    }
+
+    private fun trackEvent(event: Event, messageReader: EventMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+        val mediaTrackingId = messageReader.mediaTrackingId
+        if (mediaTrackingId == null) {
+            trackerController?.track(event)
+        } else {
+            val mediaTracking = trackerController?.media?.getMediaTracking(mediaTrackingId)
+            mediaTracking?.track(
+                event = event,
+                player = messageReader.player?.toMediaPlayerEntity(),
+                ad = messageReader.ad?.toMediaAdEntity(),
+                adBreak = messageReader.adBreak?.toMediaAdBreakEntity()
+            )
+        }
     }
 
 }

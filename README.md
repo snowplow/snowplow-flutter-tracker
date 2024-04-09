@@ -34,6 +34,7 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 | Configurable GDPR context entity                                                                             | ✔ | ✔ | ✔      |
 | Lifecycle autotracking                                                                                       | ✔ | ✔ |        |
 | Engagement tracking (activity tracking on Web, mobile screen engagement on mobile)                           | ✔ | ✔ | ✔      |
+| Media playback tracking                                                                                      | ✔ | ✔ | ✔      |
 
 ## Quick Start
 

@@ -12,8 +12,10 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:snowplow_tracker/configurations/media_tracking_configuration.dart';
 import 'package:snowplow_tracker/events/event.dart';
 import 'package:snowplow_tracker/events/self_describing.dart';
+import 'package:snowplow_tracker/media_tracking.dart';
 import 'package:snowplow_tracker/snowplow.dart';
 import 'package:snowplow_tracker/snowplow_observer.dart';
 import 'package:snowplow_tracker/configurations/configuration.dart';
@@ -56,6 +58,20 @@ class SnowplowTracker {
   /// All trackers on Web share the same session.
   Future<int?> get sessionIndex async {
     return await Snowplow.getSessionIndex(tracker: namespace);
+  }
+
+  /// Starts media tracking with the given [configuration].
+  /// Note: to track media events on Web, you will need to install the media JS
+  /// plugin by configuration [TrackerConfiguration.jsMediaPluginURL].
+  Future<MediaTracking> startMediaTracking(
+      MediaTrackingConfiguration configuration) async {
+    return await Snowplow.startMediaTracking(
+        configuration: configuration, tracker: namespace);
+  }
+
+  /// Ends media tracking with the given [id].
+  Future<void> endMediaTracking(String id) async {
+    await Snowplow.endMediaTracking(tracker: namespace, id: id);
   }
 
   /// Returns a [SnowplowObserver] for automatically tracking `PageViewEvent`

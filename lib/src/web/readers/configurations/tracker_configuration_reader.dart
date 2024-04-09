@@ -27,7 +27,8 @@ class TrackerConfigurationReader extends TrackerConfiguration {
             webActivityTracking: map['webActivityTracking'] == null
                 ? null
                 : WebActivityTrackingReader(map['webActivityTracking']),
-            userAnonymisation: map['userAnonymisation']);
+            userAnonymisation: map['userAnonymisation'],
+            jsMediaPluginURL: map['jsMediaPluginURL']);
 
   void addTrackerOptions(dynamic options) {
     if (appId != null) {
