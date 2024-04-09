@@ -34,10 +34,8 @@ class MediaPictureInPictureChangeEvent implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    final data = <String, Object?>{
+    return <String, Object?>{
       'pictureInPicture': pictureInPicture,
     };
-    data.removeWhere((key, value) => value == null);
-    return data;
   }
 }

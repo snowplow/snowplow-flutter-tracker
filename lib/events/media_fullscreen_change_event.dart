@@ -34,10 +34,8 @@ class MediaFullscreenChangeEvent implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    final data = <String, Object?>{
+    return <String, Object?>{
       'fullscreen': fullscreen,
     };
-    data.removeWhere((key, value) => value == null);
-    return data;
   }
 }

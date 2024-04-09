@@ -15,7 +15,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:snowplow_tracker/events/event.dart';
 
-/// Media player event fired immediately after the browser switches into or out of full-screen mode.
+/// Media player event sent when the playback rate has changed.
 ///
 /// {@category Media events}
 /// {@category Tracking events}
