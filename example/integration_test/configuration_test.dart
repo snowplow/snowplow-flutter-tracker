@@ -271,7 +271,33 @@ void main() {
         isTrue);
   });
 
-  testWidgets("sets platform context properties overrides",
+  testWidgets("sets a platform context property override",
+      (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'custom-headers',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            platformContextProperties: PlatformContextProperties(
+          osType: 'osType',
+        )));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          dynamic context = events[0]['event']['contexts']['data'].firstWhere(
+              (x) => x['schema'].toString().contains('mobile_context'));
+
+          return context['data']['osType'] == 'osType';
+        }),
+        isTrue);
+  });
+
+  testWidgets("sets all platform context properties overrides",
       (WidgetTester tester) async {
     SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'custom-headers',
