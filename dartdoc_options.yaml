@@ -1,25 +1,4 @@
 dartdoc:
-  categories:
-    "Getting started":
-      markdown: doc/01-getting-started.md
-      name: Getting started
-    "Initialization and configuration":
-      markdown: doc/02-configuration.md
-      name: Initialization and configuration
-    "Tracking events":
-      markdown: doc/03-tracking-events.md
-      name: Tracking events
-    "Adding data to your events":
-      markdown: doc/04-adding-data.md
-      name: Adding data to your events
-    "Sessions and data model":
-      markdown: doc/05-sessions.md
-      name: Sessions and data model
-    "Anonymous tracking":
-      markdown: doc/06-anonymous-tracking.md
-      name: Anonymous tracking
-  categoryOrder: ["Getting started", "Initialization and configuration", "Tracking events", "Adding data to your events", "Sessions and data model", "Anonymous tracking"]
-  showUndocumentedCategories: true
   errors:
     - unresolved-doc-reference
   warnings:

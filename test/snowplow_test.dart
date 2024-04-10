@@ -11,21 +11,7 @@
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
-import 'package:snowplow_tracker/configurations/network_configuration.dart';
-import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
-import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
-import 'package:snowplow_tracker/events/consent_granted.dart';
-import 'package:snowplow_tracker/events/consent_withdrawn.dart';
-import 'package:snowplow_tracker/events/event.dart';
-import 'package:snowplow_tracker/events/screen_view.dart';
-import 'package:snowplow_tracker/events/scroll_changed.dart';
-import 'package:snowplow_tracker/events/list_item_view.dart';
-import 'package:snowplow_tracker/events/self_describing.dart';
-import 'package:snowplow_tracker/events/structured.dart';
-import 'package:snowplow_tracker/events/timing.dart';
-import 'package:snowplow_tracker/events/page_view_event.dart';
-import 'package:snowplow_tracker/snowplow.dart';
+import 'package:snowplow_tracker/snowplow_tracker.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
@@ -367,5 +353,53 @@ void main() {
           'tracker': 'tns1',
         }));
     expect(sessionIndex, equals(10));
+  });
+
+  test('starts media tracking', () async {
+    await Snowplow.startMediaTracking(
+        tracker: 'tns1',
+        configuration: const MediaTrackingConfiguration(id: 'm1'));
+
+    expect(
+        methodCall,
+        isMethodCall('startMediaTracking', arguments: {
+          'tracker': 'tns1',
+          'configuration': {'id': 'm1', 'pings': true, 'session': true}
+        }));
+  });
+
+  test('updates media tracking', () async {
+    await Snowplow.updateMediaTracking(
+        tracker: 'tns1',
+        id: 'm1',
+        player: const MediaPlayerEntity(
+            label: 'n1', currentTime: 10, duration: 100, volume: 50),
+        ad: const MediaAdEntity(adId: "ad1"));
+
+    expect(
+        methodCall,
+        isMethodCall('updateMediaTracking', arguments: {
+          'tracker': 'tns1',
+          'mediaTrackingId': 'm1',
+          'player': {
+            'label': 'n1',
+            'currentTime': 10.0,
+            'duration': 100.0,
+            'volume': 50
+          },
+          'ad': {'adId': 'ad1'},
+          'adBreak': null
+        }));
+  });
+
+  test('ends media tracking', () async {
+    await Snowplow.endMediaTracking(tracker: 'tns1', id: 'm1');
+
+    expect(
+        methodCall,
+        isMethodCall('endMediaTracking', arguments: {
+          'tracker': 'tns1',
+          'mediaTrackingId': 'm1',
+        }));
   });
 }

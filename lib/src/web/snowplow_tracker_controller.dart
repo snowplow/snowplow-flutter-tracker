@@ -12,6 +12,10 @@
 import 'dart:js_util';
 import 'dart:html';
 
+import 'readers/messages/end_media_tracking_message_reader.dart';
+import 'readers/messages/start_media_tracking_message_reader.dart';
+import 'readers/messages/update_media_tracking_message_reader.dart';
+
 import 'readers/configurations/configuration_reader.dart';
 import 'readers/messages/event_message_reader.dart';
 import 'readers/messages/set_user_id_message_reader.dart';
@@ -51,10 +55,15 @@ class SnowplowTrackerController {
             'heartbeatDelay': webActivityTracking.heartbeatDelay
           }));
     }
+
+    if (configuration.trackerConfig?.jsMediaPluginURL != null) {
+      snowplow('addPlugin', configuration.trackerConfig?.jsMediaPluginURL,
+          jsify(['snowplowMedia', 'SnowplowMediaPlugin']));
+    }
   }
 
   static void trackEvent(EventMessageReader message) {
-    snowplow('${message.event().endpoint()}:${message.tracker}',
+    snowplow('${message.event.endpoint()}:${message.tracker}',
         jsify(message.eventData()));
   }
 
@@ -80,6 +89,20 @@ class SnowplowTrackerController {
       return int.tryParse(cookiePart);
     }
     return null;
+  }
+
+  static void startMediaTracking(StartMediaTrackingMessageReader message) {
+    snowplow('startMediaTracking:${message.tracker}',
+        jsify(message.configuration.toTrackerOptions()));
+  }
+
+  static void endMediaTracking(EndMediaTrackingMessageReader message) {
+    snowplow('endMediaTracking:${message.tracker}',
+        jsify({'id': message.mediaTrackingId}));
+  }
+
+  static void updateMediaTracking(UpdateMediaTrackingMessageReader message) {
+    snowplow('updateMediaTracking:${message.tracker}', jsify(message.toMap()));
   }
 
   static List<String>? _getSnowplowCookieParts() {

@@ -10,6 +10,10 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:flutter/foundation.dart';
+import '../entities/media_ad_break_entity_reader.dart';
+import '../entities/media_ad_entity_reader.dart';
+import '../entities/media_player_entity_reader.dart';
+import '../events/media_event_reader.dart';
 import '../events/consent_granted_reader.dart';
 import '../events/consent_withdrawn_reader.dart';
 import '../events/contexts_reader.dart';
@@ -25,174 +29,149 @@ import '../events/list_item_view_reader.dart';
 @immutable
 class EventMessageReader {
   final String tracker;
-  final StructuredReader? structured;
-  final SelfDescribingReader? selfDescribing;
-  final ScreenViewReader? screenView;
-  final ScrollChangedReader? scrollChanged;
-  final ListItemViewReader? listItemView;
-  final TimingReader? timing;
-  final PageViewEventReader? pageView;
-  final ConsentGrantedReader? consentGranted;
-  final ConsentWithdrawnReader? consentWithdrawn;
+  final EventReader event;
   final ContextsReader? contexts;
+  final String? mediaTrackingId;
+  final MediaPlayerEntityReader? player;
+  final MediaAdEntityReader? ad;
+  final MediaAdBreakEntityReader? adBreak;
 
   const EventMessageReader(
       {required this.tracker,
-      this.structured,
-      this.selfDescribing,
-      this.screenView,
-      this.scrollChanged,
-      this.listItemView,
-      this.timing,
-      this.consentGranted,
-      this.consentWithdrawn,
-      this.pageView,
-      this.contexts});
+      required this.event,
+      this.contexts,
+      this.mediaTrackingId,
+      this.player,
+      this.ad,
+      this.adBreak});
 
   EventMessageReader.withStructured(dynamic map)
       : tracker = map['tracker'],
-        structured = StructuredReader(map['eventData']),
-        selfDescribing = null,
-        screenView = null,
-        scrollChanged = null,
-        listItemView = null,
-        timing = null,
-        consentGranted = null,
-        consentWithdrawn = null,
-        pageView = null,
+        event = StructuredReader(map['eventData']),
         contexts =
-            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = null,
+        player = null,
+        ad = null,
+        adBreak = null;
 
   EventMessageReader.withSelfDescribing(dynamic map)
       : tracker = map['tracker'],
-        selfDescribing = SelfDescribingReader(map['eventData']),
-        structured = null,
-        screenView = null,
-        scrollChanged = null,
-        listItemView = null,
-        timing = null,
-        consentGranted = null,
-        consentWithdrawn = null,
-        pageView = null,
+        event = SelfDescribingReader(map['eventData'],
+            isMedia: map['mediaTrackingId'] != null),
         contexts =
-            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = map['mediaTrackingId'],
+        player = map['player'] != null
+            ? MediaPlayerEntityReader(map['player'])
+            : null,
+        ad = map['ad'] != null ? MediaAdEntityReader(map['ad']) : null,
+        adBreak = map['adBreak'] != null
+            ? MediaAdBreakEntityReader(map['adBreak'])
+            : null;
 
   EventMessageReader.withScreenView(dynamic map)
       : tracker = map['tracker'],
-        selfDescribing = null,
-        structured = null,
-        screenView = ScreenViewReader(map['eventData']),
-        scrollChanged = null,
-        listItemView = null,
-        timing = null,
-        consentGranted = null,
-        consentWithdrawn = null,
-        pageView = null,
+        event = ScreenViewReader(map['eventData']),
         contexts =
-            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = null,
+        player = null,
+        ad = null,
+        adBreak = null;
 
   EventMessageReader.withScrollChanged(dynamic map)
       : tracker = map['tracker'],
-        selfDescribing = null,
-        structured = null,
-        screenView = null,
-        scrollChanged = ScrollChangedReader(map['eventData']),
-        listItemView = null,
-        timing = null,
-        consentGranted = null,
-        consentWithdrawn = null,
-        pageView = null,
+        event = ScrollChangedReader(map['eventData']),
         contexts =
-            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = null,
+        player = null,
+        ad = null,
+        adBreak = null;
 
   EventMessageReader.withListItemView(dynamic map)
       : tracker = map['tracker'],
-        selfDescribing = null,
-        structured = null,
-        screenView = null,
-        scrollChanged = null,
-        listItemView = ListItemViewReader(map['eventData']),
-        timing = null,
-        consentGranted = null,
-        consentWithdrawn = null,
-        pageView = null,
+        event = ListItemViewReader(map['eventData']),
         contexts =
-            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = null,
+        player = null,
+        ad = null,
+        adBreak = null;
 
   EventMessageReader.withTiming(dynamic map)
       : tracker = map['tracker'],
-        selfDescribing = null,
-        structured = null,
-        screenView = null,
-        scrollChanged = null,
-        listItemView = null,
-        timing = TimingReader(map['eventData']),
-        consentGranted = null,
-        consentWithdrawn = null,
-        pageView = null,
+        event = TimingReader(map['eventData']),
         contexts =
-            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = null,
+        player = null,
+        ad = null,
+        adBreak = null;
 
   EventMessageReader.withConsentGranted(dynamic map)
       : tracker = map['tracker'],
-        selfDescribing = null,
-        structured = null,
-        screenView = null,
-        scrollChanged = null,
-        listItemView = null,
-        timing = null,
-        consentGranted = ConsentGrantedReader(map['eventData']),
-        consentWithdrawn = null,
-        pageView = null,
+        event = ConsentGrantedReader(map['eventData']),
         contexts =
-            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = null,
+        player = null,
+        ad = null,
+        adBreak = null;
 
   EventMessageReader.withConsentWithdrawn(dynamic map)
       : tracker = map['tracker'],
-        selfDescribing = null,
-        structured = null,
-        screenView = null,
-        scrollChanged = null,
-        listItemView = null,
-        timing = null,
-        consentGranted = null,
-        consentWithdrawn = ConsentWithdrawnReader(map['eventData']),
-        pageView = null,
+        event = ConsentWithdrawnReader(map['eventData']),
         contexts =
-            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = null,
+        player = null,
+        ad = null,
+        adBreak = null;
 
   EventMessageReader.withPageView(dynamic map)
       : tracker = map['tracker'],
-        selfDescribing = null,
-        structured = null,
-        screenView = null,
-        scrollChanged = null,
-        listItemView = null,
-        timing = null,
-        consentGranted = null,
-        consentWithdrawn = null,
-        pageView = PageViewEventReader(map['eventData']),
+        event = PageViewEventReader(map['eventData']),
         contexts =
-            map['contexts'] != null ? ContextsReader(map['contexts']) : null;
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = null,
+        player = null,
+        ad = null,
+        adBreak = null;
 
-  EventReader event() {
-    if (structured != null) return structured!;
-    if (selfDescribing != null) return selfDescribing!;
-    if (screenView != null) return screenView!;
-    if (scrollChanged != null) return scrollChanged!;
-    if (listItemView != null) return listItemView!;
-    if (timing != null) return timing!;
-    if (consentGranted != null) return consentGranted!;
-    if (pageView != null) return pageView!;
-    return consentWithdrawn!;
-  }
+  EventMessageReader.withMediaEvent(MediaEndpoint mediaEndpoint, dynamic map)
+      : tracker = map['tracker'],
+        event = MediaEventReader(
+            mediaEndpoint: mediaEndpoint, data: map['eventData']),
+        contexts =
+            map['contexts'] != null ? ContextsReader(map['contexts']) : null,
+        mediaTrackingId = map['mediaTrackingId'],
+        player = map['player'] != null
+            ? MediaPlayerEntityReader(map['player'])
+            : null,
+        ad = map['ad'] != null ? MediaAdEntityReader(map['ad']) : null,
+        adBreak = map['adBreak'] != null
+            ? MediaAdBreakEntityReader(map['adBreak'])
+            : null;
 
   dynamic eventData() {
-    EventReader event = this.event();
     dynamic data = event.eventData();
     if (contexts != null) {
       data['context'] =
           contexts?.selfDescribingJsons.map((e) => e.json()).toList();
+    }
+    if (mediaTrackingId != null) {
+      data['id'] = mediaTrackingId;
+    }
+    if (player != null) {
+      data['player'] = player?.toMap();
+    }
+    if (ad != null) {
+      data['ad'] = ad?.toMap();
+    }
+    if (adBreak != null) {
+      data['adBreak'] = adBreak?.toMap();
     }
     return data;
   }

@@ -12,7 +12,6 @@
 package com.snowplowanalytics.snowplow_tracker.readers.events
 
 import com.snowplowanalytics.snowplow.event.ListItemView
-import java.util.*
 
 class ListItemViewReader(val values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }

@@ -12,8 +12,7 @@
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snowplow_tracker/snowplow.dart';
-import 'package:snowplow_tracker/tracker.dart';
+import 'package:snowplow_tracker/snowplow_tracker.dart';
 import 'dart:convert';
 
 class SnowplowTests {
@@ -24,7 +23,10 @@ class SnowplowTests {
 
   static Future<void> createTracker() async {
     tracker = await Snowplow.createTracker(
-        namespace: 'test', endpoint: microEndpoint);
+        namespace: 'test',
+        endpoint: microEndpoint,
+        trackerConfig:
+            const TrackerConfiguration(jsMediaPluginURL: "media.js"));
   }
 
   static Future<void> resetMicro() async {

@@ -13,12 +13,16 @@ import 'package:snowplow_tracker/events/self_describing.dart';
 import 'event_reader.dart';
 
 class SelfDescribingReader extends SelfDescribing implements EventReader {
-  SelfDescribingReader(dynamic map)
+  final bool isMedia;
+
+  SelfDescribingReader(dynamic map, {this.isMedia = false})
       : super(schema: map['schema'], data: map['data']);
 
   @override
   String endpoint() {
-    return 'trackSelfDescribingEvent';
+    return isMedia
+        ? 'trackMediaSelfDescribingEvent'
+        : 'trackSelfDescribingEvent';
   }
 
   Map json() {

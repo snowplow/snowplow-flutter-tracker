@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 class Overview extends StatelessWidget {
-  const Overview({Key? key}) : super(key: key);
+  const Overview({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ This will add a line with the dependency like this to your `pubspec.yaml`:
 
 ```yml
 dependencies:
-    snowplow_tracker: ^0.6.0
+    snowplow_tracker: ^0.7.0
 ```
 
 Import the package into your Dart code:

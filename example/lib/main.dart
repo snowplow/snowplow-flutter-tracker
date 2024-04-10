@@ -18,17 +18,19 @@ Future<void> main() async {
 
   /// create a Snowplow tracker instance
   final SnowplowTracker tracker = await Snowplow.createTracker(
-      namespace: "ns1",
+      namespace: 'ns1',
       endpoint: const String.fromEnvironment('ENDPOINT',
           defaultValue: 'http://0.0.0.0:9090'),
       trackerConfig: const TrackerConfiguration(
+          appId: 'demo_app',
           webPageContext: false,
           webActivityTracking:
               WebActivityTracking(minimumVisitLength: 15, heartbeatDelay: 10),
           platformContextProperties: PlatformContextProperties(
             appleIdfa: '12345678-1234-1234-1234-123456789012',
             androidIdfa: '12345678-1234-1234-1234-123456789012',
-          )),
+          ),
+          jsMediaPluginURL: 'media.js'),
       gdprConfig: const GdprConfiguration(
           basisForProcessing: 'consent',
           documentId: 'consentDoc-abc123',
@@ -36,13 +38,19 @@ Future<void> main() async {
           documentDescription:
               'this document describes consent basis for processing'),
       subjectConfig: const SubjectConfiguration(userId: 'XYZ'));
+  final MediaTracking mediaTracking = await tracker.startMediaTracking(
+      const MediaTrackingConfiguration(id: "demo-media-tracking-id"));
 
-  runApp(MyApp(tracker: tracker));
+  runApp(MyApp(
+    tracker: tracker,
+    mediaTracking: mediaTracking,
+  ));
 }
 
 class MyApp extends StatefulWidget {
   final SnowplowTracker tracker;
-  const MyApp({Key? key, required this.tracker}) : super(key: key);
+  final MediaTracking? mediaTracking;
+  const MyApp({super.key, required this.tracker, this.mediaTracking});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -52,9 +60,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     SnowplowTracker tracker = widget.tracker;
+    MediaTracking? mediaTracking = widget.mediaTracking;
     return MaterialApp(
         title: 'Demo App',
-        home: MainPage(tracker: tracker),
+        home: MainPage(
+          tracker: tracker,
+          mediaTracking: mediaTracking,
+        ),
         navigatorObservers: [tracker.getObserver()]);
   }
 }
