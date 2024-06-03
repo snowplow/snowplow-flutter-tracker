@@ -195,15 +195,15 @@ void main() {
   });
 
   test('tracks screen view event', () async {
-    String id = const Uuid().v4();
-    Event event = ScreenView(name: 'screen1', id: id);
+    // String id = const Uuid().v4();
+    Event event = const ScreenView(name: 'screen1');
     await Snowplow.track(event, tracker: 'tns2');
 
     expect(
         methodCall,
         isMethodCall('trackScreenView', arguments: {
           'tracker': 'tns2',
-          'eventData': {'name': 'screen1', 'id': id}
+          'eventData': {'name': 'screen1'}
         }));
   });
 
