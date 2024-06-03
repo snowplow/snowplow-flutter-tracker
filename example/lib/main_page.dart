@@ -119,9 +119,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
             ElevatedButton(
               onPressed: () {
                 const event = ScreenView(
-                    name: 'home',
-                    type: 'full',
-                    transitionType: 'none');
+                    name: 'home', type: 'full', transitionType: 'none');
                 trackEvent(event);
               },
               child: const Text('Send Screen View Event'),

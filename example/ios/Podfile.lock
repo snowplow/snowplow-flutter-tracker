@@ -25,8 +25,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/snowplow_tracker/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  integration_test: 13825b8a9334a850581300559b8839134b124670
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
   snowplow_tracker: 7951e14a4c8c17de35ad58eaac17dd51efda054d
   SnowplowTracker: e53f7eb7de911801b741af2bd9e079e091fa7f2b
 

@@ -12,7 +12,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:snowplow_tracker/snowplow_tracker.dart';
-import 'package:uuid/uuid.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('snowplow_tracker');
@@ -195,7 +194,6 @@ void main() {
   });
 
   test('tracks screen view event', () async {
-    // String id = const Uuid().v4();
     Event event = const ScreenView(name: 'screen1');
     await Snowplow.track(event, tracker: 'tns2');
 
