@@ -196,7 +196,7 @@ Running the integration tests on Android/iOS:
 2. Run the integration tests (replace the Snowplow Micro URI with your IP address and set your iPhone or Android simulator name or remove to use default):
 
 ```bash
-flutter test integration_test --dart-define=ENDPOINT=http://192.168.100.127:9090 -d "iPhone 13 Pro"
+flutter test integration_test --dart-define=ENDPOINT=http://192.168.0.20:9090 -d "iPhone 13 Pro"
 ```
 
 Alternatively, you may also run the integration tests directly from Visual Studio Code.

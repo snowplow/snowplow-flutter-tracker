@@ -23,7 +23,7 @@ class ScreenView implements Event {
   final String name;
 
   /// The id (UUID v4) of screen that was viewed.
-  final String id;
+  final String? id;
 
   /// The type of screen that was viewed.
   final String? type;
@@ -42,7 +42,7 @@ class ScreenView implements Event {
 
   const ScreenView(
       {required this.name,
-      required this.id,
+      this.id,
       this.type,
       this.previousName,
       this.previousType,
