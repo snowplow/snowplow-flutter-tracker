@@ -10,6 +10,7 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'package:snowplow_tracker/events/screen_view.dart';
+import 'package:uuid/uuid.dart';
 import 'event_reader.dart';
 
 class ScreenViewReader extends ScreenView implements EventReader {
@@ -23,6 +24,13 @@ class ScreenViewReader extends ScreenView implements EventReader {
             previousId: map['previousId'],
             transitionType: map['transitionType']);
 
+  String? idUUID() {
+    if (id == null) {
+      return const Uuid().v4();
+    }
+    return id;
+  }
+
   @override
   String endpoint() {
     return 'trackSelfDescribingEvent';
@@ -32,7 +40,7 @@ class ScreenViewReader extends ScreenView implements EventReader {
   Map eventData() {
     var data = {
       'name': name,
-      'id': id,
+      'id': idUUID(),
       'type': type,
       'previousName': previousName,
       'previousId': previousId,

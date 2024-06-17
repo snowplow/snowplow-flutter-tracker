@@ -50,7 +50,7 @@ This will add a line with the dependency like this to your `pubspec.yaml`:
 
 ```yml
 dependencies:
-    snowplow_tracker: ^0.7.0
+    snowplow_tracker: ^0.7.1
 ```
 
 Import the package into your Dart code:
@@ -196,7 +196,7 @@ Running the integration tests on Android/iOS:
 2. Run the integration tests (replace the Snowplow Micro URI with your IP address and set your iPhone or Android simulator name or remove to use default):
 
 ```bash
-flutter test integration_test --dart-define=ENDPOINT=http://192.168.100.127:9090 -d "iPhone 13 Pro"
+flutter test integration_test --dart-define=ENDPOINT=http://192.168.0.20:9090 -d "iPhone 13 Pro"
 ```
 
 Alternatively, you may also run the integration tests directly from Visual Studio Code.

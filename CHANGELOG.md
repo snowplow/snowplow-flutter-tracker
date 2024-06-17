@@ -1,9 +1,13 @@
+# 0.7.1
+
+* Automatically generate ID for ScreenViews (#55)
+
 # 0.7.0
 
-* Add media tracking APIs to the tracker (close #49)
+* Add media tracking APIs to the tracker (#49)
 * Fix tracker initialization with partial platform context property overrides on Android (#53)
 * Update uuid package constraint to 4.0.0 (#48) thanks to @petermnt
-* Add support for Android Gradle Plugin 8 (close #46) thanks to @petermnt
+* Add support for Android Gradle Plugin 8 (#46) thanks to @petermnt
 * Remove documentation in the project in favour of docs.snowplow.io to reduce duplicity (#51)
 * Update flutter_lints, http, js, and example dependency versions (#52)
 
