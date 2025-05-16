@@ -37,7 +37,14 @@ Future<void> main() async {
           documentVersion: '0.1.0',
           documentDescription:
               'this document describes consent basis for processing'),
-      subjectConfig: const SubjectConfiguration(userId: 'XYZ'));
+      subjectConfig: const SubjectConfiguration(userId: 'XYZ'),
+      emitterConfig: EmitterConfiguration(
+        emitRange: 30,
+        threadPoolSize: 4,
+        maxEventStore: 2000,
+        maxEventAgeSeconds: 604800,
+        retryFailedRequests: true,
+      ));
   final MediaTracking mediaTracking = await tracker.startMediaTracking(
       const MediaTrackingConfiguration(id: "demo-media-tracking-id"));
 
