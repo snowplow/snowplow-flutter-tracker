@@ -12,16 +12,28 @@
 package com.snowplowanalytics.snowplow_tracker.readers.configurations
 
 import com.snowplowanalytics.snowplow.configuration.EmitterConfiguration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class EmitterConfigurationReader(values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
 
     val serverAnonymisation: Boolean? by valuesDefault
+    val emitRange: Int? by valuesDefault
+    val threadPoolSize: Int? by valuesDefault
+    val maxEventStoreSize: Long? by valuesDefault
+    val maxEventStoreAgeSeconds: Int? by valuesDefault
+    val retryFailedRequests: Boolean? by valuesDefault
 
     fun toConfiguration(): EmitterConfiguration {
         val emitterConfig = EmitterConfiguration()
 
         serverAnonymisation?.let { emitterConfig.serverAnonymisation(it) }
+        emitRange?.let { emitterConfig.emitRange(it) }
+        threadPoolSize?.let { emitterConfig.threadPoolSize(it) }
+        maxEventStoreSize?.let { emitterConfig.maxEventStoreSize(it) }
+        maxEventStoreAgeSeconds?.let { emitterConfig.maxEventStoreAge(it.toDuration(DurationUnit.SECONDS)) }
+        retryFailedRequests?.let { emitterConfig.retryFailedRequests(it) }
 
         return emitterConfig
     }

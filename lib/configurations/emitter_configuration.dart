@@ -11,20 +11,53 @@
 
 import 'package:flutter/foundation.dart';
 
+enum BufferOption {
+  single,
+  defaultGroup,
+  largeGroup,
+}
+
 /// Configuration of the event emitter.
 ///
 /// {@category Initialization and configuration}
 @immutable
 class EmitterConfiguration {
-  /// Adds a request header ('SP-anonymous') that prevents the event collector
-  /// from adding a network_userid cookie, as well as anonymising the user's IP address.
-  /// Setting serverAnonymisation also enables (and overrides) TrackerConfiguration.userAnonymisation.
   final bool? serverAnonymisation;
 
-  const EmitterConfiguration({this.serverAnonymisation});
+  final BufferOption? bufferOption;
+
+  final int? emitRange;
+
+  final int? threadPoolSize;
+
+  final int? maxEventStore;
+
+  final List<int>? customRetryForStatusCodes;
+
+  final int? maxEventAgeSeconds;
+  final bool? retryFailedRequests;
+  const EmitterConfiguration({
+    this.serverAnonymisation,
+    this.bufferOption,
+    this.emitRange,
+    this.threadPoolSize,
+    this.maxEventStore,
+    this.customRetryForStatusCodes,
+    this.maxEventAgeSeconds,
+    this.retryFailedRequests,
+  });
 
   Map<String, Object?> toMap() {
-    final conf = <String, Object?>{'serverAnonymisation': serverAnonymisation};
+    final conf = <String, Object?>{
+      'serverAnonymisation': serverAnonymisation,
+      'bufferOption': bufferOption?.name,
+      'emitRange': emitRange,
+      'threadPoolSize': threadPoolSize,
+      'maxEventStore': maxEventStore,
+      'customRetryForStatusCodes': customRetryForStatusCodes,
+      'maxEventAgeSeconds': maxEventAgeSeconds,
+      'retryFailedRequests': retryFailedRequests,
+    };
     conf.removeWhere((key, value) => value == null);
     return conf;
   }
