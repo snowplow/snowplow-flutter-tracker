@@ -50,7 +50,7 @@ jobs:
       # -- Micro --
       - name: Cache Micro
         id: cache-micro
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: micro.jar
           key: ${{ runner.os }}-micro
@@ -91,7 +91,7 @@ jobs:
       # -- Micro --
       - name: Cache Micro
         id: cache-micro
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: micro.jar
           key: ${{ runner.os }}-micro
@@ -137,7 +137,7 @@ jobs:
       # -- Micro --
       - name: Cache Micro
         id: cache-micro
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: micro.jar
           key: ${{ runner.os }}-micro
