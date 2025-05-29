@@ -10,7 +10,20 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import Foundation
+import SnowplowTracker
 
-class TrackerVersion {
-    static let TRACKER_VERSION = "flutter-0.8.0"
+struct PageViewReader: Decodable {
+    let url: String
+    let title: String
+    let referrer: String?
+}
+
+extension PageViewReader {
+    func toPageView() -> PageView {
+        let event = PageView(pageUrl: url)
+        event.pageTitle = title
+        event.pageUrl = url
+        event.referrer = referrer
+        return event
+    }
 }

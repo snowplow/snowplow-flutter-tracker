@@ -48,6 +48,13 @@ class Structured implements Event {
       this.property,
       this.value});
 
+  Structured.fromMap(Map<String, Object?> map)
+      : category = map['category'] as String,
+        action = map['action'] as String,
+        label = map['label'] as String?,
+        property = map['property'] as String?,
+        value = (map['value'] as num?)?.toDouble();
+
   @override
   String endpoint() {
     return 'trackStructured';

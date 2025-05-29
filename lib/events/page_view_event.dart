@@ -13,7 +13,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:snowplow_tracker/events/event.dart';
 
-/// Event to capture page views on the Web. Not implemented on mobile platforms.
+/// Event to capture page views on the Web.
 ///
 /// Page views automatically capture URL, referrer and page title.
 /// {@category Tracking events}
@@ -22,8 +22,15 @@ import 'package:snowplow_tracker/events/event.dart';
 class PageViewEvent implements Event {
   /// Optional title to replace the one automatically inferred from page title attribute.
   final String? title;
+  final String? url;
+  final String? referrer;
 
-  const PageViewEvent({this.title});
+  const PageViewEvent({this.title, this.url, this.referrer});
+
+  PageViewEvent.fromMap(Map<String, Object?> map)
+      : title = map['title'] as String?,
+        url = map['url'] as String?,
+        referrer = map['referrer'] as String?;
 
   @override
   String endpoint() {
@@ -32,7 +39,11 @@ class PageViewEvent implements Event {
 
   @override
   Map<String, Object?> toMap() {
-    final data = <String, Object?>{'title': title};
+    final data = <String, Object?>{
+      'title': title,
+      'url': url,
+      'referrer': referrer
+    };
     data.removeWhere((key, value) => value == null);
     return data;
   }

@@ -1,3 +1,7 @@
+# 0.8.0
+
+* Add integration with WebView tracker (#59)
+
 # 0.7.1
 
 * Automatically generate ID for ScreenViews (#55)

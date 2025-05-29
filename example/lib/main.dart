@@ -20,7 +20,7 @@ Future<void> main() async {
   final SnowplowTracker tracker = await Snowplow.createTracker(
       namespace: 'ns1',
       endpoint: const String.fromEnvironment('ENDPOINT',
-          defaultValue: 'http://0.0.0.0:9090'),
+          defaultValue: 'http://localhost:9090'),
       trackerConfig: const TrackerConfiguration(
           appId: 'demo_app',
           webPageContext: false,

@@ -51,5 +51,5 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.snowplowanalytics:snowplow-android-tracker:6.0.+"
+    implementation "com.snowplowanalytics:snowplow-android-tracker:6.2.+"
 }

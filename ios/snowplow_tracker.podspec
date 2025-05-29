@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'snowplow_tracker'
-  s.version          = '0.7.1'
+  s.version          = '0.8.0'
   s.summary          = 'A package for tracking Snowplow events in Flutter apps.'
   s.description      = <<-DESC
 A package for tracking Snowplow events in Flutter apps.
@@ -15,7 +15,7 @@ A package for tracking Snowplow events in Flutter apps.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'SnowplowTracker', '~> 6.0.2'
+  s.dependency 'SnowplowTracker', '~> 6.2.2'
   s.platform = :ios, '11.0'
 
   # Flutter.framework does not contain a i386 slice.

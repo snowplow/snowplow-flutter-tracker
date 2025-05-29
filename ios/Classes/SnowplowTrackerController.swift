@@ -80,6 +80,16 @@ class SnowplowTrackerController {
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)
     }
     
+    static func trackWebViewReader(_ message: TrackWebViewReaderMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toWebViewReader(arguments: arguments)
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+    
+    static func trackPageView(_ message: TrackPageViewMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toPageView()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
     static func sessionUserId(_ message: GetParameterMessageReader) -> String? {
         return Snowplow.tracker(namespace: message.tracker)?.session?.userId
     }

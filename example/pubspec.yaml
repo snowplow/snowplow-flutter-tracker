@@ -34,6 +34,8 @@ dependencies:
 
   flutter_markdown: ^0.6.12
 
+  webview_flutter: ^4.8.0
+
 dev_dependencies:
   integration_test:
     sdk: flutter

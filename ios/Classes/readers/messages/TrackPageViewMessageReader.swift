@@ -10,7 +10,14 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import Foundation
+import SnowplowTracker
 
-class TrackerVersion {
-    static let TRACKER_VERSION = "flutter-0.8.0"
+struct TrackPageViewMessageReader: Decodable {
+    let eventData: PageViewReader
+}
+
+extension TrackPageViewMessageReader {
+    func toPageView() -> PageView {
+        return eventData.toPageView()
+    }
 }
