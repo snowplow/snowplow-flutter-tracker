@@ -49,6 +49,15 @@ class ScreenView implements Event {
       this.previousId,
       this.transitionType});
 
+  ScreenView.fromMap(Map<String, Object?> map)
+      : name = map['name'] as String,
+        id = map['id'] as String?,
+        type = map['type'] as String?,
+        previousName = map['previousName'] as String?,
+        previousType = map['previousType'] as String?,
+        previousId = map['previousId'] as String?,
+        transitionType = map['transitionType'] as String?;
+
   @override
   String endpoint() {
     return 'trackScreenView';

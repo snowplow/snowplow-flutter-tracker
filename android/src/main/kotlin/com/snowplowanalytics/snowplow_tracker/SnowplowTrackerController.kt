@@ -12,6 +12,7 @@
 package com.snowplowanalytics.snowplow_tracker
 
 import android.content.Context
+import com.snowplowanalytics.core.event.WebViewReader
 
 import com.snowplowanalytics.snowplow.Snowplow;
 import com.snowplowanalytics.snowplow.configuration.Configuration;
@@ -260,6 +261,16 @@ object SnowplowTrackerController {
     fun trackMediaVolumeChangeEvent(messageReader: EventMessageReader) {
         val event = messageReader.toMediaVolumeChangeEvent()
         trackEvent(event, messageReader)
+    }
+
+    fun trackWebViewReaderEvent(messageReader: EventMessageReader) {
+        val event = messageReader.toWebViewReader()
+        trackEvent(event, messageReader)
+    }
+
+    fun trackPageView(eventReader: EventMessageReader) {
+        val pageView = eventReader.toPageViewWithContexts()
+        trackEvent(pageView, eventReader)
     }
 
     private fun trackEvent(event: Event, messageReader: EventMessageReader) {

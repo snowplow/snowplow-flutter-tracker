@@ -11,6 +11,7 @@
 
 package com.snowplowanalytics.snowplow_tracker.readers.messages
 
+import com.snowplowanalytics.core.event.WebViewReader
 import com.snowplowanalytics.snowplow.event.*
 import com.snowplowanalytics.snowplow.media.event.*
 import com.snowplowanalytics.snowplow.payload.SelfDescribingJson
@@ -241,6 +242,18 @@ class EventMessageReader(val values: Map<String, Any>) {
         val event = MediaVolumeChangeEventReader(eventData).toMediaVolumeChangeEvent()
         addContext(event)
         return event
+    }
+
+    fun toWebViewReader(): WebViewReader {
+        val event = WebViewReaderReader(eventData).toWebViewReader()
+        addContext(event)
+        return event
+    }
+
+    fun toPageViewWithContexts(): PageView {
+        val pageView = PageViewReader(eventData).toPageView()
+        addContext(pageView)
+        return pageView
     }
 
     private fun addContext(event: Event) {

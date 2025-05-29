@@ -4,13 +4,16 @@ PODS:
     - Flutter
   - snowplow_tracker (0.7.1):
     - Flutter
-    - SnowplowTracker (~> 6.0.2)
-  - SnowplowTracker (6.0.2)
+    - SnowplowTracker (~> 6.2.2)
+  - SnowplowTracker (6.2.2)
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - snowplow_tracker (from `.symlinks/plugins/snowplow_tracker/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
@@ -23,13 +26,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
   snowplow_tracker:
     :path: ".symlinks/plugins/snowplow_tracker/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
-  snowplow_tracker: 0236afd8fee445e9e018a0d0111e41e64d9e9ad3
-  SnowplowTracker: e53f7eb7de911801b741af2bd9e079e091fa7f2b
+  integration_test: 2d03ab552da9a1f408709a6acf3d7ca4cb3cb307
+  snowplow_tracker: 561463fa466be9cde484e64281d7e6b8aea0070c
+  SnowplowTracker: bd92a5bd67705ec2a7dc630576c22e13cf6c8b45
+  webview_flutter_wkwebview: 45a041c7831641076618876de3ba75c712860c6b
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

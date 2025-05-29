@@ -103,6 +103,10 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
             onTrackMediaSeekStartEvent(call, result: result)
         case "trackMediaVolumeChangeEvent":
             onTrackMediaVolumeChangeEvent(call, result: result)
+        case "trackWebViewReader":
+            onTrackWebViewReader(call, result: result)
+        case "trackPageView":
+            onTrackPageView(call, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -412,6 +416,22 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
         if let (message, arguments): (TrackMediaVolumeChangeEventMessageReader, [String: Any]) = decodeCall(call),
             let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
             SnowplowTrackerController.trackMediaVolumeChangeEvent(message, eventMessage: eventMessage, arguments: arguments)
+        }
+        result(nil)
+    }
+
+    private func onTrackWebViewReader(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, arguments): (TrackWebViewReaderMessageReader, [String: Any]) = decodeCall(call),
+            let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.trackWebViewReader(message, eventMessage: eventMessage, arguments: arguments)
+        }
+        result(nil)
+    }
+    
+    private func onTrackPageView(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, arguments): (TrackPageViewMessageReader, [String: Any]) = decodeCall(call),
+            let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.trackPageView(message, eventMessage: eventMessage, arguments: arguments)
         }
         result(nil)
     }

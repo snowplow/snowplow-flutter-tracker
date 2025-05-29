@@ -19,6 +19,7 @@ import 'package:snowplow_tracker/media_tracking.dart';
 import 'package:snowplow_tracker/snowplow.dart';
 import 'package:snowplow_tracker/snowplow_observer.dart';
 import 'package:snowplow_tracker/configurations/configuration.dart';
+import 'package:snowplow_tracker/web_view_integration.dart';
 
 /// Instance of an initialized Snowplow tracker identified by a [namespace].
 ///
@@ -148,5 +149,35 @@ class SnowplowTracker {
         (configuration
                 .trackerConfig?.webActivityTracking?.trackPageViewsInObserver ??
             false);
+  }
+
+  /// Returns a [WebViewIntegration] instance that can be used to track
+  /// events from a WebView.
+  /// The [WebViewIntegration] instance will ignore the tracker namespace
+  /// by default, meaning that it will track events for any tracker that
+  /// sends them to the WebView.
+  /// If you want to track events only for this tracker, set
+  /// [ignoreTrackerNamespace] to false.
+  WebViewIntegration getWebViewIntegration(
+      {bool ignoreTrackerNamespace = true}) {
+    return WebViewIntegration(
+        tracker: this, ignoreTrackerNamespace: ignoreTrackerNamespace);
+  }
+
+  /// Registers a JavaScript channel for the WebView to receive
+  /// messages from the WebView.
+  ///
+  /// The [webViewController] is the controller of the WebView
+  /// that will receive the messages.
+  /// The [ignoreTrackerNamespace] parameter indicates whether the
+  /// WebView should ignore the tracker namespace when tracking events.
+  /// If true, the WebView will track events for any tracker that sends them
+  /// to the WebView. If false, the WebView will only track events for this
+  /// tracker.
+  void registerWebViewJavaScriptChannel(
+      {required dynamic webViewController,
+      bool ignoreTrackerNamespace = true}) {
+    getWebViewIntegration(ignoreTrackerNamespace: ignoreTrackerNamespace)
+        .registerJavaScriptChannel(webViewController);
   }
 }

@@ -27,7 +27,7 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
-    private lateinit var channel : MethodChannel
+    private lateinit var channel: MethodChannel
     private var context: Context? = null
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
@@ -71,7 +71,10 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "trackMediaErrorEvent" -> onTrackMediaErrorEvent(call, result)
             "trackMediaFullscreenChangeEvent" -> onTrackMediaFullscreenChangeEvent(call, result)
             "trackMediaPauseEvent" -> onTrackMediaPauseEvent(call, result)
-            "trackMediaPictureInPictureChangeEvent" -> onTrackMediaPictureInPictureChangeEvent(call, result)
+            "trackMediaPictureInPictureChangeEvent" -> onTrackMediaPictureInPictureChangeEvent(
+                call,
+                result
+            )
             "trackMediaPlayEvent" -> onTrackMediaPlayEvent(call, result)
             "trackMediaPlaybackRateChangeEvent" -> onTrackMediaPlaybackRateChangeEvent(call, result)
             "trackMediaQualityChangeEvent" -> onTrackMediaQualityChangeEvent(call, result)
@@ -79,6 +82,8 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "trackMediaSeekEndEvent" -> onTrackMediaSeekEndEvent(call, result)
             "trackMediaSeekStartEvent" -> onTrackMediaSeekStartEvent(call, result)
             "trackMediaVolumeChangeEvent" -> onTrackMediaVolumeChangeEvent(call, result)
+            "trackWebViewReader" -> onTrackWebViewReaderEvent(call, result)
+            "trackPageView" -> onTrackPageView(call, result)
             else -> result.notImplemented()
         }
     }
@@ -321,7 +326,10 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
         result.success(null)
     }
 
-    private fun onTrackMediaPictureInPictureChangeEvent(call: MethodCall, result: MethodChannel.Result) {
+    private fun onTrackMediaPictureInPictureChangeEvent(
+        call: MethodCall,
+        result: MethodChannel.Result
+    ) {
         (call.arguments as? Map<String, Any>)?.let {
             SnowplowTrackerController.trackMediaPictureInPictureChangeEvent(EventMessageReader(it))
         }
@@ -335,7 +343,10 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
         result.success(null)
     }
 
-    private fun onTrackMediaPlaybackRateChangeEvent(call: MethodCall, result: MethodChannel.Result) {
+    private fun onTrackMediaPlaybackRateChangeEvent(
+        call: MethodCall,
+        result: MethodChannel.Result
+    ) {
         (call.arguments as? Map<String, Any>)?.let {
             SnowplowTrackerController.trackMediaPlaybackRateChangeEvent(EventMessageReader(it))
         }
@@ -377,5 +388,18 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
         result.success(null)
     }
 
+    private fun onTrackWebViewReaderEvent(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackWebViewReaderEvent(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackPageView(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackPageView(EventMessageReader(it))
+        }
+        result.success(null)
+    }
 
 }

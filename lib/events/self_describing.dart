@@ -34,6 +34,10 @@ class SelfDescribing implements Event {
 
   const SelfDescribing({required this.schema, required this.data});
 
+  SelfDescribing.fromMap(Map<String, Object?> map)
+      : schema = map['schema'] as String,
+        data = map['data'];
+
   @override
   String endpoint() {
     return 'trackSelfDescribing';
