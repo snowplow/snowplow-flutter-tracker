@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   String _sessionUserId = 'Unknown';
   int? _sessionIndex;
 
-  late final WebViewController _webViewController;
+  WebViewController? _webViewController;
 
   Future<void> trackEvent(event, {List<SelfDescribing>? contexts}) async {
     widget.tracker.track(event, contexts: contexts);
@@ -54,13 +54,15 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
 
     WidgetsBinding.instance.addObserver(this);
 
-    _webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(const String.fromEnvironment('WEBVIEW_URL',
-          defaultValue: 'http://localhost:3000')));
+    if (!kIsWeb) {
+      _webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse(const String.fromEnvironment('WEBVIEW_URL',
+            defaultValue: 'http://localhost:3000')));
 
-    widget.tracker.registerWebViewJavaScriptChannel(
-        webViewController: _webViewController);
+      widget.tracker.registerWebViewJavaScriptChannel(
+          webViewController: _webViewController!);
+    }
   }
 
   Future<void> updateState() async {
@@ -242,10 +244,11 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
             Text('Session index: $_sessionIndex'),
             const SizedBox(height: 5.0),
             const SizedBox(height: 24.0),
-            SizedBox(
-              height: 300,
-              child: WebViewWidget(controller: _webViewController),
-            ),
+            if (!kIsWeb && _webViewController != null)
+              SizedBox(
+                height: 300,
+                child: WebViewWidget(controller: _webViewController!),
+              ),
             // Final SizedBox remains for spacing
           ]),
         ),
