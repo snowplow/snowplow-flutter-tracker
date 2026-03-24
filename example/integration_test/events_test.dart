@@ -255,8 +255,7 @@ void main() {
         isTrue);
   });
 
-  testWidgets("tracks page view event on mobile",
-      (WidgetTester tester) async {
+  testWidgets("tracks page view event on mobile", (WidgetTester tester) async {
     if (kIsWeb) {
       return;
     }
