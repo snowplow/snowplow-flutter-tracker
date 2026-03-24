@@ -246,10 +246,12 @@ void main() {
     expect(
         await SnowplowTests.checkMicroGood((dynamic events) {
           dynamic screenViews = events
-              .where((event) => event['event']['event_name'] == 'screen_view');
+              .where((event) => event['event']['event_name'] == 'screen_view')
+              .toList();
 
           return (screenViews.length == 1) &&
-              (events[0]['event']['unstruct_event']['data']['data']['name'] ==
+              (screenViews[0]['event']['unstruct_event']['data']['data']
+                      ['name'] ==
                   '/');
         }),
         isTrue);
@@ -261,6 +263,9 @@ void main() {
     }
 
     // PageView is now supported on mobile — should not throw
-    await Snowplow.track(const PageViewEvent(), tracker: 'test');
+    await Snowplow.track(
+      const PageViewEvent(url: 'https://example.com'),
+      tracker: 'test',
+    );
   });
 }
