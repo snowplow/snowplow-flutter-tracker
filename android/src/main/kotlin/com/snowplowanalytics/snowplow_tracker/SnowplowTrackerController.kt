@@ -46,8 +46,6 @@ object SnowplowTrackerController {
         val emitterConfigReader = messageReader.emitterConfig
         emitterConfigReader?.let { controllers.add(it.toConfiguration()) }
 
-        val globalContextsConfigReader = messageReader.globalContextsConfig
-
         Snowplow.createTracker(
                 context,
                 messageReader.namespace,
@@ -55,9 +53,10 @@ object SnowplowTrackerController {
                 *controllers.toTypedArray()
         )
 
-        // Add global contexts after tracker creation
-        globalContextsConfigReader?.let {
-            val staticContexts = it.contexts?.map { item ->
+        // Add global contexts AFTER tracker creation (not during initialization)
+        val globalContextsConfigReader = messageReader.globalContextsConfig
+        globalContextsConfigReader?.let { reader ->
+            val staticContexts = reader.contexts?.map { item ->
                 SelfDescribingJsonReader(item).toSelfDescribingJson()
             } ?: emptyList()
 
