@@ -48,6 +48,8 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "trackConsentGranted" -> onTrackConsentGranted(call, result)
             "trackConsentWithdrawn" -> onTrackConsentWithdrawn(call, result)
             "setUserId" -> onSetUserId(call, result)
+            "addGlobalContexts" -> onAddGlobalContexts(call, result)
+            "removeGlobalContexts" -> onRemoveGlobalContexts(call, result)
             "getSessionUserId" -> onGetSessionUserId(call, result)
             "getSessionId" -> onGetSessionId(call, result)
             "getSessionIndex" -> onGetSessionIndex(call, result)
@@ -161,6 +163,20 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
     private fun onSetUserId(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
             SnowplowTrackerController.setUserId(SetUserIdMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onAddGlobalContexts(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.addGlobalContexts(AddGlobalContextsMessageReader(it), it)
+        }
+        result.success(null)
+    }
+
+    private fun onRemoveGlobalContexts(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.removeGlobalContexts(RemoveGlobalContextsMessageReader(it))
         }
         result.success(null)
     }

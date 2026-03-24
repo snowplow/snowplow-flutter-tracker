@@ -38,4 +38,9 @@ class CreateTrackerMessageReader(val values: Map<String, Any>) {
             EmitterConfigurationReader(it as Map<String, Any>)
         }
     }
+    val globalContextsConfig: GlobalContextsConfigurationReader? by lazy {
+        values.get("globalContextsConfig")?.let {
+            GlobalContextsConfigurationReader(it as Map<String, Any>)
+        }
+    }
 }
