@@ -399,14 +399,34 @@ void main() {
 
     expect(
         await SnowplowTests.checkMicroGood((dynamic events) {
+          print('DEBUG: Total events received: ${events.length}');
+
           if (events.length != 1) {
+            print('DEBUG: Expected 1 event, got ${events.length}');
             return false;
           }
-          dynamic context = events[0]['event']['contexts']['data'].firstWhere(
-              (x) => x['schema']
-                  .toString()
-                  .contains('iglu:com.example/global-user'),
-              orElse: () => null);
+
+          print('DEBUG: Event structure: ${events[0]}');
+
+          final contextsData = events[0]['event']['contexts']['data'];
+          print('DEBUG: Contexts data: $contextsData');
+          print('DEBUG: Contexts data type: ${contextsData.runtimeType}');
+
+          dynamic context = contextsData.firstWhere((x) {
+            print('DEBUG: Checking context: $x');
+            print('DEBUG: Schema: ${x['schema']}');
+            return x['schema']
+                .toString()
+                .contains('iglu:com.example/global-user');
+          }, orElse: () => null);
+
+          print('DEBUG: Found context: $context');
+
+          if (context != null) {
+            print('DEBUG: Context data: ${context['data']}');
+            print('DEBUG: UserId: ${context['data']['userId']}');
+          }
+
           return (context != null) &&
               (context['data']['userId'] == 'global-user-123');
         }),
