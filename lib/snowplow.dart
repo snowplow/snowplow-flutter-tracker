@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:snowplow_tracker/configurations/configuration.dart';
 import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
 import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
+import 'package:snowplow_tracker/configurations/global_contexts_configuration.dart';
 import 'package:snowplow_tracker/configurations/media_tracking_configuration.dart';
 import 'package:snowplow_tracker/configurations/network_configuration.dart';
 import 'package:snowplow_tracker/configurations/subject_configuration.dart';
@@ -49,7 +50,8 @@ class Snowplow {
       TrackerConfiguration? trackerConfig,
       SubjectConfiguration? subjectConfig,
       GdprConfiguration? gdprConfig,
-      EmitterConfiguration? emitterConfig}) async {
+      EmitterConfiguration? emitterConfig,
+      GlobalContextsConfiguration? globalContextsConfig}) async {
     final configuration = Configuration(
         namespace: namespace,
         networkConfig: NetworkConfiguration(
@@ -60,7 +62,8 @@ class Snowplow {
         trackerConfig: trackerConfig,
         subjectConfig: subjectConfig,
         gdprConfig: gdprConfig,
-        emitterConfig: emitterConfig);
+        emitterConfig: emitterConfig,
+        globalContextsConfig: globalContextsConfig);
     await _channel.invokeMethod('createTracker', configuration.toMap());
     return SnowplowTracker(configuration: configuration);
   }
@@ -82,6 +85,24 @@ class Snowplow {
       {required String tracker}) async {
     await _channel
         .invokeMethod('setUserId', {'tracker': tracker, 'userId': userId});
+  }
+
+  /// Adds global contexts with the given [tag] to be attached to all tracked events for the [tracker] namespace.
+  static Future<void> addGlobalContexts(
+      String tag, List<SelfDescribing> contexts,
+      {required String tracker}) async {
+    await _channel.invokeMethod('addGlobalContexts', {
+      'tracker': tracker,
+      'tag': tag,
+      'contexts': contexts.map((c) => c.toMap()).toList(),
+    });
+  }
+
+  /// Removes global contexts with the given [tag] from the [tracker] namespace.
+  static Future<void> removeGlobalContexts(String tag,
+      {required String tracker}) async {
+    await _channel.invokeMethod('removeGlobalContexts',
+        {'tracker': tracker, 'tag': tag});
   }
 
   /// Returns the identifier (string UUIDv4) for the user of the session.

@@ -15,6 +15,7 @@ export 'snowplow_observer.dart';
 export 'media_tracking.dart';
 
 export 'configurations/gdpr_configuration.dart';
+export 'configurations/global_contexts_configuration.dart';
 export 'configurations/network_configuration.dart';
 export 'configurations/subject_configuration.dart';
 export 'configurations/tracker_configuration.dart';

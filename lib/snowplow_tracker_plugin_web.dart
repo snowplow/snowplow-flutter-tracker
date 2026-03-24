@@ -20,6 +20,8 @@ import 'src/web/readers/messages/update_media_tracking_message_reader.dart';
 import 'src/web/readers/configurations/configuration_reader.dart';
 import 'src/web/readers/messages/event_message_reader.dart';
 import 'src/web/readers/messages/set_user_id_message_reader.dart';
+import 'src/web/readers/messages/add_global_contexts_message_reader.dart';
+import 'src/web/readers/messages/remove_global_contexts_message_reader.dart';
 import 'src/web/snowplow_tracker_controller.dart';
 
 class SnowplowTrackerPluginWeb {
@@ -120,6 +122,10 @@ class SnowplowTrackerPluginWeb {
         return onTrackMediaSeekStartEvent(call);
       case "trackMediaVolumeChangeEvent":
         return onTrackMediaVolumeChangeEvent(call);
+      case "addGlobalContexts":
+        return onAddGlobalContexts(call);
+      case "removeGlobalContexts":
+        return onRemoveGlobalContexts(call);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -359,5 +365,22 @@ class SnowplowTrackerPluginWeb {
     var message = EventMessageReader.withMediaEvent(
         MediaEndpoint.trackMediaVolumeChange, call.arguments);
     return SnowplowTrackerController.trackEvent(message);
+  }
+
+  void onAddGlobalContexts(MethodCall call) {
+    var message = AddGlobalContextsMessageReader(call.arguments);
+    SnowplowTrackerController.addGlobalContexts(
+      message.tracker,
+      message.tag,
+      message.contexts,
+    );
+  }
+
+  void onRemoveGlobalContexts(MethodCall call) {
+    var message = RemoveGlobalContextsMessageReader(call.arguments);
+    SnowplowTrackerController.removeGlobalContexts(
+      message.tracker,
+      message.tag,
+    );
   }
 }
