@@ -402,13 +402,11 @@ void main() {
           if (events.length != 1) {
             return false;
           }
-          dynamic context = events[0]['event']['contexts']['data']
-              .firstWhere(
-                  (x) =>
-                      x['schema']
-                          .toString()
-                          .contains('iglu:com.example/global-user'),
-                  orElse: () => null);
+          dynamic context = events[0]['event']['contexts']['data'].firstWhere(
+              (x) => x['schema']
+                  .toString()
+                  .contains('iglu:com.example/global-user'),
+              orElse: () => null);
           return (context != null) &&
               (context['data']['userId'] == 'global-user-123');
         }),

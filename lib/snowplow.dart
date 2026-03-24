@@ -101,8 +101,8 @@ class Snowplow {
   /// Removes global contexts with the given [tag] from the [tracker] namespace.
   static Future<void> removeGlobalContexts(String tag,
       {required String tracker}) async {
-    await _channel.invokeMethod('removeGlobalContexts',
-        {'tracker': tracker, 'tag': tag});
+    await _channel
+        .invokeMethod('removeGlobalContexts', {'tracker': tracker, 'tag': tag});
   }
 
   /// Returns the identifier (string UUIDv4) for the user of the session.

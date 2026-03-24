@@ -47,7 +47,6 @@ object SnowplowTrackerController {
         emitterConfigReader?.let { controllers.add(it.toConfiguration()) }
 
         val globalContextsConfigReader = messageReader.globalContextsConfig
-        globalContextsConfigReader?.let { controllers.add(it.toConfiguration()) }
 
         Snowplow.createTracker(
                 context,
@@ -55,6 +54,16 @@ object SnowplowTrackerController {
                 networkConfiguration,
                 *controllers.toTypedArray()
         )
+
+        // Add global contexts after tracker creation
+        globalContextsConfigReader?.let {
+            val staticContexts = it.contexts?.map { item ->
+                SelfDescribingJsonReader(item).toSelfDescribingJson()
+            } ?: emptyList()
+
+            val tracker = Snowplow.getTracker(messageReader.namespace)
+            tracker?.globalContexts?.add("flutter-global", GlobalContext(staticContexts))
+        }
     }
 
     fun trackStructured(eventReader: EventMessageReader) {
