@@ -17,7 +17,7 @@ import com.snowplowanalytics.snowplow_tracker.readers.events.SelfDescribingJsonR
 
 class GlobalContextsConfigurationReader(val values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
-    private val contexts: List<Map<String, Any>>? by valuesDefault
+    val contexts: List<Map<String, Any>>? by valuesDefault
 
     fun toConfiguration(): GlobalContextsConfiguration {
         val staticContexts = contexts?.map { item ->
