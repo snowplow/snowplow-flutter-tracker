@@ -22,6 +22,7 @@ import 'readers/messages/set_user_id_message_reader.dart';
 import 'sp.dart';
 
 class SnowplowTrackerController {
+  static final Map<String, Map<String, List>> _globalContextsByTag = {};
   static void createTracker(ConfigurationReader configuration) {
     dynamic options = configuration.getTrackerOptions();
     snowplow('newTracker', configuration.namespace,
@@ -112,5 +113,19 @@ class SnowplowTrackerController {
       return cookieValue?.split('.');
     }
     return null;
+  }
+
+  static void addGlobalContexts(String tracker, String tag, List contexts) {
+    _globalContextsByTag[tracker] ??= {};
+    _globalContextsByTag[tracker]![tag] = contexts;
+    snowplow('addGlobalContexts:$tracker', jsify(contexts));
+  }
+
+  static void removeGlobalContexts(String tracker, String tag) {
+    final contexts = _globalContextsByTag[tracker]?[tag];
+    if (contexts != null) {
+      snowplow('removeGlobalContexts:$tracker', jsify(contexts));
+      _globalContextsByTag[tracker]!.remove(tag);
+    }
   }
 }

@@ -27,6 +27,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   String _sessionId = 'Unknown';
   String _sessionUserId = 'Unknown';
   int? _sessionIndex;
+  bool _globalContextEnabled = false;
 
   WebViewController? _webViewController;
 
@@ -105,6 +106,39 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
         child: Center(
           child: Column(children: <Widget>[
             Text('Number of events sent: $_numberOfEventsSent'),
+            const SizedBox(height: 24.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _globalContextEnabled
+                      ? 'Disable Global Context'
+                      : 'Enable Global Context',
+                ),
+                Switch(
+                  value: _globalContextEnabled,
+                  onChanged: (bool value) async {
+                    if (value) {
+                      await widget.tracker.addGlobalContexts('demo_app', [
+                        const SelfDescribing(
+                          schema:
+                              'iglu:com.snowplowanalytics.mobile/screen/jsonschema/1-0-0',
+                          data: {
+                            'name': 'demo',
+                            'id': '00000000-0000-0000-0000-000000000001',
+                          },
+                        ),
+                      ]);
+                    } else {
+                      await widget.tracker.removeGlobalContexts('demo_app');
+                    }
+                    setState(() {
+                      _globalContextEnabled = value;
+                    });
+                  },
+                ),
+              ],
+            ),
             const SizedBox(height: 24.0),
             ElevatedButton(
               onPressed: () {

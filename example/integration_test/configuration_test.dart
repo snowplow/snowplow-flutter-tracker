@@ -378,4 +378,40 @@ void main() {
         }),
         isTrue);
   });
+
+  testWidgets("attaches global contexts to all events",
+      (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'global-contexts-test',
+        endpoint: SnowplowTests.microEndpoint,
+        globalContextsConfig: const GlobalContextsConfiguration(contexts: [
+          SelfDescribing(
+              schema: 'iglu:com.example/global-user/jsonschema/1-0-0',
+              data: {'userId': 'global-user-123'}),
+        ]));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          dynamic context = events[0]['event']['contexts']['data']
+              .firstWhere(
+                  (x) =>
+                      x['schema']
+                          .toString()
+                          .contains('iglu:com.example/global-user'),
+                  orElse: () => null);
+          return (context != null) &&
+              (context['data']['userId'] == 'global-user-123');
+        }),
+        isTrue);
+  });
 }

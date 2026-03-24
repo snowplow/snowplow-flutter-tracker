@@ -5,7 +5,7 @@ PODS:
   - snowplow_tracker (0.8.0):
     - Flutter
     - SnowplowTracker (~> 6.2.2)
-  - SnowplowTracker (6.2.2)
+  - SnowplowTracker (6.2.3)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
@@ -30,12 +30,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  integration_test: 2d03ab552da9a1f408709a6acf3d7ca4cb3cb307
-  snowplow_tracker: 5d4e578d401811a7c021b44ee305848465420d12
-  SnowplowTracker: bd92a5bd67705ec2a7dc630576c22e13cf6c8b45
-  webview_flutter_wkwebview: 45a041c7831641076618876de3ba75c712860c6b
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
+  snowplow_tracker: 98dbe7822c876c2b75f69ebcf0ba6dd631175987
+  SnowplowTracker: a7f1fe639b225d8a43a77cd11db3ecfc33a3f80b
+  webview_flutter_wkwebview: 2a23822e9039b7b1bc52e5add778e5d89ad488d1
 
-PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
+PODFILE CHECKSUM: 0dbd5a87e0ace00c9610d2037ac22083a01f861d
 
 COCOAPODS: 1.16.2
