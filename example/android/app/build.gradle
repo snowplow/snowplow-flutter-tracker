@@ -41,7 +41,7 @@ android {
 
     defaultConfig {
         applicationId "com.snowplowanalytics.snowplow_tracker_example"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
