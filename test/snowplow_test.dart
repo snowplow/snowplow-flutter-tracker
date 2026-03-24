@@ -390,6 +390,39 @@ void main() {
         }));
   });
 
+  test('creates tracker with global contexts configuration', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        globalContextsConfig: const GlobalContextsConfiguration(contexts: [
+          SelfDescribing(
+              schema: 'iglu:com.example/user/jsonschema/1-0-0',
+              data: {'userId': '123'}),
+        ]));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {'endpoint': 'https://snowplowanalytics.com'},
+          'globalContextsConfig': {
+            'contexts': [
+              {
+                'schema': 'iglu:com.example/user/jsonschema/1-0-0',
+                'data': {'userId': '123'}
+              }
+            ]
+          }
+        }));
+  });
+
+  test('creates tracker without global contexts configuration', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1', endpoint: 'https://snowplowanalytics.com');
+
+    expect(methodCall?.arguments.containsKey('globalContextsConfig'), isFalse);
+  });
+
   test('ends media tracking', () async {
     await Snowplow.endMediaTracking(tracker: 'tns1', id: 'm1');
 
