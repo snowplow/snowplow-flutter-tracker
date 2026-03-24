@@ -10,14 +10,9 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import Foundation
-import SnowplowTracker
 
-struct CreateTrackerMessageReader: Decodable {
-    let namespace: String
-    let networkConfig: NetworkConfigurationReader
-    let trackerConfig: TrackerConfigurationReader?
-    let subjectConfig: SubjectConfigurationReader?
-    let gdprConfig: GdprConfigurationReader?
-    let emitterConfig: EmitterConfigurationReader?
-    let globalContextsConfig: GlobalContextsConfigurationReader?
+struct AddGlobalContextsMessageReader: Decodable {
+    let tracker: String
+    let tag: String
+    let contexts: [SelfDescribingJsonReader]?
 }

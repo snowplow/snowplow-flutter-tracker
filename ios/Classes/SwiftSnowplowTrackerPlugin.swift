@@ -47,6 +47,10 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
             onGetSessionIndex(call, result: result)
         case "setUserId":
             onSetUserId(call, result: result)
+        case "addGlobalContexts":
+            onAddGlobalContexts(call, result: result)
+        case "removeGlobalContexts":
+            onRemoveGlobalContexts(call, result: result)
         case "startMediaTracking":
             onStartMediaTracking(call, result: result)
         case "endMediaTracking":
@@ -210,6 +214,20 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
     private func onSetUserId(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if let (message, _): (SetUserIdMessageReader, Any) = decodeCall(call) {
             SnowplowTrackerController.setUserId(message)
+        }
+        result(nil)
+    }
+
+    private func onAddGlobalContexts(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, arguments): (AddGlobalContextsMessageReader, [String: Any]) = decodeCall(call) {
+            SnowplowTrackerController.addGlobalContexts(message, arguments: arguments)
+        }
+        result(nil)
+    }
+
+    private func onRemoveGlobalContexts(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, _): (RemoveGlobalContextsMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.removeGlobalContexts(message)
         }
         result(nil)
     }

@@ -12,12 +12,20 @@
 import Foundation
 import SnowplowTracker
 
-struct CreateTrackerMessageReader: Decodable {
-    let namespace: String
-    let networkConfig: NetworkConfigurationReader
-    let trackerConfig: TrackerConfigurationReader?
-    let subjectConfig: SubjectConfigurationReader?
-    let gdprConfig: GdprConfigurationReader?
-    let emitterConfig: EmitterConfigurationReader?
-    let globalContextsConfig: GlobalContextsConfigurationReader?
+struct GlobalContextsConfigurationReader: Decodable {
+    let contexts: [SelfDescribingJsonReader]
+}
+
+extension GlobalContextsConfigurationReader {
+    func toConfiguration(arguments: [String: Any]) -> GlobalContextsConfiguration {
+        let contextsArgs = arguments["contexts"] as? [[String: Any]] ?? []
+
+        let entities = zip(contexts, contextsArgs).compactMap { (reader, readerArgs) in
+            reader.toSelfDescribingJson(arguments: readerArgs)
+        }
+
+        let gc = GlobalContextsConfiguration()
+        gc.contextGenerators = ["flutter-global": GlobalContext(staticContexts: entities)]
+        return gc
+    }
 }

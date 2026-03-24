@@ -31,7 +31,11 @@ class SnowplowTrackerController {
         if let emitterConfig = message.emitterConfig {
             controllers.append(emitterConfig.toConfiguration())
         }
-        
+        if let globalContextsConfig = message.globalContextsConfig {
+            let gcArgs = arguments["globalContextsConfig"] as? [String: Any] ?? [:]
+            controllers.append(globalContextsConfig.toConfiguration(arguments: gcArgs))
+        }
+
         _ = Snowplow.createTracker(
             namespace: message.namespace,
             network: message.networkConfig.toConfiguration(),
@@ -105,6 +109,26 @@ class SnowplowTrackerController {
     static func setUserId(_ message: SetUserIdMessageReader) {
         let trackerController = Snowplow.tracker(namespace: message.tracker)
         trackerController?.subject?.userId = message.userId
+    }
+
+    static func addGlobalContexts(_ message: AddGlobalContextsMessageReader, arguments: [String: Any]) {
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        let contextsArgs = arguments["contexts"] as? [[String: Any]] ?? []
+
+        let entities = zip(message.contexts ?? [], contextsArgs).compactMap { (reader, readerArgs) in
+            reader.toSelfDescribingJson(arguments: readerArgs)
+        }
+
+        if let globalContexts = trackerController?.globalContexts {
+            globalContexts.add(tag: message.tag, contextGenerator: GlobalContext(staticContexts: entities))
+        }
+    }
+
+    static func removeGlobalContexts(_ message: RemoveGlobalContextsMessageReader) {
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        if let globalContexts = trackerController?.globalContexts {
+            globalContexts.remove(tag: message.tag)
+        }
     }
 
     static func startMediaTracking(_ message: StartMediaTrackingMessageReader, arguments: [String: Any]) {
