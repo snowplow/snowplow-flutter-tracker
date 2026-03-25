@@ -385,64 +385,39 @@ void main() {
       return;
     }
 
-    print('DEBUG: Creating tracker with global contexts');
-
     SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'global-contexts-test',
         endpoint: SnowplowTests.microEndpoint,
         globalContextsConfig: const GlobalContextsConfiguration(contexts: [
           SelfDescribing(
-              schema: 'iglu:com.example/global-user/jsonschema/1-0-0',
-              data: {'userId': 'global-user-123'}),
+              schema:
+                  'iglu:com.snowplowanalytics.mobile/screen/jsonschema/1-0-0',
+              data: {
+                'name': 'demo',
+                'id': '00000000-0000-0000-0000-000000000001',
+              }),
         ]));
-
-    print('DEBUG: Tracker created, tracking event');
 
     await tracker
         .track(const Structured(category: 'category', action: 'action'));
 
-    print('DEBUG: Event tracked, checking Micro');
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
 
-    try {
-      final result = await SnowplowTests.checkMicroGood((dynamic events) {
-        print('DEBUG: Inside callback - events received: $events');
-        print('DEBUG: Total events received: ${events.length}');
+          final contextsData = events[0]['event']['contexts']['data'];
+          dynamic context = contextsData.firstWhere(
+              (x) => x['schema']
+                  .toString()
+                  .contains('com.snowplowanalytics.mobile/screen'),
+              orElse: () => null);
 
-        if (events.length != 1) {
-          print('DEBUG: Expected 1 event, got ${events.length}');
-          return false;
-        }
-
-        print('DEBUG: Event structure: ${events[0]}');
-
-        final contextsData = events[0]['event']['contexts']['data'];
-        print('DEBUG: Contexts data: $contextsData');
-        print('DEBUG: Contexts data type: ${contextsData.runtimeType}');
-
-        dynamic context = contextsData.firstWhere((x) {
-          print('DEBUG: Checking context: $x');
-          print('DEBUG: Schema: ${x['schema']}');
-          return x['schema']
-              .toString()
-              .contains('iglu:com.example/global-user');
-        }, orElse: () => null);
-
-        print('DEBUG: Found context: $context');
-
-        if (context != null) {
-          print('DEBUG: Context data: ${context['data']}');
-          print('DEBUG: UserId: ${context['data']['userId']}');
-        }
-
-        return (context != null) &&
-            (context['data']['userId'] == 'global-user-123');
-      });
-
-      print('DEBUG: checkMicroGood returned: $result');
-      expect(result, isTrue);
-    } catch (e) {
-      print('DEBUG: Exception in test: $e');
-      rethrow;
-    }
+          return (context != null) &&
+              (context['data']['name'] == 'demo') &&
+              (context['data']['id'] == '00000000-0000-0000-0000-000000000001');
+        }),
+        isTrue);
   });
 }
