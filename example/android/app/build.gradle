@@ -24,7 +24,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.snowplowanalytics.snowplow_tracker_example"
-    compileSdkVersion 34
+    compileSdkVersion 35
+    ndkVersion "26.3.11579264"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
