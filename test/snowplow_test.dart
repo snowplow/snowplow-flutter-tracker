@@ -433,4 +433,62 @@ void main() {
           'mediaTrackingId': 'm1',
         }));
   });
+
+  test('adds global contexts', () async {
+    await Snowplow.addGlobalContexts('ctx_tag_1', [
+      const SelfDescribing(
+          schema: 'iglu:com.example/context/jsonschema/1-0-0',
+          data: {'key': 'value'})
+    ], tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('addGlobalContexts', arguments: {
+          'tracker': 'tns1',
+          'tag': 'ctx_tag_1',
+          'contexts': [
+            {
+              'schema': 'iglu:com.example/context/jsonschema/1-0-0',
+              'data': {'key': 'value'}
+            }
+          ]
+        }));
+  });
+
+  test('adds global contexts with multiple contexts', () async {
+    await Snowplow.addGlobalContexts('ctx_tag_2', [
+      const SelfDescribing(
+          schema: 'iglu:com.example/user/jsonschema/1-0-0',
+          data: {'userId': 'u123'}),
+      const SelfDescribing(
+          schema: 'iglu:com.example/session/jsonschema/1-0-0',
+          data: {'sessionId': 's456'})
+    ], tracker: 'tns2');
+
+    expect(
+        methodCall,
+        isMethodCall('addGlobalContexts', arguments: {
+          'tracker': 'tns2',
+          'tag': 'ctx_tag_2',
+          'contexts': [
+            {
+              'schema': 'iglu:com.example/user/jsonschema/1-0-0',
+              'data': {'userId': 'u123'}
+            },
+            {
+              'schema': 'iglu:com.example/session/jsonschema/1-0-0',
+              'data': {'sessionId': 's456'}
+            }
+          ]
+        }));
+  });
+
+  test('removes global contexts', () async {
+    await Snowplow.removeGlobalContexts('ctx_tag_1', tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('removeGlobalContexts',
+            arguments: {'tracker': 'tns1', 'tag': 'ctx_tag_1'}));
+  });
 }

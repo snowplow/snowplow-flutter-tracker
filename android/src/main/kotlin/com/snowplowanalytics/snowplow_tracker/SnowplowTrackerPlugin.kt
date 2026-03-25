@@ -169,7 +169,7 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
 
     private fun onAddGlobalContexts(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
-            SnowplowTrackerController.addGlobalContexts(AddGlobalContextsMessageReader(it), it)
+            SnowplowTrackerController.addGlobalContexts(AddGlobalContextsMessageReader(it))
         }
         result.success(null)
     }

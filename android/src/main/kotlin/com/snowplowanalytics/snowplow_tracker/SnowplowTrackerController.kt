@@ -19,8 +19,6 @@ import com.snowplowanalytics.snowplow.configuration.Configuration;
 import com.snowplowanalytics.snowplow.event.Event
 import com.snowplowanalytics.snowplow_tracker.readers.configurations.DefaultTrackerConfiguration
 import com.snowplowanalytics.snowplow_tracker.readers.messages.*
-import com.snowplowanalytics.snowplow_tracker.readers.events.SelfDescribingJsonReader
-import com.snowplowanalytics.snowplow.globalcontexts.GlobalContext
 
 object SnowplowTrackerController {
 
@@ -46,23 +44,15 @@ object SnowplowTrackerController {
         val emitterConfigReader = messageReader.emitterConfig
         emitterConfigReader?.let { controllers.add(it.toConfiguration()) }
 
+        val globalContextsConfigReader = messageReader.globalContextsConfig
+        globalContextsConfigReader?.let { controllers.add(it.toConfiguration()) }
+
         Snowplow.createTracker(
                 context,
                 messageReader.namespace,
                 networkConfiguration,
                 *controllers.toTypedArray()
         )
-
-        // Add global contexts AFTER tracker creation (not during initialization)
-        val globalContextsConfigReader = messageReader.globalContextsConfig
-        globalContextsConfigReader?.let { reader ->
-            val staticContexts = reader.contexts?.map { item ->
-                SelfDescribingJsonReader(item).toSelfDescribingJson()
-            } ?: emptyList()
-
-            val tracker = Snowplow.getTracker(messageReader.namespace)
-            tracker?.globalContexts?.add("flutter-global", GlobalContext(staticContexts))
-        }
     }
 
     fun trackStructured(eventReader: EventMessageReader) {
@@ -111,7 +101,7 @@ object SnowplowTrackerController {
         trackerController?.subject?.userId = messageReader.userId
     }
 
-    fun addGlobalContexts(messageReader: AddGlobalContextsMessageReader, arguments: Map<String, Any>) {
+    fun addGlobalContexts(messageReader: AddGlobalContextsMessageReader) {
         val trackerController = Snowplow.getTracker(messageReader.tracker)
 
         val staticContexts = messageReader.contexts?.map { item ->
