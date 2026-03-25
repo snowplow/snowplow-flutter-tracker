@@ -19,6 +19,8 @@ import com.snowplowanalytics.snowplow.configuration.Configuration;
 import com.snowplowanalytics.snowplow.event.Event
 import com.snowplowanalytics.snowplow_tracker.readers.configurations.DefaultTrackerConfiguration
 import com.snowplowanalytics.snowplow_tracker.readers.messages.*
+import com.snowplowanalytics.snowplow_tracker.readers.events.SelfDescribingJsonReader
+import com.snowplowanalytics.snowplow.globalcontexts.GlobalContext
 
 object SnowplowTrackerController {
 
