@@ -34,7 +34,7 @@ dependencies:
 
   flutter_markdown: ^0.6.12
 
-  webview_flutter: ^4.8.0
+  webview_flutter: ^4.13.1
 
 dev_dependencies:
   integration_test:
