@@ -14,5 +14,4 @@ import Foundation
 struct AddGlobalContextsMessageReader: Decodable {
     let tracker: String
     let tag: String
-    let contexts: [SelfDescribingJsonReader]?
 }

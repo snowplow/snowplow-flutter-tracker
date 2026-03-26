@@ -16,5 +16,5 @@ class AddGlobalContextsMessageReader(val values: Map<String, Any>) {
 
     val tracker: String by values
     val tag: String by values
-    val contexts: List<Map<String, Any>>? by valuesDefault
+    val context: Map<String, Any>? by valuesDefault
 }

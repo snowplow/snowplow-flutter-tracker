@@ -113,14 +113,15 @@ class SnowplowTrackerController {
 
     static func addGlobalContexts(_ message: AddGlobalContextsMessageReader, arguments: [String: Any]) {
         let trackerController = Snowplow.tracker(namespace: message.tracker)
-        let contextsArgs = arguments["contexts"] as? [[String: Any]] ?? []
 
-        let entities = zip(message.contexts ?? [], contextsArgs).compactMap { (reader, readerArgs) in
-            reader.toSelfDescribingJson(arguments: readerArgs)
-        }
+        if let contextDict = arguments["context"] as? [String: Any],
+           let schemaReader = try? JSONDecoder().decode(SelfDescribingJsonReader.self, from: JSONSerialization.data(withJSONObject: contextDict)) {
+            let entity = schemaReader.toSelfDescribingJson(arguments: contextDict)
+            let entities = [entity].compactMap { $0 }
 
-        if let globalContexts = trackerController?.globalContexts {
-            globalContexts.add(tag: message.tag, contextGenerator: GlobalContext(staticContexts: entities))
+            if let globalContexts = trackerController?.globalContexts {
+                globalContexts.add(tag: message.tag, contextGenerator: GlobalContext(staticContexts: entities))
+            }
         }
     }
 

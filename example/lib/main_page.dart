@@ -119,7 +119,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                   value: _globalContextEnabled,
                   onChanged: (bool value) async {
                     if (value) {
-                      await widget.tracker.addGlobalContexts('demo_app', [
+                      await widget.tracker.addGlobalContexts(
+                        'demo_app',
                         const SelfDescribing(
                           schema:
                               'iglu:com.snowplowanalytics.mobile/screen/jsonschema/1-0-0',
@@ -128,7 +129,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                             'id': '00000000-0000-0000-0000-000000000001',
                           },
                         ),
-                      ]);
+                      );
                     } else {
                       await widget.tracker.removeGlobalContexts('demo_app');
                     }

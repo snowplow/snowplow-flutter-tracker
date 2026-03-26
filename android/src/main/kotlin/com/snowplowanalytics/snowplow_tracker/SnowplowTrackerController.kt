@@ -106,9 +106,8 @@ object SnowplowTrackerController {
     fun addGlobalContexts(messageReader: AddGlobalContextsMessageReader) {
         val trackerController = Snowplow.getTracker(messageReader.tracker)
 
-        val staticContexts = messageReader.contexts?.map { item ->
-            SelfDescribingJsonReader(item).toSelfDescribingJson()
-        } ?: emptyList()
+        val entity = messageReader.context?.let { SelfDescribingJsonReader(it).toSelfDescribingJson() }
+        val staticContexts = listOfNotNull(entity)
 
         trackerController?.globalContexts?.add(messageReader.tag, GlobalContext(staticContexts))
     }

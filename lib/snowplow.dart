@@ -87,14 +87,14 @@ class Snowplow {
         .invokeMethod('setUserId', {'tracker': tracker, 'userId': userId});
   }
 
-  /// Adds global contexts with the given [tag] to be attached to all tracked events for the [tracker] namespace.
+  /// Adds a global context with the given [tag] to be attached to all tracked events for the [tracker] namespace.
   static Future<void> addGlobalContexts(
-      String tag, List<SelfDescribing> contexts,
+      String tag, SelfDescribing context,
       {required String tracker}) async {
     await _channel.invokeMethod('addGlobalContexts', {
       'tracker': tracker,
       'tag': tag,
-      'contexts': contexts.map((c) => c.toMap()).toList(),
+      'context': context.toMap(),
     });
   }
 

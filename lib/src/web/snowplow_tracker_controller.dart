@@ -22,7 +22,6 @@ import 'readers/messages/set_user_id_message_reader.dart';
 import 'sp.dart';
 
 class SnowplowTrackerController {
-  static final Map<String, Map<String, List>> _globalContextsByTag = {};
   static void createTracker(ConfigurationReader configuration) {
     dynamic options = configuration.getTrackerOptions();
     snowplow('newTracker', configuration.namespace,
@@ -33,16 +32,8 @@ class SnowplowTrackerController {
       _setUserId(configuration.namespace, configuration.subjectConfig?.userId);
     }
 
-    if (configuration.gdprConfig != null) {
-      snowplow(
-          'enableGdprContext',
-          jsify({
-            'basisForProcessing': configuration.gdprConfig?.basisForProcessing,
-            'documentId': configuration.gdprConfig?.documentId,
-            'documentVersion': configuration.gdprConfig?.documentVersion,
-            'documentDescription': configuration.gdprConfig?.documentDescription
-          }));
-    }
+    // Note: GDPR context requires the ConsentPlugin in v4
+    // See: https://docs.snowplow.io/docs/sources/web-trackers/tracking-events/consent-gdpr/
 
     if (configuration
             .trackerConfig?.webActivityTracking?.enableActivityTracking ??
@@ -115,17 +106,13 @@ class SnowplowTrackerController {
     return null;
   }
 
-  static void addGlobalContexts(String tracker, String tag, List contexts) {
-    _globalContextsByTag[tracker] ??= {};
-    _globalContextsByTag[tracker]![tag] = contexts;
-    snowplow('addGlobalContexts:$tracker', jsify(contexts));
+  static void addGlobalContexts(String tracker, String tag, dynamic context) {
+    if (context != null) {
+      snowplow('addGlobalContexts', jsify({tag: context}));
+    }
   }
 
   static void removeGlobalContexts(String tracker, String tag) {
-    final contexts = _globalContextsByTag[tracker]?[tag];
-    if (contexts != null) {
-      snowplow('removeGlobalContexts:$tracker', jsify(contexts));
-      _globalContextsByTag[tracker]!.remove(tag);
-    }
+    snowplow('removeGlobalContexts', jsify([tag]));
   }
 }

@@ -372,7 +372,7 @@ class SnowplowTrackerPluginWeb {
     SnowplowTrackerController.addGlobalContexts(
       message.tracker,
       message.tag,
-      message.contexts,
+      message.context,
     );
   }
 

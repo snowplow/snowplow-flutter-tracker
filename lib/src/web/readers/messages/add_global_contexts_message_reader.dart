@@ -15,10 +15,10 @@ import 'package:flutter/foundation.dart';
 class AddGlobalContextsMessageReader {
   final String tracker;
   final String tag;
-  final List contexts;
+  final dynamic context;
 
   AddGlobalContextsMessageReader(dynamic map)
       : tracker = map['tracker'],
         tag = map['tag'],
-        contexts = map['contexts'] ?? [];
+        context = map['context'];
 }

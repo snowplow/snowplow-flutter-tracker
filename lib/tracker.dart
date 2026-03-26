@@ -40,10 +40,10 @@ class SnowplowTracker {
     await Snowplow.setUserId(userId, tracker: namespace);
   }
 
-  /// Adds global contexts with the given [tag] to be attached to all tracked events.
+  /// Adds a global context with the given [tag] to be attached to all tracked events.
   Future<void> addGlobalContexts(
-      String tag, List<SelfDescribing> contexts) async {
-    await Snowplow.addGlobalContexts(tag, contexts, tracker: namespace);
+      String tag, SelfDescribing context) async {
+    await Snowplow.addGlobalContexts(tag, context, tracker: namespace);
   }
 
   /// Removes global contexts with the given [tag].
