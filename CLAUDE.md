@@ -340,31 +340,6 @@ testWidgets('end-to-end tracking', (tester) async {
 - [ ] Maps to native tracker methods
 - [ ] Consistent error handling
 
-## Implementing tickets
-
-When you're triggered by the `implement` label on a GitHub issue (or asked to implement an issue locally), the issue body is the spec — read it carefully before anything else.
-
-Then:
-
-1. Read this file. If the change is contained to one layer (Dart API, platform channels, Android/iOS/web bridges), match that layer's existing patterns before editing.
-2. Implement the change as described in the issue body. Don't deviate from its file-level intent. If you find an error in it, note the deviation in the PR description.
-3. Keep changes minimal and focused. Don't refactor unrelated code.
-4. Add or modify tests for every new feature or bug fix.
-5. If you discover a real architectural blocker the spec didn't anticipate, stop and post a comment on the issue. Don't guess.
-
-Before opening the PR:
-
-- `flutter analyze` — static analysis clean
-- `flutter test` — unit tests pass
-- `dart format lib test example/lib` — formatting consistent
-
-PR shape (matches this repo's `CONTRIBUTING.md`):
-
-- **Branch**: descriptive name (e.g. `fix/platform-channel-null-handling`).
-- **Commits**: `Description (closes #1234)` — 1-to-1 with the issue.
-- **PR title**: short, descriptive, with `(closes #1234)` referencing the issue.
-- **PR body**: explain why the change is needed, not just what it is. Single feature/fix per PR.
-
 ## Contributing to CLAUDE.md
 
 When adding or updating content in this document, please follow these guidelines:
