@@ -85,6 +85,7 @@ jobs:
   build-ios:
     name: Integration tests on iOS
     runs-on: macos-14
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -109,6 +110,7 @@ jobs:
 
       # -- Integration tests --
       - name: "Start Simulator"
+        id: simulator
         uses: futureware-tech/simulator-action@v4
         with:
           model: iPhone 15 Pro Max
@@ -122,9 +124,12 @@ jobs:
 
       - run: "flutter clean"
 
+      # Target the simulator booted above explicitly. The macOS runner image
+      # ships many simulators, so without an explicit device `flutter drive`
+      # cannot unambiguously pick one and hangs.
       - name: Run tests
         working-directory: example
-        run: ./tool/e2e_tests.sh http://0.0.0.0:9090
+        run: ./tool/e2e_tests.sh http://0.0.0.0:9090 "-d ${{ steps.simulator.outputs.udid }}"
 
   build-web:
     name: Integration tests on Web
