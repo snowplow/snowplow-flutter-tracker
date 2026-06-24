@@ -135,7 +135,8 @@ jobs:
           for suite in configuration_test events_test session_test media_test; do
             flutter test "integration_test/$suite.dart" \
               -d "${{ steps.simulator.outputs.udid }}" \
-              --dart-define=ENDPOINT=http://0.0.0.0:9090
+              --timeout=none \
+              --dart-define=ENDPOINT=http://127.0.0.1:9090
           done
 
   build-web:
