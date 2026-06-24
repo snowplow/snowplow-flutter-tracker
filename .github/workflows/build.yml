@@ -84,7 +84,7 @@ jobs:
 
   build-ios:
     name: Integration tests on iOS
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
 
@@ -109,12 +109,11 @@ jobs:
 
       # -- Integration tests --
       - name: "Start Simulator"
-        uses: futureware-tech/simulator-action@v3
+        uses: futureware-tech/simulator-action@v4
         with:
-          model: iPhone 14 Pro Max
+          model: iPhone 15 Pro Max
           erase_before_boot: true
           shutdown_after_job: true
-          os_version: 16.2
 
       - uses: subosito/flutter-action@v2
         with:
