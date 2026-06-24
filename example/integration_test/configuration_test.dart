@@ -190,6 +190,70 @@ void main() {
         isTrue);
   });
 
+  testWidgets("toggles userAnonymisation at runtime without recreating tracker",
+      (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'runtime-user-anonymisation',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            userAnonymisation: false,
+            sessionContext: true,
+            platformContext: true));
+
+    // First event tracked with anonymisation off: userId is a real UUID.
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    // Toggle anonymisation on at runtime on the same tracker instance.
+    await tracker.setUserAnonymisation(true);
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 2) {
+            return false;
+          }
+
+          dynamic sessionOf(dynamic event) =>
+              event['event']['contexts']['data'].firstWhere(
+                  (x) => x['schema'].toString().contains('client_session'));
+
+          final firstSession = sessionOf(events[0]);
+          final secondSession = sessionOf(events[1]);
+
+          // After the toggle the userId is anonymised to the null UUID.
+          expect(secondSession['data']['userId'],
+              equals('00000000-0000-0000-0000-000000000000'));
+          expect(firstSession['data']['userId'],
+              isNot(equals('00000000-0000-0000-0000-000000000000')));
+
+          return true;
+        }),
+        isTrue);
+  });
+
+  testWidgets("toggles serverAnonymisation at runtime",
+      (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'runtime-server-anonymisation',
+        endpoint: SnowplowTests.microEndpoint,
+        emitterConfig: const EmitterConfiguration(serverAnonymisation: false));
+
+    await tracker.setServerAnonymisation(true);
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            (events[0]['event']['network_userid'] ==
+                '00000000-0000-0000-0000-000000000000')),
+        isTrue);
+  });
+
   testWidgets("screenContext and applicationContext on by default",
       (WidgetTester tester) async {
     // screenContext/applicationContext are not available on web

@@ -50,6 +50,8 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "setUserId" -> onSetUserId(call, result)
             "addGlobalContexts" -> onAddGlobalContexts(call, result)
             "removeGlobalContexts" -> onRemoveGlobalContexts(call, result)
+            "setUserAnonymisation" -> onSetUserAnonymisation(call, result)
+            "setServerAnonymisation" -> onSetServerAnonymisation(call, result)
             "getSessionUserId" -> onGetSessionUserId(call, result)
             "getSessionId" -> onGetSessionId(call, result)
             "getSessionIndex" -> onGetSessionIndex(call, result)
@@ -177,6 +179,20 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
     private fun onRemoveGlobalContexts(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
             SnowplowTrackerController.removeGlobalContexts(RemoveGlobalContextsMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onSetUserAnonymisation(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.setUserAnonymisation(SetUserAnonymisationMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onSetServerAnonymisation(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.setServerAnonymisation(SetServerAnonymisationMessageReader(it))
         }
         result.success(null)
     }

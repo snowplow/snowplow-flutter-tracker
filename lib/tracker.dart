@@ -41,14 +41,32 @@ class SnowplowTracker {
   }
 
   /// Adds a global context with the given [tag] to be attached to all tracked events.
-  Future<void> addGlobalContexts(
-      String tag, SelfDescribing context) async {
+  Future<void> addGlobalContexts(String tag, SelfDescribing context) async {
     await Snowplow.addGlobalContexts(tag, context, tracker: namespace);
   }
 
   /// Removes global contexts with the given [tag].
   Future<void> removeGlobalContexts(String tag) async {
     await Snowplow.removeGlobalContexts(tag, tracker: namespace);
+  }
+
+  /// Sets whether client-side user anonymisation is enabled.
+  ///
+  /// This toggles the `userAnonymisation` flag at runtime, without having to
+  /// recreate the tracker. Changing it starts a new session but preserves the
+  /// tracker instance. Not supported on Web.
+  Future<void> setUserAnonymisation(bool userAnonymisation) async {
+    await Snowplow.setUserAnonymisation(userAnonymisation, tracker: namespace);
+  }
+
+  /// Sets whether server-side anonymisation is enabled (the `SP-Anonymous`
+  /// header).
+  ///
+  /// This toggles the `serverAnonymisation` flag at runtime, without having to
+  /// recreate the tracker. Not supported on Web.
+  Future<void> setServerAnonymisation(bool serverAnonymisation) async {
+    await Snowplow.setServerAnonymisation(serverAnonymisation,
+        tracker: namespace);
   }
 
   /// Returns the identifier (string UUIDv4) for the user of the session.

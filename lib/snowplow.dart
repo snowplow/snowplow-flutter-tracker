@@ -88,8 +88,7 @@ class Snowplow {
   }
 
   /// Adds a global context with the given [tag] to be attached to all tracked events for the [tracker] namespace.
-  static Future<void> addGlobalContexts(
-      String tag, SelfDescribing context,
+  static Future<void> addGlobalContexts(String tag, SelfDescribing context,
       {required String tracker}) async {
     await _channel.invokeMethod('addGlobalContexts', {
       'tracker': tracker,
@@ -103,6 +102,27 @@ class Snowplow {
       {required String tracker}) async {
     await _channel
         .invokeMethod('removeGlobalContexts', {'tracker': tracker, 'tag': tag});
+  }
+
+  /// Sets whether client-side user anonymisation is enabled for the [tracker] namespace.
+  ///
+  /// This toggles the `userAnonymisation` flag at runtime, without having to
+  /// recreate the tracker. Changing it starts a new session but preserves the
+  /// tracker instance. Not supported on Web.
+  static Future<void> setUserAnonymisation(bool userAnonymisation,
+      {required String tracker}) async {
+    await _channel.invokeMethod('setUserAnonymisation',
+        {'tracker': tracker, 'userAnonymisation': userAnonymisation});
+  }
+
+  /// Sets whether server-side anonymisation is enabled for the [tracker] namespace.
+  ///
+  /// This toggles the `serverAnonymisation` flag at runtime (the `SP-Anonymous`
+  /// header), without having to recreate the tracker. Not supported on Web.
+  static Future<void> setServerAnonymisation(bool serverAnonymisation,
+      {required String tracker}) async {
+    await _channel.invokeMethod('setServerAnonymisation',
+        {'tracker': tracker, 'serverAnonymisation': serverAnonymisation});
   }
 
   /// Returns the identifier (string UUIDv4) for the user of the session.
