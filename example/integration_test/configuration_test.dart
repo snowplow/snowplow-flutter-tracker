@@ -200,35 +200,42 @@ void main() {
             sessionContext: true,
             platformContext: true));
 
-    // First event tracked with anonymisation off: userId is a real UUID.
+    dynamic clientSessionOf(dynamic event) => event['event']['contexts']['data']
+        .firstWhere((x) => x['schema'].toString().contains('client_session'));
+
+    // First event with anonymisation off: userId is a real (non-null) UUID.
     await tracker
         .track(const Structured(category: 'category', action: 'action'));
+
+    String? userIdBefore;
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          userIdBefore = clientSessionOf(events[0])['data']['userId'];
+          expect(userIdBefore,
+              isNot(equals('00000000-0000-0000-0000-000000000000')));
+          return true;
+        }),
+        isTrue);
 
     // Toggle anonymisation on at runtime on the same tracker instance.
     await tracker.setUserAnonymisation(true);
 
+    await SnowplowTests.resetMicro();
     await tracker
         .track(const Structured(category: 'category', action: 'action'));
 
     expect(
         await SnowplowTests.checkMicroGood((dynamic events) {
-          if (events.length != 2) {
+          if (events.length != 1) {
             return false;
           }
-
-          dynamic sessionOf(dynamic event) =>
-              event['event']['contexts']['data'].firstWhere(
-                  (x) => x['schema'].toString().contains('client_session'));
-
-          final firstSession = sessionOf(events[0]);
-          final secondSession = sessionOf(events[1]);
-
-          // After the toggle the userId is anonymised to the null UUID.
-          expect(secondSession['data']['userId'],
+          // After the toggle the userId is anonymised to the null UUID,
+          // confirming the runtime change took effect on the live tracker.
+          expect(clientSessionOf(events[0])['data']['userId'],
               equals('00000000-0000-0000-0000-000000000000'));
-          expect(firstSession['data']['userId'],
-              isNot(equals('00000000-0000-0000-0000-000000000000')));
-
           return true;
         }),
         isTrue);
