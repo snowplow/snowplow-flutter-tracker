@@ -124,12 +124,19 @@ jobs:
 
       - run: "flutter clean"
 
-      # Target the simulator booted above explicitly. The macOS runner image
-      # ships many simulators, so without an explicit device `flutter drive`
-      # cannot unambiguously pick one and hangs.
+      # Use `flutter test` rather than `flutter drive` on iOS: the driver's
+      # VM-service handshake hangs on iOS simulators (the app builds and
+      # launches but the test connection never establishes). `flutter test`
+      # against the integration_test suites avoids that handshake. Target the
+      # simulator booted above explicitly via its UDID.
       - name: Run tests
         working-directory: example
-        run: ./tool/e2e_tests.sh http://0.0.0.0:9090 "-d ${{ steps.simulator.outputs.udid }}"
+        run: |
+          for suite in configuration_test events_test session_test media_test; do
+            flutter test "integration_test/$suite.dart" \
+              -d "${{ steps.simulator.outputs.udid }}" \
+              --dart-define=ENDPOINT=http://0.0.0.0:9090
+          done
 
   build-web:
     name: Integration tests on Web
