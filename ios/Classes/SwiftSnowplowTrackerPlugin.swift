@@ -51,6 +51,10 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
             onAddGlobalContexts(call, result: result)
         case "removeGlobalContexts":
             onRemoveGlobalContexts(call, result: result)
+        case "setUserAnonymisation":
+            onSetUserAnonymisation(call, result: result)
+        case "setServerAnonymisation":
+            onSetServerAnonymisation(call, result: result)
         case "startMediaTracking":
             onStartMediaTracking(call, result: result)
         case "endMediaTracking":
@@ -228,6 +232,20 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
     private func onRemoveGlobalContexts(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if let (message, _): (RemoveGlobalContextsMessageReader, Any) = decodeCall(call) {
             SnowplowTrackerController.removeGlobalContexts(message)
+        }
+        result(nil)
+    }
+
+    private func onSetUserAnonymisation(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, _): (SetUserAnonymisationMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.setUserAnonymisation(message)
+        }
+        result(nil)
+    }
+
+    private func onSetServerAnonymisation(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, _): (SetServerAnonymisationMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.setServerAnonymisation(message)
         }
         result(nil)
     }

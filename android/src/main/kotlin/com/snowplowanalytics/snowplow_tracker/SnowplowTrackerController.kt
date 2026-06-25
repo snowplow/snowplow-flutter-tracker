@@ -118,6 +118,18 @@ object SnowplowTrackerController {
         trackerController?.globalContexts?.remove(messageReader.tag)
     }
 
+    fun setUserAnonymisation(messageReader: SetUserAnonymisationMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+
+        trackerController?.userAnonymisation = messageReader.userAnonymisation
+    }
+
+    fun setServerAnonymisation(messageReader: SetServerAnonymisationMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+
+        trackerController?.emitter?.serverAnonymisation = messageReader.serverAnonymisation
+    }
+
     fun getSessionUserId(messageReader: GetParameterMessageReader): String? {
         val trackerController = Snowplow.getTracker(messageReader.tracker)
 
