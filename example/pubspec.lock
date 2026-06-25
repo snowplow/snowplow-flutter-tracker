@@ -258,7 +258,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.9.0"
+    version: "0.10.0"
   source_span:
     dependency: transitive
     description:

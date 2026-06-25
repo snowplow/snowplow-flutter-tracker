@@ -1,4 +1,9 @@
 
+# 0.10.0
+* Add ability to toggle anonymous tracking at runtime via `setUserAnonymisation` and `setServerAnonymisation` (BCPF-2051)
+* Migrate web JS interop to `dart:js_interop` and `package:web`
+* Fix iOS integration tests in CI
+
 # 0.9.0
 * Migrate Android example app build to Gradle 8 / Java 21 (#70)
 * Add [static] global contexts (#71) 
