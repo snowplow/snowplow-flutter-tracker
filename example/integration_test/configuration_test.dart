@@ -190,6 +190,77 @@ void main() {
         isTrue);
   });
 
+  testWidgets("toggles userAnonymisation at runtime without recreating tracker",
+      (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'runtime-user-anonymisation',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            userAnonymisation: false,
+            sessionContext: true,
+            platformContext: true));
+
+    dynamic clientSessionOf(dynamic event) => event['event']['contexts']['data']
+        .firstWhere((x) => x['schema'].toString().contains('client_session'));
+
+    // First event with anonymisation off: userId is a real (non-null) UUID.
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    String? userIdBefore;
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          userIdBefore = clientSessionOf(events[0])['data']['userId'];
+          expect(userIdBefore,
+              isNot(equals('00000000-0000-0000-0000-000000000000')));
+          return true;
+        }),
+        isTrue);
+
+    // Toggle anonymisation on at runtime on the same tracker instance.
+    await tracker.setUserAnonymisation(true);
+
+    await SnowplowTests.resetMicro();
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          // After the toggle the userId is anonymised to the null UUID,
+          // confirming the runtime change took effect on the live tracker.
+          expect(clientSessionOf(events[0])['data']['userId'],
+              equals('00000000-0000-0000-0000-000000000000'));
+          return true;
+        }),
+        isTrue);
+  });
+
+  testWidgets("toggles serverAnonymisation at runtime",
+      (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'runtime-server-anonymisation',
+        endpoint: SnowplowTests.microEndpoint,
+        emitterConfig: const EmitterConfiguration(serverAnonymisation: false));
+
+    await tracker.setServerAnonymisation(true);
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            (events[0]['event']['network_userid'] ==
+                '00000000-0000-0000-0000-000000000000')),
+        isTrue);
+  });
+
   testWidgets("screenContext and applicationContext on by default",
       (WidgetTester tester) async {
     // screenContext/applicationContext are not available on web
