@@ -9,8 +9,8 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import 'dart:js_util';
-import 'dart:html';
+import 'dart:js_interop';
+import 'package:web/web.dart' show document;
 
 import 'readers/messages/end_media_tracking_message_reader.dart';
 import 'readers/messages/start_media_tracking_message_reader.dart';
@@ -24,8 +24,8 @@ import 'sp.dart';
 class SnowplowTrackerController {
   static void createTracker(ConfigurationReader configuration) {
     dynamic options = configuration.getTrackerOptions();
-    snowplow('newTracker', configuration.namespace,
-        configuration.networkConfig.endpoint, jsify(options));
+    snowplow('newTracker', configuration.namespace.toJS,
+        configuration.networkConfig.endpoint.toJS, options.jsify());
 
     if (configuration.subjectConfig != null &&
         configuration.subjectConfig?.userId != null) {
@@ -42,21 +42,21 @@ class SnowplowTrackerController {
           configuration.trackerConfig!.webActivityTracking!;
       snowplow(
           'enableActivityTracking',
-          jsify({
+          {
             'minimumVisitLength': webActivityTracking.minimumVisitLength,
             'heartbeatDelay': webActivityTracking.heartbeatDelay
-          }));
+          }.jsify());
     }
 
     if (configuration.trackerConfig?.jsMediaPluginURL != null) {
-      snowplow('addPlugin', configuration.trackerConfig?.jsMediaPluginURL,
-          jsify(['snowplowMedia', 'SnowplowMediaPlugin']));
+      snowplow('addPlugin', configuration.trackerConfig?.jsMediaPluginURL?.toJS,
+          ['snowplowMedia', 'SnowplowMediaPlugin'].jsify());
     }
   }
 
   static void trackEvent(EventMessageReader message) {
     snowplow('${message.event.endpoint()}:${message.tracker}',
-        jsify(message.eventData()));
+        message.eventData().jsify());
   }
 
   static void setUserId(SetUserIdMessageReader message) {
@@ -64,7 +64,7 @@ class SnowplowTrackerController {
   }
 
   static void _setUserId(String tracker, String? userId) {
-    snowplow('setUserId:$tracker', userId);
+    snowplow('setUserId:$tracker', userId?.toJS);
   }
 
   static String? getSessionUserId() {
@@ -85,34 +85,31 @@ class SnowplowTrackerController {
 
   static void startMediaTracking(StartMediaTrackingMessageReader message) {
     snowplow('startMediaTracking:${message.tracker}',
-        jsify(message.configuration.toTrackerOptions()));
+        message.configuration.toTrackerOptions().jsify());
   }
 
   static void endMediaTracking(EndMediaTrackingMessageReader message) {
     snowplow('endMediaTracking:${message.tracker}',
-        jsify({'id': message.mediaTrackingId}));
+        {'id': message.mediaTrackingId}.jsify());
   }
 
   static void updateMediaTracking(UpdateMediaTrackingMessageReader message) {
-    snowplow('updateMediaTracking:${message.tracker}', jsify(message.toMap()));
+    snowplow('updateMediaTracking:${message.tracker}', message.toMap().jsify());
   }
 
   static List<String>? _getSnowplowCookieParts() {
     final regex = RegExp(r'_sp_id\.[a-f0-9]+=([^;]+);?');
-    if (document.cookie != null) {
-      final cookieValue = regex.firstMatch(document.cookie!)?.group(1);
-      return cookieValue?.split('.');
-    }
-    return null;
+    final cookieValue = regex.firstMatch(document.cookie)?.group(1);
+    return cookieValue?.split('.');
   }
 
   static void addGlobalContexts(String tracker, String tag, dynamic context) {
     if (context != null) {
-      snowplow('addGlobalContexts', jsify({tag: context}));
+      snowplow('addGlobalContexts', {tag: context}.jsify());
     }
   }
 
   static void removeGlobalContexts(String tracker, String tag) {
-    snowplow('removeGlobalContexts', jsify([tag]));
+    snowplow('removeGlobalContexts', [tag].jsify());
   }
 }
