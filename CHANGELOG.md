@@ -2,6 +2,7 @@
 # 0.10.0
 * Add ability to toggle anonymous tracking at runtime via `setUserAnonymisation` and `setServerAnonymisation` (BCPF-2051)
 * Migrate web JS interop to `dart:js_interop` and `package:web`
+* Raise the minimum Flutter version to 3.19.0 (Dart 3.3.0)
 * Fix iOS integration tests in CI
 
 # 0.9.0
