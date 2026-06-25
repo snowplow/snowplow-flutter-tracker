@@ -192,6 +192,11 @@ void main() {
 
   testWidgets("toggles userAnonymisation at runtime without recreating tracker",
       (WidgetTester tester) async {
+    // setUserAnonymisation is not supported on Web (throws Unimplemented).
+    if (kIsWeb) {
+      return;
+    }
+
     SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'runtime-user-anonymisation',
         endpoint: SnowplowTests.microEndpoint,
@@ -243,6 +248,11 @@ void main() {
 
   testWidgets("toggles serverAnonymisation at runtime",
       (WidgetTester tester) async {
+    // setServerAnonymisation is not supported on Web (throws Unimplemented).
+    if (kIsWeb) {
+      return;
+    }
+
     SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'runtime-server-anonymisation',
         endpoint: SnowplowTests.microEndpoint,
