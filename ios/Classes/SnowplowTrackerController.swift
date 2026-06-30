@@ -132,6 +132,16 @@ class SnowplowTrackerController {
         }
     }
 
+    static func setUserAnonymisation(_ message: SetUserAnonymisationMessageReader) {
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        trackerController?.userAnonymisation = message.userAnonymisation
+    }
+
+    static func setServerAnonymisation(_ message: SetServerAnonymisationMessageReader) {
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        trackerController?.emitter?.serverAnonymisation = message.serverAnonymisation
+    }
+
     static func startMediaTracking(_ message: StartMediaTrackingMessageReader, arguments: [String: Any]) {
         let configurationArguments = arguments["configuration"] as? [String: Any] ?? [:]
         let mediaTrackingConfiguration = message.configuration.toMediaTrackingConfiguration(arguments: configurationArguments)

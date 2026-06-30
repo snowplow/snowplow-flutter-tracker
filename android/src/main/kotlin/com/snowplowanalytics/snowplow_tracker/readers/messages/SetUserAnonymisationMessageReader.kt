@@ -9,8 +9,9 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import Foundation
+package com.snowplowanalytics.snowplow_tracker.readers.messages
 
-class TrackerVersion {
-    static let TRACKER_VERSION = "flutter-0.10.0"
+class SetUserAnonymisationMessageReader(val values: Map<String, Any>) {
+    val tracker: String by values
+    val userAnonymisation: Boolean by values
 }

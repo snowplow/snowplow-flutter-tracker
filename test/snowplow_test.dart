@@ -462,4 +462,22 @@ void main() {
         isMethodCall('removeGlobalContexts',
             arguments: {'tracker': 'tns1', 'tag': 'ctx_tag_1'}));
   });
+
+  test('sets user anonymisation', () async {
+    await Snowplow.setUserAnonymisation(true, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('setUserAnonymisation',
+            arguments: {'tracker': 'tns1', 'userAnonymisation': true}));
+  });
+
+  test('sets server anonymisation', () async {
+    await Snowplow.setServerAnonymisation(false, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('setServerAnonymisation',
+            arguments: {'tracker': 'tns1', 'serverAnonymisation': false}));
+  });
 }

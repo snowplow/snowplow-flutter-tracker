@@ -69,4 +69,20 @@ void main() {
     expect(arguments['tracker'], equals('ns1'));
     expect(sessionId, equals('1234'));
   });
+
+  test('sets user anonymisation', () async {
+    await tracker?.setUserAnonymisation(true);
+
+    expect(method, equals('setUserAnonymisation'));
+    expect(arguments['tracker'], equals('ns1'));
+    expect(arguments['userAnonymisation'], equals(true));
+  });
+
+  test('sets server anonymisation', () async {
+    await tracker?.setServerAnonymisation(true);
+
+    expect(method, equals('setServerAnonymisation'));
+    expect(arguments['tracker'], equals('ns1'));
+    expect(arguments['serverAnonymisation'], equals(true));
+  });
 }

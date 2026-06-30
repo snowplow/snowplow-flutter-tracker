@@ -11,6 +11,7 @@
 
 import Foundation
 
-class TrackerVersion {
-    static let TRACKER_VERSION = "flutter-0.10.0"
+struct SetUserAnonymisationMessageReader: Decodable {
+    let tracker: String
+    let userAnonymisation: Bool
 }

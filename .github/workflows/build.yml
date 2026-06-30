@@ -1,5 +1,8 @@
 name: Build and Test
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 jobs:
   build:
     name: Run unit tests
@@ -84,7 +87,8 @@ jobs:
 
   build-ios:
     name: Integration tests on iOS
-    runs-on: macos-12
+    runs-on: macos-14
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -109,23 +113,35 @@ jobs:
 
       # -- Integration tests --
       - name: "Start Simulator"
-        uses: futureware-tech/simulator-action@v3
+        id: simulator
+        uses: futureware-tech/simulator-action@v4
         with:
-          model: iPhone 14 Pro Max
+          model: iPhone 15 Pro Max
           erase_before_boot: true
           shutdown_after_job: true
-          os_version: 16.2
 
+      # The iOS job pins a newer Flutter than the rest of the matrix
+      # (3.32.0): under 3.32.0 both `flutter drive` and `flutter test`
+      # stall while attaching to the iOS simulator, so the suite never
+      # starts. A newer SDK is required to attach reliably on the sim.
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.32.0'
+          flutter-version: '3.35.4'
           channel: 'stable'
 
       - run: "flutter clean"
 
+      # Target the simulator booted above explicitly via its UDID; the macOS
+      # runner image ships many simulators, so an unqualified `flutter test`
+      # cannot pick one.
       - name: Run tests
         working-directory: example
-        run: ./tool/e2e_tests.sh http://0.0.0.0:9090
+        run: |
+          for suite in configuration_test events_test session_test media_test; do
+            flutter test "integration_test/$suite.dart" \
+              -d "${{ steps.simulator.outputs.udid }}" \
+              --dart-define=ENDPOINT=http://127.0.0.1:9090
+          done
 
   build-web:
     name: Integration tests on Web
