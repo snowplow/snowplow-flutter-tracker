@@ -1,5 +1,12 @@
 
+# 0.11.0
+
+* Migrate Android plugin and example app builds to Gradle 9 / Java 17
+* Add Swift Package Manager support for the iOS plugin
+* Switch the iOS example app from CocoaPods to Swift Package Manager
+
 # 0.10.0
+
 * Add ability to toggle anonymous tracking at runtime via `setUserAnonymisation` and `setServerAnonymisation` (BCPF-2051)
 * Migrate web JS interop to `dart:js_interop` and `package:web`
 * Raise the minimum Flutter version to 3.19.0 (Dart 3.3.0)

@@ -25,7 +25,7 @@ cd example/ios && pod deintegrate && pod install
 
 The iOS implementation follows a three-layer architecture mirroring the Android design:
 
-1. **Plugin Layer** (`SwiftSnowplowTrackerPlugin.swift`): Method channel handler
+1. **Plugin Layer** (`SnowplowTrackerPlugin.swift`): Method channel handler
 2. **Controller Layer** (`SnowplowTrackerController.swift`): Business logic and native SDK integration
 3. **Reader Layer** (`readers/`): Message deserialization from Dart types
 
@@ -77,7 +77,7 @@ if let trackerConfig = message.trackerConfig {
 
 ## Layer Organization & Responsibilities
 
-### Plugin Layer (SwiftSnowplowTrackerPlugin)
+### Plugin Layer (SnowplowTrackerPlugin)
 
 - Registers method channel with Flutter
 - Routes method calls to appropriate handlers
@@ -287,26 +287,28 @@ private func onTrackMediaAdClickEvent(_ call: FlutterMethodCall, result: @escapi
 
 ```
 ios/
-├── Classes/
-│   ├── SwiftSnowplowTrackerPlugin.swift    # Main plugin class
-│   ├── SnowplowTrackerController.swift     # Controller logic
-│   ├── TrackerVersion.swift                # Version constants
-│   └── readers/
-│       ├── configurations/                 # Config readers
-│       │   ├── EmitterConfigurationReader.swift
-│       │   ├── NetworkConfigurationReader.swift
-│       │   └── TrackerConfigurationReader.swift
-│       ├── events/                         # Event readers
-│       │   ├── ScreenViewReader.swift
-│       │   ├── StructuredReader.swift
-│       │   └── SelfDescribingJsonReader.swift
-│       ├── entities/                       # Entity readers
-│       │   ├── MediaPlayerEntityReader.swift
-│       │   └── MediaAdEntityReader.swift
-│       └── messages/                       # Message readers
-│           ├── CreateTrackerMessageReader.swift
-│           └── EventMessageReader.swift
-└── snowplow_tracker.podspec               # CocoaPods specification
+├── snowplow_tracker/
+│   ├── Package.swift                       # Swift Package Manager specification
+│   └── Sources/snowplow_tracker/
+│       ├── SnowplowTrackerPlugin.swift     # Main plugin class
+│       ├── SnowplowTrackerController.swift # Controller logic
+│       ├── TrackerVersion.swift            # Version constants
+│       └── readers/
+│           ├── configurations/             # Config readers
+│           │   ├── EmitterConfigurationReader.swift
+│           │   ├── NetworkConfigurationReader.swift
+│           │   └── TrackerConfigurationReader.swift
+│           ├── events/                     # Event readers
+│           │   ├── ScreenViewReader.swift
+│           │   ├── StructuredReader.swift
+│           │   └── SelfDescribingJsonReader.swift
+│           ├── entities/                   # Entity readers
+│           │   ├── MediaPlayerEntityReader.swift
+│           │   └── MediaAdEntityReader.swift
+│           └── messages/                   # Message readers
+│               ├── CreateTrackerMessageReader.swift
+│               └── EventMessageReader.swift
+└── snowplow_tracker.podspec                # CocoaPods specification
 ```
 
 ## Quick Reference
