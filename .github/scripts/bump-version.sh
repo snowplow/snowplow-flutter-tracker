@@ -45,8 +45,10 @@ sed_inplace "s/^(version:[[:space:]]*)[0-9]+\.[0-9]+\.[0-9]+$/\1$NEW_VERSION/" p
 # 2. ios/snowplow_tracker.podspec — line: s.version = 'X.Y.Z'
 sed_inplace "s/(s\.version[[:space:]]*=[[:space:]]*)'[0-9]+\.[0-9]+\.[0-9]+'/\1'$NEW_VERSION'/" ios/snowplow_tracker.podspec
 
-# 3. ios/Classes/TrackerVersion.swift — TRACKER_VERSION = "flutter-X.Y.Z"
-sed_inplace "s/(TRACKER_VERSION[[:space:]]*=[[:space:]]*)\"flutter-[0-9]+\.[0-9]+\.[0-9]+\"/\1\"flutter-$NEW_VERSION\"/" ios/Classes/TrackerVersion.swift
+IOS_VERSION_FILE="ios/snowplow_tracker/Sources/snowplow_tracker/TrackerVersion.swift"
+
+# 3. iOS TrackerVersion.swift — TRACKER_VERSION = "flutter-X.Y.Z"
+sed_inplace "s/(TRACKER_VERSION[[:space:]]*=[[:space:]]*)\"flutter-[0-9]+\.[0-9]+\.[0-9]+\"/\1\"flutter-$NEW_VERSION\"/" "$IOS_VERSION_FILE"
 
 # 4. android/.../TrackerVersion.kt — TRACKER_VERSION = "flutter-X.Y.Z"
 KOTLIN_VERSION_FILE="$(find android -name TrackerVersion.kt -print -quit)"
@@ -66,18 +68,14 @@ sed_inplace "s/(snowplow_tracker:[[:space:]]*\^)$OLD_VERSION/\1$NEW_VERSION/" RE
 #    entry has this exact line; safer to anchor on the literal old version).
 sed_inplace "s/^(    version:[[:space:]]*)\"$OLD_VERSION\"$/\1\"$NEW_VERSION\"/" example/pubspec.lock
 
-# 8. example/ios/Podfile.lock — `- snowplow_tracker (OLD_VERSION):`
-sed_inplace "s/(- snowplow_tracker[[:space:]]+\()$OLD_VERSION(\):)/\1$NEW_VERSION\2/" example/ios/Podfile.lock
-
 # Sanity checks: every file must now contain the new version on the expected line.
 grep -qE "^version:[[:space:]]*$NEW_VERSION\$" pubspec.yaml
 grep -qE "s\.version[[:space:]]*=[[:space:]]*'$NEW_VERSION'" ios/snowplow_tracker.podspec
-grep -q "TRACKER_VERSION = \"flutter-$NEW_VERSION\"" ios/Classes/TrackerVersion.swift
+grep -q "TRACKER_VERSION = \"flutter-$NEW_VERSION\"" "$IOS_VERSION_FILE"
 grep -q "TRACKER_VERSION = \"flutter-$NEW_VERSION\"" "$KOTLIN_VERSION_FILE"
 grep -q "snowplow_tracker: \^$NEW_VERSION" example/lib/overview.dart
 grep -q "snowplow_tracker: \^$NEW_VERSION" README.md
 grep -q "version: \"$NEW_VERSION\"" example/pubspec.lock
-grep -q "snowplow_tracker ($NEW_VERSION):" example/ios/Podfile.lock
 
 # Belt-and-braces: refuse to finish if any of the bumped lines still mentions
 # the old version. Each pattern is scoped to the specific context (`^X.Y.Z`
@@ -88,17 +86,15 @@ for pat in \
   "snowplow_tracker:[[:space:]]*\^$OLD_VERSION\b" \
   "TRACKER_VERSION[[:space:]]*=[[:space:]]*\"flutter-$OLD_VERSION\"" \
   "s\.version[[:space:]]*=[[:space:]]*'$OLD_VERSION'" \
-  "^version:[[:space:]]*$OLD_VERSION$" \
-  "snowplow_tracker[[:space:]]+\($OLD_VERSION\):"; do
+  "^version:[[:space:]]*$OLD_VERSION$"; do
   if grep -REn "$pat" \
        pubspec.yaml \
        ios/snowplow_tracker.podspec \
-       ios/Classes/TrackerVersion.swift \
+       "$IOS_VERSION_FILE" \
        "$KOTLIN_VERSION_FILE" \
        example/lib/overview.dart \
        README.md \
-       example/pubspec.lock \
-       example/ios/Podfile.lock 2>/dev/null; then
+       example/pubspec.lock 2>/dev/null; then
     echo "Pattern '$pat' (old version $OLD_VERSION) still matches one of the bumped files; aborting." >&2
     exit 1
   fi
@@ -107,9 +103,8 @@ done
 echo "Bumped to $NEW_VERSION across:"
 echo "  pubspec.yaml"
 echo "  ios/snowplow_tracker.podspec"
-echo "  ios/Classes/TrackerVersion.swift"
+echo "  $IOS_VERSION_FILE"
 echo "  $KOTLIN_VERSION_FILE"
 echo "  example/lib/overview.dart"
 echo "  README.md"
 echo "  example/pubspec.lock"
-echo "  example/ios/Podfile.lock"

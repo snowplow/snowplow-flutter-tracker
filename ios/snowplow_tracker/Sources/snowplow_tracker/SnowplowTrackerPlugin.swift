@@ -12,10 +12,10 @@
 import Flutter
 import UIKit
 
-public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
+public class SnowplowTrackerPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "snowplow_tracker", binaryMessenger: registrar.messenger())
-        let instance = SwiftSnowplowTrackerPlugin()
+        let instance = SnowplowTrackerPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     
