@@ -268,4 +268,61 @@ void main() {
       tracker: 'test',
     );
   });
+
+  testWidgets("tracks a deep link received event",
+      (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    await Snowplow.track(
+      const DeepLinkReceived(
+        url: 'https://example.com/path?ref=promo',
+        referrer: 'https://referrer.com',
+      ),
+      tracker: 'test',
+    );
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            events[0]['event']['unstruct_event']['data']['schema']
+                .toString()
+                .contains('deep_link_received') &&
+            (events[0]['event']['unstruct_event']['data']['data']['url'] ==
+                'https://example.com/path?ref=promo') &&
+            (events[0]['event']['unstruct_event']['data']['data']['referrer'] ==
+                'https://referrer.com')),
+        isTrue);
+  });
+
+  testWidgets("tracks a message notification event",
+      (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    await Snowplow.track(
+      const MessageNotification(
+        title: 'Test Notification',
+        body: 'Notification body',
+        trigger: 'push',
+      ),
+      tracker: 'test',
+    );
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            events[0]['event']['unstruct_event']['data']['schema']
+                .toString()
+                .contains('message_notification') &&
+            (events[0]['event']['unstruct_event']['data']['data']['title'] ==
+                'Test Notification') &&
+            (events[0]['event']['unstruct_event']['data']['data']['body'] ==
+                'Notification body') &&
+            (events[0]['event']['unstruct_event']['data']['data']['trigger'] ==
+                'push')),
+        isTrue);
+  });
 }

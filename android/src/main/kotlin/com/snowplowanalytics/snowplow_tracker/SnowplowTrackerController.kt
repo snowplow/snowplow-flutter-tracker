@@ -305,6 +305,16 @@ object SnowplowTrackerController {
         trackEvent(pageView, eventReader)
     }
 
+    fun trackDeepLinkReceived(eventReader: EventMessageReader) {
+        val event = eventReader.toDeepLinkReceivedWithContexts()
+        trackEvent(event, eventReader)
+    }
+
+    fun trackMessageNotification(eventReader: EventMessageReader) {
+        val event = eventReader.toMessageNotificationWithContexts()
+        trackEvent(event, eventReader)
+    }
+
     private fun trackEvent(event: Event, messageReader: EventMessageReader) {
         val trackerController = Snowplow.getTracker(messageReader.tracker)
         val mediaTrackingId = messageReader.mediaTrackingId

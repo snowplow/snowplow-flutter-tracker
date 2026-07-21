@@ -47,9 +47,14 @@ android {
     defaultConfig {
         minSdkVersion 21
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.snowplowanalytics:snowplow-android-tracker:6.2.+"
+    testImplementation 'junit:junit:4.13.2'
 }
