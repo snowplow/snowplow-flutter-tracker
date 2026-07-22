@@ -21,4 +21,9 @@ A package for tracking Snowplow events in Flutter apps.
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
+
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'Tests/**/*.swift'
+    test_spec.dependency 'SnowplowTracker', '~> 6.2.2'
+  end
 end
