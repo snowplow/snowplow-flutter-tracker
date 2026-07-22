@@ -262,11 +262,19 @@ void main() {
       return;
     }
 
-    // PageView is now supported on mobile — should not throw
+    // PageView is now supported on mobile — should not throw.
+    // Await delivery so the event does not leak into the next test's
+    // Micro state (the emitter flushes asynchronously).
     await Snowplow.track(
       const PageViewEvent(url: 'https://example.com'),
       tracker: 'test',
     );
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) =>
+            (events.length == 1) &&
+            (events[0]['event']['page_url'] == 'https://example.com')),
+        isTrue);
   });
 
   testWidgets("tracks a deep link received event on mobile",
@@ -287,8 +295,8 @@ void main() {
         await SnowplowTests.checkMicroGood((events) =>
             (events.length == 1) &&
             (events[0]['event']['unstruct_event']['data']['schema']
-                    .toString()
-                    .contains('deep_link_received')) &&
+                .toString()
+                .contains('deep_link_received')) &&
             (events[0]['event']['unstruct_event']['data']['data']['url'] ==
                 'https://example.com/deep?id=1')),
         isTrue);
@@ -315,8 +323,8 @@ void main() {
         await SnowplowTests.checkMicroGood((events) =>
             (events.length == 1) &&
             (events[0]['event']['unstruct_event']['data']['schema']
-                    .toString()
-                    .contains('message_notification')) &&
+                .toString()
+                .contains('message_notification')) &&
             (events[0]['event']['unstruct_event']['data']['data']['title'] ==
                 'Test Notification') &&
             (events[0]['event']['unstruct_event']['data']['data']['body'] ==

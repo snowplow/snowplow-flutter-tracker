@@ -14,7 +14,7 @@ import SnowplowTracker
 
 struct PageViewReader: Decodable {
     let url: String
-    let title: String
+    let title: String?
     let referrer: String?
 }
 
