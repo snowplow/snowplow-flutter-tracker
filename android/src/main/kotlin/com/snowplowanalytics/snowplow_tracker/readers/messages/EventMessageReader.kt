@@ -256,6 +256,18 @@ class EventMessageReader(val values: Map<String, Any>) {
         return pageView
     }
 
+    fun toDeepLinkReceivedWithContexts(): DeepLinkReceived {
+        val event = DeepLinkReceivedReader(eventData).toDeepLinkReceived()
+        addContext(event)
+        return event
+    }
+
+    fun toMessageNotificationWithContexts(): MessageNotification {
+        val event = MessageNotificationReader(eventData).toMessageNotification()
+        addContext(event)
+        return event
+    }
+
     private fun addContext(event: Event) {
         contextsJsons?.let { event.entities.addAll(it) }
     }

@@ -88,6 +88,8 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "trackMediaVolumeChangeEvent" -> onTrackMediaVolumeChangeEvent(call, result)
             "trackWebViewReader" -> onTrackWebViewReaderEvent(call, result)
             "trackPageView" -> onTrackPageView(call, result)
+            "trackDeepLinkReceived" -> onTrackDeepLinkReceived(call, result)
+            "trackMessageNotification" -> onTrackMessageNotification(call, result)
             else -> result.notImplemented()
         }
     }
@@ -430,6 +432,20 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
     private fun onTrackPageView(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
             SnowplowTrackerController.trackPageView(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackDeepLinkReceived(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackDeepLinkReceived(EventMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onTrackMessageNotification(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.trackMessageNotification(EventMessageReader(it))
         }
         result.success(null)
     }
