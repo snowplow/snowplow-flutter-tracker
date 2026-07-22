@@ -34,43 +34,80 @@ class MessageNotification implements Event {
   /// The action associated with the notification.
   final String? action;
 
-  /// The badge count of the application.
-  final int? badge;
+  /// Attachments added to the notification (they can be part of the data
+  /// object).
+  final List<MessageNotificationAttachment>? attachments;
 
-  /// The category identifier of the notification.
-  final String? categoryIdentifier;
+  /// Variable string values to be used in place of the format specifiers in
+  /// [bodyLocKey] to localize the body text to the user's current
+  /// localization.
+  final List<String>? bodyLocArgs;
 
-  /// The name of the launch image used when the app is launched.
-  final String? launchImageName;
+  /// The key to the body string in the app's string resources to use to
+  /// localize the body text to the user's current localization.
+  final String? bodyLocKey;
 
-  /// The date and time the notification was sent.
+  /// The category associated with the notification.
+  final String? category;
+
+  /// Whether the app is notified of the delivery of the notification while in
+  /// the foreground or background (iOS only).
+  final bool? contentAvailable;
+
+  /// The group which this notification is part of.
+  final String? group;
+
+  /// The icon associated with the notification (Android only).
+  final String? icon;
+
+  /// The number of items this notification represents.
+  final int? notificationCount;
+
+  /// The time when the notification was delivered.
   final String? notificationTimestamp;
 
-  /// The sound of the notification.
+  /// The sound played when the device receives the notification.
   final String? sound;
 
-  /// The subtitle of the notification.
+  /// The notification's subtitle.
   final String? subtitle;
 
-  /// The thread identifier of the notification.
+  /// An identifier for the notification, used to replace or group
+  /// notifications (Android only).
+  final String? tag;
+
+  /// The thread identifier the notification belongs to (iOS only).
   final String? threadIdentifier;
 
-  /// The attachments included in the notification.
-  final List<MessageNotificationAttachment>? attachments;
+  /// Variable string values to be used in place of the format specifiers in
+  /// [titleLocKey] to localize the title text to the user's current
+  /// localization.
+  final List<String>? titleLocArgs;
+
+  /// The key to the title string in the app's string resources to use to
+  /// localize the title text to the user's current localization.
+  final String? titleLocKey;
 
   const MessageNotification({
     required this.title,
     required this.body,
     required this.trigger,
     this.action,
-    this.badge,
-    this.categoryIdentifier,
-    this.launchImageName,
+    this.attachments,
+    this.bodyLocArgs,
+    this.bodyLocKey,
+    this.category,
+    this.contentAvailable,
+    this.group,
+    this.icon,
+    this.notificationCount,
     this.notificationTimestamp,
     this.sound,
     this.subtitle,
+    this.tag,
     this.threadIdentifier,
-    this.attachments,
+    this.titleLocArgs,
+    this.titleLocKey,
   });
 
   @override
@@ -85,14 +122,21 @@ class MessageNotification implements Event {
       'body': body,
       'trigger': trigger,
       'action': action,
-      'badge': badge,
-      'categoryIdentifier': categoryIdentifier,
-      'launchImageName': launchImageName,
+      'attachments': attachments?.map((a) => a.toMap()).toList(),
+      'bodyLocArgs': bodyLocArgs,
+      'bodyLocKey': bodyLocKey,
+      'category': category,
+      'contentAvailable': contentAvailable,
+      'group': group,
+      'icon': icon,
+      'notificationCount': notificationCount,
       'notificationTimestamp': notificationTimestamp,
       'sound': sound,
       'subtitle': subtitle,
+      'tag': tag,
       'threadIdentifier': threadIdentifier,
-      'attachments': attachments?.map((a) => a.toMap()).toList(),
+      'titleLocArgs': titleLocArgs,
+      'titleLocKey': titleLocKey,
     };
     data.removeWhere((key, value) => value == null);
     return data;

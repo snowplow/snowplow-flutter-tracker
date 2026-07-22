@@ -27,14 +27,21 @@ struct MessageNotificationReader: Decodable {
     let body: String
     let trigger: String
     let action: String?
-    let badge: Int?
-    let categoryIdentifier: String?
-    let launchImageName: String?
+    let attachments: [MessageNotificationAttachmentReader]?
+    let bodyLocArgs: [String]?
+    let bodyLocKey: String?
+    let category: String?
+    let contentAvailable: Bool?
+    let group: String?
+    let icon: String?
+    let notificationCount: Int?
     let notificationTimestamp: String?
     let sound: String?
     let subtitle: String?
+    let tag: String?
     let threadIdentifier: String?
-    let attachments: [MessageNotificationAttachmentReader]?
+    let titleLocArgs: [String]?
+    let titleLocKey: String?
 
     private func toTrigger() -> MessageNotificationTrigger {
         switch trigger {
@@ -50,17 +57,22 @@ struct MessageNotificationReader: Decodable {
 extension MessageNotificationReader {
     func toMessageNotification() -> MessageNotification {
         let event = MessageNotification(title: title, body: body, trigger: toTrigger())
-        if let a = self.action { event.action(a) }
-        if let b = self.badge { event.badge(b) }
-        if let ci = self.categoryIdentifier { event.categoryIdentifier(ci) }
-        if let li = self.launchImageName { event.launchImageName(li) }
-        if let nt = self.notificationTimestamp { event.notificationTimestamp(nt) }
-        if let s = self.sound { event.sound(s) }
-        if let st = self.subtitle { event.subtitle(st) }
-        if let ti = self.threadIdentifier { event.thread(ti) }
-        if let att = self.attachments {
-            event.attachments(att.map { $0.toAttachment() })
-        }
+        event.action = action
+        event.attachments = attachments?.map { $0.toAttachment() }
+        event.bodyLocArgs = bodyLocArgs
+        event.bodyLocKey = bodyLocKey
+        event.category = category
+        event.contentAvailable = contentAvailable
+        event.group = group
+        event.icon = icon
+        event.notificationCount = notificationCount
+        event.notificationTimestamp = notificationTimestamp
+        event.sound = sound
+        event.subtitle = subtitle
+        event.tag = tag
+        event.threadIdentifier = threadIdentifier
+        event.titleLocArgs = titleLocArgs
+        event.titleLocKey = titleLocKey
         return event
     }
 }

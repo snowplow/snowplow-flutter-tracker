@@ -33,26 +33,40 @@ class MessageNotificationReaderTests: XCTestCase {
             "body": "Body",
             "trigger": "calendar",
             "action": "Open",
-            "badge": 3,
-            "categoryIdentifier": "cat1",
-            "launchImageName": "launch",
+            "bodyLocArgs": ["bodyArg"],
+            "bodyLocKey": "bodyKey",
+            "category": "cat1",
+            "contentAvailable": true,
+            "group": "group1",
+            "icon": "icon1",
+            "notificationCount": 5,
             "notificationTimestamp": "2023-01-01T00:00:00Z",
             "sound": "default",
             "subtitle": "Subtitle",
-            "threadIdentifier": "thread1"
+            "tag": "tag1",
+            "threadIdentifier": "thread1",
+            "titleLocArgs": ["titleArg"],
+            "titleLocKey": "titleKey"
         }
         """
         let data = json.data(using: .utf8)!
         let reader = try JSONDecoder().decode(MessageNotificationReader.self, from: data)
 
         XCTAssertEqual(reader.action, "Open")
-        XCTAssertEqual(reader.badge, 3)
-        XCTAssertEqual(reader.categoryIdentifier, "cat1")
-        XCTAssertEqual(reader.launchImageName, "launch")
+        XCTAssertEqual(reader.bodyLocArgs, ["bodyArg"])
+        XCTAssertEqual(reader.bodyLocKey, "bodyKey")
+        XCTAssertEqual(reader.category, "cat1")
+        XCTAssertEqual(reader.contentAvailable, true)
+        XCTAssertEqual(reader.group, "group1")
+        XCTAssertEqual(reader.icon, "icon1")
+        XCTAssertEqual(reader.notificationCount, 5)
         XCTAssertEqual(reader.notificationTimestamp, "2023-01-01T00:00:00Z")
         XCTAssertEqual(reader.sound, "default")
         XCTAssertEqual(reader.subtitle, "Subtitle")
+        XCTAssertEqual(reader.tag, "tag1")
         XCTAssertEqual(reader.threadIdentifier, "thread1")
+        XCTAssertEqual(reader.titleLocArgs, ["titleArg"])
+        XCTAssertEqual(reader.titleLocKey, "titleKey")
     }
 
     func testReaderNullsAbsentOptionalFields() throws {
@@ -63,14 +77,21 @@ class MessageNotificationReaderTests: XCTestCase {
         let reader = try JSONDecoder().decode(MessageNotificationReader.self, from: data)
 
         XCTAssertNil(reader.action)
-        XCTAssertNil(reader.badge)
-        XCTAssertNil(reader.categoryIdentifier)
-        XCTAssertNil(reader.launchImageName)
+        XCTAssertNil(reader.attachments)
+        XCTAssertNil(reader.bodyLocArgs)
+        XCTAssertNil(reader.bodyLocKey)
+        XCTAssertNil(reader.category)
+        XCTAssertNil(reader.contentAvailable)
+        XCTAssertNil(reader.group)
+        XCTAssertNil(reader.icon)
+        XCTAssertNil(reader.notificationCount)
         XCTAssertNil(reader.notificationTimestamp)
         XCTAssertNil(reader.sound)
         XCTAssertNil(reader.subtitle)
+        XCTAssertNil(reader.tag)
         XCTAssertNil(reader.threadIdentifier)
-        XCTAssertNil(reader.attachments)
+        XCTAssertNil(reader.titleLocArgs)
+        XCTAssertNil(reader.titleLocKey)
     }
 
     func testToMessageNotificationProducesEvent() throws {
@@ -91,9 +112,7 @@ class MessageNotificationReaderTests: XCTestCase {
             "body": "Body",
             "trigger": "timeInterval",
             "action": "Open",
-            "badge": 2,
-            "categoryIdentifier": "cat1",
-            "launchImageName": "launch",
+            "category": "cat1",
             "notificationTimestamp": "2023-01-01T00:00:00Z",
             "sound": "default",
             "subtitle": "Subtitle",

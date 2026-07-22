@@ -36,24 +36,38 @@ class MessageNotificationReaderTest {
             "body" to "Body",
             "trigger" to "calendar",
             "action" to "Open",
-            "badge" to 3,
-            "categoryIdentifier" to "cat1",
-            "launchImageName" to "launch",
+            "bodyLocArgs" to listOf("bodyArg"),
+            "bodyLocKey" to "bodyKey",
+            "category" to "cat1",
+            "contentAvailable" to true,
+            "group" to "group1",
+            "icon" to "icon1",
+            "notificationCount" to 5,
             "notificationTimestamp" to "2023-01-01T00:00:00Z",
             "sound" to "default",
             "subtitle" to "Subtitle",
-            "threadIdentifier" to "thread1"
+            "tag" to "tag1",
+            "threadIdentifier" to "thread1",
+            "titleLocArgs" to listOf("titleArg"),
+            "titleLocKey" to "titleKey"
         )
         val reader = MessageNotificationReader(map)
 
         assertEquals("Open", reader.action)
-        assertEquals(3, reader.badge)
-        assertEquals("cat1", reader.categoryIdentifier)
-        assertEquals("launch", reader.launchImageName)
+        assertEquals(listOf("bodyArg"), reader.bodyLocArgs)
+        assertEquals("bodyKey", reader.bodyLocKey)
+        assertEquals("cat1", reader.category)
+        assertEquals(true, reader.contentAvailable)
+        assertEquals("group1", reader.group)
+        assertEquals("icon1", reader.icon)
+        assertEquals(5, reader.notificationCount)
         assertEquals("2023-01-01T00:00:00Z", reader.notificationTimestamp)
         assertEquals("default", reader.sound)
         assertEquals("Subtitle", reader.subtitle)
+        assertEquals("tag1", reader.tag)
         assertEquals("thread1", reader.threadIdentifier)
+        assertEquals(listOf("titleArg"), reader.titleLocArgs)
+        assertEquals("titleKey", reader.titleLocKey)
     }
 
     @Test
@@ -66,13 +80,20 @@ class MessageNotificationReaderTest {
         val reader = MessageNotificationReader(map)
 
         assertNull(reader.action)
-        assertNull(reader.badge)
-        assertNull(reader.categoryIdentifier)
-        assertNull(reader.launchImageName)
+        assertNull(reader.bodyLocArgs)
+        assertNull(reader.bodyLocKey)
+        assertNull(reader.category)
+        assertNull(reader.contentAvailable)
+        assertNull(reader.group)
+        assertNull(reader.icon)
+        assertNull(reader.notificationCount)
         assertNull(reader.notificationTimestamp)
         assertNull(reader.sound)
         assertNull(reader.subtitle)
+        assertNull(reader.tag)
         assertNull(reader.threadIdentifier)
+        assertNull(reader.titleLocArgs)
+        assertNull(reader.titleLocKey)
     }
 
     @Test
@@ -100,9 +121,8 @@ class MessageNotificationReaderTest {
             "body" to "Body",
             "trigger" to "timeInterval",
             "action" to "Open",
-            "badge" to 2,
-            "categoryIdentifier" to "cat1",
-            "launchImageName" to "launch",
+            "category" to "cat1",
+            "notificationCount" to 2,
             "notificationTimestamp" to "2023-01-01T00:00:00Z",
             "sound" to "default",
             "subtitle" to "Subtitle",

@@ -36,14 +36,21 @@ void main() {
     final map = event.toMap();
 
     expect(map.containsKey('action'), isFalse);
-    expect(map.containsKey('badge'), isFalse);
-    expect(map.containsKey('categoryIdentifier'), isFalse);
-    expect(map.containsKey('launchImageName'), isFalse);
+    expect(map.containsKey('attachments'), isFalse);
+    expect(map.containsKey('bodyLocArgs'), isFalse);
+    expect(map.containsKey('bodyLocKey'), isFalse);
+    expect(map.containsKey('category'), isFalse);
+    expect(map.containsKey('contentAvailable'), isFalse);
+    expect(map.containsKey('group'), isFalse);
+    expect(map.containsKey('icon'), isFalse);
+    expect(map.containsKey('notificationCount'), isFalse);
     expect(map.containsKey('notificationTimestamp'), isFalse);
     expect(map.containsKey('sound'), isFalse);
     expect(map.containsKey('subtitle'), isFalse);
+    expect(map.containsKey('tag'), isFalse);
     expect(map.containsKey('threadIdentifier'), isFalse);
-    expect(map.containsKey('attachments'), isFalse);
+    expect(map.containsKey('titleLocArgs'), isFalse);
+    expect(map.containsKey('titleLocKey'), isFalse);
   });
 
   test('MessageNotification toMap includes all optional fields when set', () {
@@ -57,14 +64,21 @@ void main() {
       body: 'Body',
       trigger: 'calendar',
       action: 'Open',
-      badge: 3,
-      categoryIdentifier: 'cat1',
-      launchImageName: 'launch',
+      attachments: [attachment],
+      bodyLocArgs: ['bodyArg'],
+      bodyLocKey: 'bodyKey',
+      category: 'cat1',
+      contentAvailable: true,
+      group: 'group1',
+      icon: 'icon1',
+      notificationCount: 5,
       notificationTimestamp: '2023-01-01T00:00:00Z',
       sound: 'default',
       subtitle: 'Subtitle',
+      tag: 'tag1',
       threadIdentifier: 'thread1',
-      attachments: [attachment],
+      titleLocArgs: ['titleArg'],
+      titleLocKey: 'titleKey',
     );
     final map = event.toMap();
 
@@ -72,13 +86,20 @@ void main() {
     expect(map['body'], equals('Body'));
     expect(map['trigger'], equals('calendar'));
     expect(map['action'], equals('Open'));
-    expect(map['badge'], equals(3));
-    expect(map['categoryIdentifier'], equals('cat1'));
-    expect(map['launchImageName'], equals('launch'));
+    expect(map['bodyLocArgs'], equals(['bodyArg']));
+    expect(map['bodyLocKey'], equals('bodyKey'));
+    expect(map['category'], equals('cat1'));
+    expect(map['contentAvailable'], equals(true));
+    expect(map['group'], equals('group1'));
+    expect(map['icon'], equals('icon1'));
+    expect(map['notificationCount'], equals(5));
     expect(map['notificationTimestamp'], equals('2023-01-01T00:00:00Z'));
     expect(map['sound'], equals('default'));
     expect(map['subtitle'], equals('Subtitle'));
+    expect(map['tag'], equals('tag1'));
     expect(map['threadIdentifier'], equals('thread1'));
+    expect(map['titleLocArgs'], equals(['titleArg']));
+    expect(map['titleLocKey'], equals('titleKey'));
 
     final attachments = map['attachments'] as List;
     expect(attachments.length, equals(1));

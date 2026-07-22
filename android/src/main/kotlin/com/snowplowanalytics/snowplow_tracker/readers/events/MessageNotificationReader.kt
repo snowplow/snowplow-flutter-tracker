@@ -22,13 +22,22 @@ class MessageNotificationReader(val values: Map<String, Any>) {
     val body: String by values
     private val trigger: String by values
     val action: String? by valuesDefault
-    val badge: Int? by lazy { (values["badge"] as? Number)?.toInt() }
-    val categoryIdentifier: String? by valuesDefault
-    val launchImageName: String? by valuesDefault
+    @Suppress("UNCHECKED_CAST")
+    val bodyLocArgs: List<String>? by lazy { values["bodyLocArgs"] as? List<String> }
+    val bodyLocKey: String? by valuesDefault
+    val category: String? by valuesDefault
+    val contentAvailable: Boolean? by valuesDefault
+    val group: String? by valuesDefault
+    val icon: String? by valuesDefault
+    val notificationCount: Int? by lazy { (values["notificationCount"] as? Number)?.toInt() }
     val notificationTimestamp: String? by valuesDefault
     val sound: String? by valuesDefault
     val subtitle: String? by valuesDefault
+    val tag: String? by valuesDefault
     val threadIdentifier: String? by valuesDefault
+    @Suppress("UNCHECKED_CAST")
+    val titleLocArgs: List<String>? by lazy { values["titleLocArgs"] as? List<String> }
+    val titleLocKey: String? by valuesDefault
     private val attachmentsRaw: List<Map<String, Any>>? by valuesDefault
     private val processedAttachments: List<MessageNotificationAttachment>? by lazy {
         attachmentsRaw?.map { map ->
@@ -53,14 +62,21 @@ class MessageNotificationReader(val values: Map<String, Any>) {
     fun toMessageNotification(): MessageNotification {
         val event = MessageNotification(title, body, toTrigger())
         action?.let { event.action(it) }
-        badge?.let { event.badge(it) }
-        categoryIdentifier?.let { event.categoryIdentifier(it) }
-        launchImageName?.let { event.launchImageName(it) }
+        processedAttachments?.let { event.attachments(it) }
+        bodyLocArgs?.let { event.bodyLocArgs(it) }
+        bodyLocKey?.let { event.bodyLocKey(it) }
+        category?.let { event.category(it) }
+        contentAvailable?.let { event.contentAvailable(it) }
+        group?.let { event.group(it) }
+        icon?.let { event.icon(it) }
+        notificationCount?.let { event.notificationCount(it) }
         notificationTimestamp?.let { event.notificationTimestamp(it) }
         sound?.let { event.sound(it) }
         subtitle?.let { event.subtitle(it) }
-        threadIdentifier?.let { event.thread(it) }
-        processedAttachments?.let { event.attachments(it) }
+        tag?.let { event.tag(it) }
+        threadIdentifier?.let { event.threadIdentifier(it) }
+        titleLocArgs?.let { event.titleLocArgs(it) }
+        titleLocKey?.let { event.titleLocKey(it) }
         return event
     }
 }
