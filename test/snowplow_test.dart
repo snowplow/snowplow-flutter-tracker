@@ -480,4 +480,105 @@ void main() {
         isMethodCall('setServerAnonymisation',
             arguments: {'tracker': 'tns1', 'serverAnonymisation': false}));
   });
+
+  test('tracks deep link received event', () async {
+    Event event = const DeepLinkReceived(url: 'https://example.com');
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('trackDeepLinkReceived', arguments: {
+          'tracker': 'tns1',
+          'eventData': {'url': 'https://example.com'}
+        }));
+  });
+
+  test('tracks deep link received event with referrer', () async {
+    Event event = const DeepLinkReceived(
+      url: 'https://example.com',
+      referrer: 'https://referrer.com',
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('trackDeepLinkReceived', arguments: {
+          'tracker': 'tns1',
+          'eventData': {
+            'url': 'https://example.com',
+            'referrer': 'https://referrer.com',
+          }
+        }));
+  });
+
+  test('tracks message notification event', () async {
+    Event event = const MessageNotification(
+      title: 'title1',
+      body: 'body1',
+      trigger: MessageNotificationTrigger.push,
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('trackMessageNotification', arguments: {
+          'tracker': 'tns1',
+          'eventData': {
+            'title': 'title1',
+            'body': 'body1',
+            'trigger': 'push',
+          }
+        }));
+  });
+
+  test('tracks message notification with timeInterval trigger', () async {
+    Event event = const MessageNotification(
+      title: 't',
+      body: 'b',
+      trigger: MessageNotificationTrigger.timeInterval,
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(methodCall?.arguments['eventData']['trigger'], equals('timeInterval'));
+  });
+
+  test('tracks message notification drops null optional fields', () async {
+    Event event = const MessageNotification(
+      title: 'title1',
+      body: 'body1',
+      trigger: MessageNotificationTrigger.other,
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall?.arguments['eventData'].containsKey('action'), isFalse);
+    expect(
+        methodCall?.arguments['eventData'].containsKey('sound'), isFalse);
+  });
+
+  test('tracks message notification with attachments', () async {
+    Event event = const MessageNotification(
+      title: 'title1',
+      body: 'body1',
+      trigger: MessageNotificationTrigger.push,
+      attachments: [
+        MessageNotificationAttachment(
+          identifier: 'id1',
+          type: 'image/png',
+          url: 'https://example.com/image.png',
+        ),
+      ],
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall?.arguments['eventData']['attachments'],
+        equals([
+          {
+            'identifier': 'id1',
+            'type': 'image/png',
+            'url': 'https://example.com/image.png',
+          }
+        ]));
+  });
 }

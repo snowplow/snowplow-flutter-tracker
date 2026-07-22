@@ -25,6 +25,10 @@ export 'configurations/platform_context_properties.dart';
 export 'configurations/media_tracking_configuration.dart';
 
 export 'events/event.dart';
+export 'events/deep_link_received.dart';
+export 'events/message_notification.dart';
+export 'events/message_notification_attachment.dart';
+export 'events/message_notification_trigger.dart';
 export 'events/consent_granted.dart';
 export 'events/consent_withdrawn.dart';
 export 'events/screen_view.dart';
