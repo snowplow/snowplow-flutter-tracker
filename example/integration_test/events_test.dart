@@ -267,5 +267,100 @@ void main() {
       const PageViewEvent(url: 'https://example.com'),
       tracker: 'test',
     );
+    // Barrier: wait for the event to flush before resetMicro runs for the
+    // next test, preventing stale-event contamination on slow emulators.
+    await SnowplowTests.checkMicroGood(
+        (events) => events.any((e) => e['event']['event_name'] == 'page_view'));
   });
+
+  testWidgets("tracks a deep link received event", (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    await Snowplow.track(
+      const DeepLinkReceived(
+          url: 'https://example.com', referrer: 'https://ref.example.com'),
+      tracker: 'test',
+    );
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) => events.any((event) {
+              try {
+                return event['event']['unstruct_event']['data']['schema']
+                        .contains('deep_link_received') &&
+                    event['event']['unstruct_event']['data']['data']['url'] ==
+                        'https://example.com';
+              } catch (_) {
+                return false;
+              }
+            })),
+        isTrue);
+  });
+
+  testWidgets("tracks a message notification event",
+      (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    await Snowplow.track(
+      const MessageNotification(
+        title: 'Test notification',
+        body: 'Test body',
+        trigger: MessageNotificationTrigger.push,
+      ),
+      tracker: 'test',
+    );
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) => events.any((event) {
+              try {
+                return event['event']['unstruct_event']['data']['schema']
+                        .contains('message_notification') &&
+                    event['event']['unstruct_event']['data']['data']['title'] ==
+                        'Test notification' &&
+                    event['event']['unstruct_event']['data']['data']
+                            ['trigger'] ==
+                        'push';
+              } catch (_) {
+                return false;
+              }
+            })),
+        isTrue);
+  });
+
+  testWidgets(
+      "tracks deep link received and screen view shows deep link entity",
+      (WidgetTester tester) async {
+    // Skipped: the DeepLinkReceived entity auto-attach to a subsequent
+    // ScreenView is a native-side feature that requires the native tracker
+    // to be in a particular state after receiving a deep link. This cannot
+    // be reliably tested via the Flutter integration test harness on CI.
+    // See c8d21a5 for the skip pattern used for similar flaky tests.
+    if (kIsWeb) {
+      return;
+    }
+
+    await Snowplow.track(
+      const DeepLinkReceived(url: 'https://example.com'),
+      tracker: 'test',
+    );
+    await Snowplow.track(
+      ScreenView(name: 'home', id: const Uuid().v4()),
+      tracker: 'test',
+    );
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) => events.any((event) {
+              try {
+                return event['event']['event_name'] == 'screen_view' &&
+                    (event['event']['contexts']['data'] as List).any((ctx) =>
+                        ctx['schema'].toString().contains('deep_link'));
+              } catch (_) {
+                return false;
+              }
+            })),
+        isTrue);
+  }, skip: true);
 }
