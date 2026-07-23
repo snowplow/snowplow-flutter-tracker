@@ -1,4 +1,9 @@
 
+# 0.10.1
+
+* Update Android tracker dependency to 6.4.0
+* Update iOS tracker dependency to 6.2.5
+
 # 0.10.0
 * Add ability to toggle anonymous tracking at runtime via `setUserAnonymisation` and `setServerAnonymisation` (BCPF-2051)
 * Migrate web JS interop to `dart:js_interop` and `package:web`
