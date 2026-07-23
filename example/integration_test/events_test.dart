@@ -333,34 +333,43 @@ void main() {
   testWidgets(
       "tracks deep link received and screen view shows deep link entity",
       (WidgetTester tester) async {
-    // Skipped: the DeepLinkReceived entity auto-attach to a subsequent
-    // ScreenView is a native-side feature that requires the native tracker
-    // to be in a particular state after receiving a deep link. This cannot
-    // be reliably tested via the Flutter integration test harness on CI.
-    // See c8d21a5 for the skip pattern used for similar flaky tests.
     if (kIsWeb) {
       return;
     }
+
+    // The native trackers attach the deep_link entity to the first
+    // ScreenView tracked after a DeepLinkReceived event. Use a unique
+    // screen name so the assertion targets this test's own ScreenView and
+    // is not satisfied by a stale screen_view left in Micro by an earlier
+    // test on slow emulators.
+    const screenName = 'deep-link-screen';
 
     await Snowplow.track(
       const DeepLinkReceived(url: 'https://example.com'),
       tracker: 'test',
     );
     await Snowplow.track(
-      ScreenView(name: 'home', id: const Uuid().v4()),
+      ScreenView(name: screenName, id: const Uuid().v4()),
       tracker: 'test',
     );
 
     expect(
         await SnowplowTests.checkMicroGood((events) => events.any((event) {
               try {
-                return event['event']['event_name'] == 'screen_view' &&
-                    (event['event']['contexts']['data'] as List).any((ctx) =>
-                        ctx['schema'].toString().contains('deep_link'));
+                if (event['event']['event_name'] != 'screen_view') {
+                  return false;
+                }
+                final contexts = event['event']['contexts']['data'] as List;
+                final isThisScreenView = contexts.any((ctx) =>
+                    ctx['schema'].toString().contains('mobile/screen/') &&
+                    ctx['data']['name'] == screenName);
+                final hasDeepLinkEntity = contexts.any((ctx) =>
+                    ctx['schema'].toString().contains('mobile/deep_link/'));
+                return isThisScreenView && hasDeepLinkEntity;
               } catch (_) {
                 return false;
               }
             })),
         isTrue);
-  }, skip: true);
+  });
 }
