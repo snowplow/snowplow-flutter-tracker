@@ -94,6 +94,16 @@ class SnowplowTrackerController {
         trackEvent(event, eventMessage: eventMessage, arguments: arguments)
     }
 
+    static func trackDeepLinkReceived(_ message: TrackDeepLinkReceivedMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toDeepLinkReceived()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
+    static func trackMessageNotification(_ message: TrackMessageNotificationMessageReader, eventMessage: EventMessageReader, arguments: [String: Any]) {
+        let event = message.toMessageNotification()
+        trackEvent(event, eventMessage: eventMessage, arguments: arguments)
+    }
+
     static func sessionUserId(_ message: GetParameterMessageReader) -> String? {
         return Snowplow.tracker(namespace: message.tracker)?.session?.userId
     }

@@ -480,4 +480,102 @@ void main() {
         isMethodCall('setServerAnonymisation',
             arguments: {'tracker': 'tns1', 'serverAnonymisation': false}));
   });
+
+  test('tracks deep link received event', () async {
+    const event = DeepLinkReceived(url: 'https://example.com');
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('trackDeepLinkReceived', arguments: {
+          'tracker': 'tns1',
+          'eventData': {'url': 'https://example.com'}
+        }));
+  });
+
+  test('tracks deep link received event with referrer', () async {
+    const event = DeepLinkReceived(
+        url: 'https://example.com', referrer: 'https://ref.example.com');
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('trackDeepLinkReceived', arguments: {
+          'tracker': 'tns1',
+          'eventData': {
+            'url': 'https://example.com',
+            'referrer': 'https://ref.example.com'
+          }
+        }));
+  });
+
+  test('tracks message notification event', () async {
+    const event = MessageNotification(
+      title: 'Test title',
+      body: 'Test body',
+      trigger: MessageNotificationTrigger.push,
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    expect(
+        methodCall,
+        isMethodCall('trackMessageNotification', arguments: {
+          'tracker': 'tns1',
+          'eventData': {
+            'title': 'Test title',
+            'body': 'Test body',
+            'trigger': 'push',
+          }
+        }));
+  });
+
+  test('message notification trigger serializes timeInterval correctly',
+      () async {
+    const event = MessageNotification(
+      title: 't',
+      body: 'b',
+      trigger: MessageNotificationTrigger.timeInterval,
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    final eventData =
+        methodCall!.arguments['eventData'] as Map<Object?, Object?>;
+    expect(eventData['trigger'], 'timeInterval');
+  });
+
+  test('message notification attachment serializes correctly', () async {
+    const event = MessageNotification(
+      title: 't',
+      body: 'b',
+      trigger: MessageNotificationTrigger.push,
+      attachments: [
+        MessageNotificationAttachment(
+            identifier: 'id1',
+            type: 'image/png',
+            url: 'https://img.example.com')
+      ],
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    final eventData =
+        methodCall!.arguments['eventData'] as Map<Object?, Object?>;
+    final attachments = eventData['attachments'] as List<Object?>;
+    expect(attachments.length, 1);
+    expect((attachments[0] as Map<Object?, Object?>)['identifier'], 'id1');
+  });
+
+  test('message notification removes null optional fields', () async {
+    const event = MessageNotification(
+      title: 't',
+      body: 'b',
+      trigger: MessageNotificationTrigger.other,
+    );
+    await Snowplow.track(event, tracker: 'tns1');
+
+    final eventData =
+        methodCall!.arguments['eventData'] as Map<Object?, Object?>;
+    expect(eventData.containsKey('action'), isFalse);
+    expect(eventData.containsKey('sound'), isFalse);
+    expect(eventData.containsKey('attachments'), isFalse);
+  });
 }
