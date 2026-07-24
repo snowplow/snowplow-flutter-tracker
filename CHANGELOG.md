@@ -1,6 +1,7 @@
 
 # 0.11.0
 
+* Add deep link and push notification event tracking
 * Modernise the Android plugin and example app builds: migrate to the Kotlin Gradle DSL and align the toolchain with the native tracker (Android Gradle Plugin 8.13, Kotlin 2.2, Gradle 8.13, `compileSdk` 35, Java/Kotlin JVM target 17)
 * Add Swift Package Manager support for the iOS plugin while keeping CocoaPods compatibility
 * Switch the iOS example app from CocoaPods to Swift Package Manager
