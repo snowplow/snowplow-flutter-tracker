@@ -1,9 +1,10 @@
 
 # 0.11.0
 
-* Migrate Android plugin and example app builds to Gradle 9 / Java 17
-* Add Swift Package Manager support for the iOS plugin
+* Modernise the Android plugin and example app builds: migrate to the Kotlin Gradle DSL and align the toolchain with the native tracker (Android Gradle Plugin 8.13, Kotlin 2.2, Gradle 8.13, `compileSdk` 35, Java/Kotlin JVM target 17)
+* Add Swift Package Manager support for the iOS plugin while keeping CocoaPods compatibility
 * Switch the iOS example app from CocoaPods to Swift Package Manager
+* **Breaking:** raise the minimum iOS deployment target to 13.0 (was 11.0)
 
 # 0.10.0
 
