@@ -10,7 +10,14 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import Foundation
+import SnowplowTracker
 
-class TrackerVersion {
-    static let TRACKER_VERSION = "flutter-0.10.0"
+struct TrackMessageNotificationMessageReader: Decodable {
+    let eventData: MessageNotificationReader
+}
+
+extension TrackMessageNotificationMessageReader {
+    func toMessageNotification() -> MessageNotification {
+        return eventData.toMessageNotification()
+    }
 }

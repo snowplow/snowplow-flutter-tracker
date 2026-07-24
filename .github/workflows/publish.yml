@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        flutter: ['3.32.0']
+        flutter: ['3.44.4']
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -38,7 +38,7 @@ jobs:
     - name: Get tag and tracker versions
       id: version
       env:
-        IOS_VER_FILEPATH: 'ios/Classes/TrackerVersion.swift'
+        IOS_VER_FILEPATH: 'ios/snowplow_tracker/Sources/snowplow_tracker/TrackerVersion.swift'
         ANDR_VER_FILEPATH: 'android/src/main/kotlin/com/snowplowanalytics/snowplow_tracker/TrackerVersion.kt'
       run: |
         echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/*/}

@@ -9,8 +9,22 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-package com.snowplowanalytics.snowplow_tracker
+/// Trigger type for a [MessageNotification] event.
+///
+/// Not supported on Web.
+enum MessageNotificationTrigger {
+  /// Push notification trigger.
+  push,
 
-object TrackerVersion {
-    val TRACKER_VERSION = "flutter-0.11.0"
+  /// Location-based trigger.
+  location,
+
+  /// Calendar trigger.
+  calendar,
+
+  /// Time interval trigger.
+  timeInterval,
+
+  /// Other trigger type.
+  other,
 }

@@ -9,8 +9,17 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-package com.snowplowanalytics.snowplow_tracker
+import Foundation
+import SnowplowTracker
 
-object TrackerVersion {
-    val TRACKER_VERSION = "flutter-0.11.0"
+struct MessageNotificationAttachmentReader: Decodable {
+    let identifier: String
+    let type: String
+    let url: String
+}
+
+extension MessageNotificationAttachmentReader {
+    func toAttachment() -> MessageNotificationAttachment {
+        return MessageNotificationAttachment(identifier: identifier, type: type, url: url)
+    }
 }

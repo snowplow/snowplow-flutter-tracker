@@ -9,8 +9,31 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-package com.snowplowanalytics.snowplow_tracker
+import 'package:flutter/foundation.dart';
 
-object TrackerVersion {
-    val TRACKER_VERSION = "flutter-0.11.0"
+/// An attachment to a [MessageNotification] event.
+@immutable
+class MessageNotificationAttachment {
+  /// A unique identifier for the attachment.
+  final String identifier;
+
+  /// The content type of the attachment.
+  final String type;
+
+  /// The URL of the attachment content.
+  final String url;
+
+  const MessageNotificationAttachment({
+    required this.identifier,
+    required this.type,
+    required this.url,
+  });
+
+  Map<String, Object?> toMap() {
+    return {
+      'identifier': identifier,
+      'type': type,
+      'url': url,
+    };
+  }
 }

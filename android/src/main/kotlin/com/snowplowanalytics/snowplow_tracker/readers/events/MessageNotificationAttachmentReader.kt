@@ -9,8 +9,16 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-package com.snowplowanalytics.snowplow_tracker
+package com.snowplowanalytics.snowplow_tracker.readers.events
 
-object TrackerVersion {
-    val TRACKER_VERSION = "flutter-0.11.0"
+import com.snowplowanalytics.snowplow.event.MessageNotificationAttachment
+
+class MessageNotificationAttachmentReader(val values: Map<String, Any>) {
+    val identifier: String by values
+    val type: String by values
+    val url: String by values
+
+    fun toAttachment(): MessageNotificationAttachment {
+        return MessageNotificationAttachment(identifier, type, url)
+    }
 }

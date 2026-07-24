@@ -9,8 +9,19 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-package com.snowplowanalytics.snowplow_tracker
+package com.snowplowanalytics.snowplow_tracker.readers.events
 
-object TrackerVersion {
-    val TRACKER_VERSION = "flutter-0.11.0"
+import com.snowplowanalytics.snowplow.event.DeepLinkReceived
+
+class DeepLinkReceivedReader(val values: Map<String, Any>) {
+    private val valuesDefault = values.withDefault { null }
+
+    val url: String by values
+    val referrer: String? by valuesDefault
+
+    fun toDeepLinkReceived(): DeepLinkReceived {
+        val event = DeepLinkReceived(url)
+        referrer?.let { event.referrer(it) }
+        return event
+    }
 }

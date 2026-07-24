@@ -267,5 +267,109 @@ void main() {
       const PageViewEvent(url: 'https://example.com'),
       tracker: 'test',
     );
+    // Barrier: wait for the event to flush before resetMicro runs for the
+    // next test, preventing stale-event contamination on slow emulators.
+    await SnowplowTests.checkMicroGood(
+        (events) => events.any((e) => e['event']['event_name'] == 'page_view'));
+  });
+
+  testWidgets("tracks a deep link received event", (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    await Snowplow.track(
+      const DeepLinkReceived(
+          url: 'https://example.com', referrer: 'https://ref.example.com'),
+      tracker: 'test',
+    );
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) => events.any((event) {
+              try {
+                return event['event']['unstruct_event']['data']['schema']
+                        .contains('deep_link_received') &&
+                    event['event']['unstruct_event']['data']['data']['url'] ==
+                        'https://example.com';
+              } catch (_) {
+                return false;
+              }
+            })),
+        isTrue);
+  });
+
+  testWidgets("tracks a message notification event",
+      (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    await Snowplow.track(
+      const MessageNotification(
+        title: 'Test notification',
+        body: 'Test body',
+        trigger: MessageNotificationTrigger.push,
+      ),
+      tracker: 'test',
+    );
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) => events.any((event) {
+              try {
+                return event['event']['unstruct_event']['data']['schema']
+                        .contains('message_notification') &&
+                    event['event']['unstruct_event']['data']['data']['title'] ==
+                        'Test notification' &&
+                    event['event']['unstruct_event']['data']['data']
+                            ['trigger'] ==
+                        'push';
+              } catch (_) {
+                return false;
+              }
+            })),
+        isTrue);
+  });
+
+  testWidgets(
+      "tracks deep link received and screen view shows deep link entity",
+      (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    // The native trackers attach the deep_link entity to the first
+    // ScreenView tracked after a DeepLinkReceived event. Use a unique
+    // screen name so the assertion targets this test's own ScreenView and
+    // is not satisfied by a stale screen_view left in Micro by an earlier
+    // test on slow emulators.
+    const screenName = 'deep-link-screen';
+
+    await Snowplow.track(
+      const DeepLinkReceived(url: 'https://example.com'),
+      tracker: 'test',
+    );
+    await Snowplow.track(
+      ScreenView(name: screenName, id: const Uuid().v4()),
+      tracker: 'test',
+    );
+
+    expect(
+        await SnowplowTests.checkMicroGood((events) => events.any((event) {
+              try {
+                if (event['event']['event_name'] != 'screen_view') {
+                  return false;
+                }
+                final contexts = event['event']['contexts']['data'] as List;
+                final isThisScreenView = contexts.any((ctx) =>
+                    ctx['schema'].toString().contains('mobile/screen/') &&
+                    ctx['data']['name'] == screenName);
+                final hasDeepLinkEntity = contexts.any((ctx) =>
+                    ctx['schema'].toString().contains('mobile/deep_link/'));
+                return isThisScreenView && hasDeepLinkEntity;
+              } catch (_) {
+                return false;
+              }
+            })),
+        isTrue);
   });
 }

@@ -21,13 +21,12 @@ maintainers used to write by hand.
    used to touch:
    - `pubspec.yaml`
    - `ios/snowplow_tracker.podspec`
-   - `ios/Classes/TrackerVersion.swift` (`TRACKER_VERSION = "flutter-X.Y.Z"`)
+   - `ios/snowplow_tracker/Sources/snowplow_tracker/TrackerVersion.swift` (`TRACKER_VERSION = "flutter-X.Y.Z"`)
    - `android/src/main/kotlin/com/snowplowanalytics/snowplow_tracker/TrackerVersion.kt` (same string)
    - `example/lib/overview.dart` (`snowplow_tracker: ^X.Y.Z` line)
    - `README.md` (the `snowplow_tracker: ^X.Y.Z` install snippet)
-   - `example/pubspec.lock` and `example/ios/Podfile.lock` (snowplow_tracker
-     entries only; the script sed-bumps these directly so the workflow
-     doesn't need a Flutter or CocoaPods install)
+   - `example/pubspec.lock` (snowplow_tracker entry only; the script
+     sed-bumps this directly so the workflow doesn't need a Flutter install)
 4. Then it asks Claude to draft the new `CHANGELOG.md` entry from the
    commits on the branch (using the previous entry as a style example) and
    prepends it.
@@ -40,7 +39,7 @@ maintainers used to write by hand.
 
 Review the PR, edit the CHANGELOG entry or PR body in place if needed, then
 merge. Pushing the `X.Y.Z` tag triggers `publish.yml`, which cross-validates
-the version in pubspec.yaml, `ios/Classes/TrackerVersion.swift`, and
+the version in pubspec.yaml, `ios/snowplow_tracker/Sources/snowplow_tracker/TrackerVersion.swift`, and
 `android/.../TrackerVersion.kt` against the tag before publishing to pub.dev
 and creating the GitHub release.
 

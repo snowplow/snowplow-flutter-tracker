@@ -12,10 +12,10 @@
 import Flutter
 import UIKit
 
-public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
+public class SnowplowTrackerPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "snowplow_tracker", binaryMessenger: registrar.messenger())
-        let instance = SwiftSnowplowTrackerPlugin()
+        let instance = SnowplowTrackerPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     
@@ -115,6 +115,10 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
             onTrackWebViewReader(call, result: result)
         case "trackPageView":
             onTrackPageView(call, result: result)
+        case "trackDeepLinkReceived":
+            onTrackDeepLinkReceived(call, result: result)
+        case "trackMessageNotification":
+            onTrackMessageNotification(call, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -468,6 +472,22 @@ public class SwiftSnowplowTrackerPlugin: NSObject, FlutterPlugin {
         if let (message, arguments): (TrackPageViewMessageReader, [String: Any]) = decodeCall(call),
             let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
             SnowplowTrackerController.trackPageView(message, eventMessage: eventMessage, arguments: arguments)
+        }
+        result(nil)
+    }
+
+    private func onTrackDeepLinkReceived(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, arguments): (TrackDeepLinkReceivedMessageReader, [String: Any]) = decodeCall(call),
+           let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.trackDeepLinkReceived(message, eventMessage: eventMessage, arguments: arguments)
+        }
+        result(nil)
+    }
+
+    private func onTrackMessageNotification(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, arguments): (TrackMessageNotificationMessageReader, [String: Any]) = decodeCall(call),
+           let (eventMessage, _): (EventMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.trackMessageNotification(message, eventMessage: eventMessage, arguments: arguments)
         }
         result(nil)
     }

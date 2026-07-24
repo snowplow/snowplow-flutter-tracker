@@ -14,6 +14,8 @@ package com.snowplowanalytics.snowplow_tracker.readers.messages
 import com.snowplowanalytics.core.event.WebViewReader
 import com.snowplowanalytics.snowplow.event.*
 import com.snowplowanalytics.snowplow.media.event.*
+import com.snowplowanalytics.snowplow_tracker.readers.events.DeepLinkReceivedReader
+import com.snowplowanalytics.snowplow_tracker.readers.events.MessageNotificationReader
 import com.snowplowanalytics.snowplow.payload.SelfDescribingJson
 import com.snowplowanalytics.snowplow_tracker.readers.entities.MediaAdBreakEntityReader
 import com.snowplowanalytics.snowplow_tracker.readers.entities.MediaAdEntityReader
@@ -254,6 +256,18 @@ class EventMessageReader(val values: Map<String, Any>) {
         val pageView = PageViewReader(eventData).toPageView()
         addContext(pageView)
         return pageView
+    }
+
+    fun toDeepLinkReceivedWithContexts(): DeepLinkReceived {
+        val event = DeepLinkReceivedReader(eventData).toDeepLinkReceived()
+        addContext(event)
+        return event
+    }
+
+    fun toMessageNotificationWithContexts(): MessageNotification {
+        val event = MessageNotificationReader(eventData).toMessageNotification()
+        addContext(event)
+        return event
     }
 
     private fun addContext(event: Event) {
