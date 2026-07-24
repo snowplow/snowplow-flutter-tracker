@@ -72,7 +72,7 @@ kotlin {
 }
 
 dependencies {
-    implementation("com.snowplowanalytics:snowplow-android-tracker:6.2.+")
+    implementation("com.snowplowanalytics:snowplow-android-tracker:6.4.+")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.mockito:mockito-core:5.0.0")
