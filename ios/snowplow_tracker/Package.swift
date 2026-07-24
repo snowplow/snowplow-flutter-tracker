@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "snowplow-tracker", targets: ["snowplow_tracker"])
     ],
     dependencies: [
-        .package(url: "https://github.com/snowplow/snowplow-ios-tracker.git", from: "6.2.2")
+        .package(url: "https://github.com/snowplow/snowplow-ios-tracker.git", from: "6.2.5")
     ],
     targets: [
         .target(
