@@ -167,12 +167,11 @@ jobs:
           git add \
             pubspec.yaml \
             ios/snowplow_tracker.podspec \
-            ios/Classes/TrackerVersion.swift \
+            ios/snowplow_tracker/Sources/snowplow_tracker/TrackerVersion.swift \
             android/src/main/kotlin/com/snowplowanalytics/snowplow_tracker/TrackerVersion.kt \
             example/lib/overview.dart \
             README.md \
             example/pubspec.lock \
-            example/ios/Podfile.lock \
             CHANGELOG.md
           git commit -m 'Prepare for ${{ steps.validate.outputs.version }} release'
           git push origin '${{ inputs.release_branch }}'

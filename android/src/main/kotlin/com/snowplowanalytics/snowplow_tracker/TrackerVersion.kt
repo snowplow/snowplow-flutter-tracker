@@ -12,5 +12,5 @@
 package com.snowplowanalytics.snowplow_tracker
 
 object TrackerVersion {
-    val TRACKER_VERSION = "flutter-0.10.0"
+    val TRACKER_VERSION = "flutter-0.11.0"
 }

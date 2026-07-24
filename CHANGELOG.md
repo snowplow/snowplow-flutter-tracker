@@ -1,5 +1,13 @@
 
+# 0.11.0
+
+* Modernise the Android plugin and example app builds: migrate to the Kotlin Gradle DSL and align the toolchain with the native tracker (Android Gradle Plugin 8.13, Kotlin 2.2, Gradle 8.13, `compileSdk` 35, Java/Kotlin JVM target 17)
+* Add Swift Package Manager support for the iOS plugin while keeping CocoaPods compatibility
+* Switch the iOS example app from CocoaPods to Swift Package Manager
+* **Breaking:** raise the minimum iOS deployment target to 13.0 (was 11.0)
+
 # 0.10.0
+
 * Add ability to toggle anonymous tracking at runtime via `setUserAnonymisation` and `setServerAnonymisation` (BCPF-2051)
 * Migrate web JS interop to `dart:js_interop` and `package:web`
 * Raise the minimum Flutter version to 3.19.0 (Dart 3.3.0)
