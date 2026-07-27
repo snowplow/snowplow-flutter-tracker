@@ -513,14 +513,11 @@ void main() {
       return;
     }
 
-    const schema =
-        'iglu:com.snowplowanalytics.mobile/screen/jsonschema/1-0-0';
-    const entity = SelfDescribing(
-        schema: schema,
-        data: {
-          'name': 'runtime-context',
-          'id': '00000000-0000-0000-0000-000000000002',
-        });
+    const schema = 'iglu:com.snowplowanalytics.mobile/screen/jsonschema/1-0-0';
+    const entity = SelfDescribing(schema: schema, data: {
+      'name': 'runtime-context',
+      'id': '00000000-0000-0000-0000-000000000002',
+    });
 
     SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'global-contexts-runtime-test',
