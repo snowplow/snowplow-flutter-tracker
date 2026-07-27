@@ -506,4 +506,68 @@ void main() {
         }),
         isTrue);
   });
+
+  testWidgets("adds and removes global contexts at runtime",
+      (WidgetTester tester) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    const schema = 'iglu:com.snowplowanalytics.mobile/screen/jsonschema/1-0-0';
+    const entity = SelfDescribing(schema: schema, data: {
+      'name': 'runtime-context',
+      'id': '00000000-0000-0000-0000-000000000002',
+    });
+
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'global-contexts-runtime-test',
+        endpoint: SnowplowTests.microEndpoint);
+
+    // Add global context and verify it is attached to events
+    await tracker.addGlobalContexts('runtime-tag', entity);
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+
+          final contextsData = events[0]['event']['contexts']['data'];
+          dynamic context = contextsData.firstWhere(
+              (x) => x['schema']
+                  .toString()
+                  .contains('com.snowplowanalytics.mobile/screen'),
+              orElse: () => null);
+
+          return (context != null) &&
+              (context['data']['name'] == 'runtime-context');
+        }),
+        isTrue);
+
+    // Reset Micro, remove global context, verify it is no longer attached
+    await SnowplowTests.resetMicro();
+
+    await tracker.removeGlobalContexts('runtime-tag');
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+
+          final contextsData = events[0]['event']['contexts']['data'];
+          dynamic context = contextsData.firstWhere(
+              (x) => x['schema']
+                  .toString()
+                  .contains('com.snowplowanalytics.mobile/screen'),
+              orElse: () => null);
+
+          return context == null;
+        }),
+        isTrue);
+  });
 }
