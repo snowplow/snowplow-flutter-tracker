@@ -570,4 +570,76 @@ void main() {
         }),
         isTrue);
   });
+
+  testWidgets("excludes negative storage values from platform context",
+      (WidgetTester tester) async {
+    // Platform context not available on Web
+    if (kIsWeb) {
+      return;
+    }
+
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'negative-storage',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            platformContextProperties: PlatformContextProperties(
+          availableStorage: -1,
+          totalStorage: -1,
+        )));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          dynamic context = events[0]['event']['contexts']['data'].firstWhere(
+              (x) => x['schema'].toString().contains('mobile_context'),
+              orElse: () => null);
+          if (context == null) {
+            return false;
+          }
+          return !(context['data'] as Map).containsKey('availableStorage') &&
+              !(context['data'] as Map).containsKey('totalStorage');
+        }),
+        isTrue);
+  });
+
+  testWidgets("includes zero storage values in platform context",
+      (WidgetTester tester) async {
+    // Platform context not available on Web; zero = disk-full, must be present
+    if (kIsWeb) {
+      return;
+    }
+
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'zero-storage',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            platformContextProperties: PlatformContextProperties(
+          availableStorage: 0,
+          totalStorage: 0,
+        )));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 1) {
+            return false;
+          }
+          dynamic context = events[0]['event']['contexts']['data'].firstWhere(
+              (x) => x['schema'].toString().contains('mobile_context'),
+              orElse: () => null);
+          if (context == null) {
+            return false;
+          }
+          return context['data']['availableStorage'] == 0 &&
+              context['data']['totalStorage'] == 0;
+        }),
+        isTrue);
+  });
 }

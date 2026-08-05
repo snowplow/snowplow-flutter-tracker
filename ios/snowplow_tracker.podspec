@@ -15,7 +15,7 @@ A package for tracking Snowplow events in Flutter apps.
   s.source           = { :path => '.' }
   s.source_files = 'snowplow_tracker/Sources/snowplow_tracker/**/*'
   s.dependency 'Flutter'
-  s.dependency 'SnowplowTracker', '~> 6.2.5'
+  s.dependency 'SnowplowTracker', '~> 6.2.6'
   s.platform = :ios, '13.0'
 
   # Flutter.framework does not contain a i386 slice.
