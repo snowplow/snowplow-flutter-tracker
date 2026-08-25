@@ -35,6 +35,9 @@ class SnowplowTrackerController {
             let gcArgs = arguments["globalContextsConfig"] as? [String: Any] ?? [:]
             controllers.append(globalContextsConfig.toConfiguration(arguments: gcArgs))
         }
+        if let sessionConfig = message.sessionConfig {
+            controllers.append(sessionConfig.toConfiguration())
+        }
 
         _ = Snowplow.createTracker(
             namespace: message.namespace,

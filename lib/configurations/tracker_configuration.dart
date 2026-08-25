@@ -95,6 +95,31 @@ class TrackerConfiguration {
   /// `https://cdn.jsdelivr.net/npm/@snowplow/browser-plugin-media@latest/dist/index.umd.min.js`
   final String? jsMediaPluginURL;
 
+  /// Indicates whether screen views should be tracked automatically on iOS and Android
+  /// (based on native view controller / activity lifecycle).
+  /// Defaults to false on iOS/Android (Flutter renders into a single native view, so
+  /// track screen views explicitly instead). Not available on Web.
+  final bool? screenViewAutotracking;
+
+  /// Indicates whether an application install event should be tracked automatically
+  /// on the first launch on iOS and Android.
+  /// Defaults to false. Not available on Web.
+  final bool? installAutotracking;
+
+  /// Indicates whether uncaught native exceptions should be tracked automatically
+  /// on iOS and Android. Note that this covers native exceptions only, not Dart errors.
+  /// Defaults to false. Not available on Web.
+  final bool? exceptionAutotracking;
+
+  /// Indicates whether diagnostic events about tracker errors should be tracked
+  /// automatically on iOS and Android.
+  /// Defaults to false. Not available on Web.
+  final bool? diagnosticAutotracking;
+
+  /// Log level of the native tracker's internal logger on iOS and Android.
+  /// Defaults to [LogLevel.off]. Not available on Web.
+  final LogLevel? logLevel;
+
   const TrackerConfiguration(
       {this.appId,
       this.devicePlatform,
@@ -110,7 +135,12 @@ class TrackerConfiguration {
       this.lifecycleAutotracking,
       this.screenEngagementAutotracking,
       this.platformContextProperties,
-      this.jsMediaPluginURL});
+      this.jsMediaPluginURL,
+      this.screenViewAutotracking,
+      this.installAutotracking,
+      this.exceptionAutotracking,
+      this.diagnosticAutotracking,
+      this.logLevel});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -128,7 +158,12 @@ class TrackerConfiguration {
       'lifecycleAutotracking': lifecycleAutotracking,
       'screenEngagementAutotracking': screenEngagementAutotracking,
       'platformContextProperties': platformContextProperties?.toMap(),
-      'jsMediaPluginURL': jsMediaPluginURL
+      'jsMediaPluginURL': jsMediaPluginURL,
+      'screenViewAutotracking': screenViewAutotracking,
+      'installAutotracking': installAutotracking,
+      'exceptionAutotracking': exceptionAutotracking,
+      'diagnosticAutotracking': diagnosticAutotracking,
+      'logLevel': logLevel?.name
     };
     conf.removeWhere((key, value) => value == null);
     return conf;
@@ -160,4 +195,19 @@ enum DevicePlatform {
 
   /// Internet of things
   iot
+}
+
+/// Log level of the native tracker's internal logger.
+enum LogLevel {
+  /// No logging.
+  off,
+
+  /// Errors only.
+  error,
+
+  /// Errors and debug information.
+  debug,
+
+  /// Everything.
+  verbose
 }

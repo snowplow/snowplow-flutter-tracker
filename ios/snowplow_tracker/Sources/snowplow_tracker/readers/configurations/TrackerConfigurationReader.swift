@@ -25,6 +25,21 @@ struct TrackerConfigurationReader: Decodable {
     let lifecycleAutotracking: Bool?
     let screenEngagementAutotracking: Bool?
     let platformContextProperties: PlatformContextPropertiesReader?
+    let screenViewAutotracking: Bool?
+    let installAutotracking: Bool?
+    let exceptionAutotracking: Bool?
+    let diagnosticAutotracking: Bool?
+    let logLevel: String?
+
+    var logLevelType: LogLevel? {
+        switch logLevel {
+        case "off": return LogLevel.off
+        case "error": return LogLevel.error
+        case "debug": return LogLevel.debug
+        case "verbose": return LogLevel.verbose
+        default: return nil
+        }
+    }
     
     var devicePlatformType: DevicePlatform? {
         if let devicePlatform = self.devicePlatform {
@@ -85,6 +100,11 @@ extension TrackerConfigurationReader {
             let retriever = pcp.toPlatformContextRetriever()
             trackerConfig.platformContextRetriever(retriever)
         }
+        if let sva = self.screenViewAutotracking { trackerConfig.screenViewAutotracking(sva) }
+        if let ia = self.installAutotracking { trackerConfig.installAutotracking(ia) }
+        if let ea = self.exceptionAutotracking { trackerConfig.exceptionAutotracking(ea) }
+        if let da = self.diagnosticAutotracking { trackerConfig.diagnosticAutotracking(da) }
+        if let ll = self.logLevelType { trackerConfig.logLevel(ll) }
 
         return trackerConfig
     }

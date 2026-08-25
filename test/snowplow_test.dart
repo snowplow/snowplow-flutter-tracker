@@ -145,6 +145,56 @@ void main() {
         }));
   });
 
+  test('createsTrackerWithAutotrackingAndLogLevel', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        trackerConfig: const TrackerConfiguration(
+            screenViewAutotracking: false,
+            installAutotracking: true,
+            exceptionAutotracking: true,
+            diagnosticAutotracking: false,
+            logLevel: LogLevel.verbose));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {
+            'endpoint': 'https://snowplowanalytics.com',
+          },
+          'trackerConfig': {
+            'screenViewAutotracking': false,
+            'installAutotracking': true,
+            'exceptionAutotracking': true,
+            'diagnosticAutotracking': false,
+            'logLevel': 'verbose'
+          },
+        }));
+  });
+
+  test('createsTrackerWithSessionConfig', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        sessionConfig: const SessionConfiguration(
+            foregroundTimeout: Duration(minutes: 30),
+            backgroundTimeout: Duration(minutes: 15)));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {
+            'endpoint': 'https://snowplowanalytics.com',
+          },
+          'sessionConfig': {
+            'foregroundTimeoutSeconds': 1800,
+            'backgroundTimeoutSeconds': 900
+          },
+        }));
+  });
+
   test('tracks structured event', () async {
     Event event = const Structured(category: 'c1', action: 'a1');
     await Snowplow.track(event, tracker: 'tns3');

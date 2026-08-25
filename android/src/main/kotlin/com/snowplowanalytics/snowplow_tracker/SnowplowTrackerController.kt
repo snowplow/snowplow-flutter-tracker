@@ -49,6 +49,9 @@ object SnowplowTrackerController {
         val globalContextsConfigReader = messageReader.globalContextsConfig
         globalContextsConfigReader?.let { controllers.add(it.toConfiguration()) }
 
+        val sessionConfigReader = messageReader.sessionConfig
+        sessionConfigReader?.let { controllers.add(it.toConfiguration()) }
+
         Snowplow.createTracker(
                 context,
                 messageReader.namespace,

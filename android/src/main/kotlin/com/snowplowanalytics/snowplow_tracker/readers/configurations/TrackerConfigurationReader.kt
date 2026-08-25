@@ -14,6 +14,7 @@ package com.snowplowanalytics.snowplow_tracker.readers.configurations
 import android.content.Context
 import com.snowplowanalytics.snowplow.configuration.TrackerConfiguration
 import com.snowplowanalytics.snowplow.tracker.DevicePlatform
+import com.snowplowanalytics.snowplow.tracker.LogLevel
 import com.snowplowanalytics.snowplow.tracker.PlatformContextRetriever
 import com.snowplowanalytics.snowplow_tracker.TrackerVersion
 
@@ -32,6 +33,11 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
     val lifecycleAutotracking: Boolean? by valuesDefault
     val screenEngagementAutotracking: Boolean? by valuesDefault
     val platformContextProperties: Map<String, Any>? by valuesDefault
+    val screenViewAutotracking: Boolean? by valuesDefault
+    val installAutotracking: Boolean? by valuesDefault
+    val exceptionAutotracking: Boolean? by valuesDefault
+    val diagnosticAutotracking: Boolean? by valuesDefault
+    val logLevel: String? by valuesDefault
     private val platformContextRetriever: PlatformContextRetriever? by lazy {
         platformContextProperties?.let { PlatformContextPropertiesReader(it).toPlatformContextRetriever() }
     }
@@ -61,6 +67,18 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
         lifecycleAutotracking?.let { trackerConfig.lifecycleAutotracking(it) }
         screenEngagementAutotracking?.let { trackerConfig.screenEngagementAutotracking(it) }
         platformContextRetriever?.let { trackerConfig.platformContextRetriever(it) }
+        screenViewAutotracking?.let { trackerConfig.screenViewAutotracking(it) }
+        installAutotracking?.let { trackerConfig.installAutotracking(it) }
+        exceptionAutotracking?.let { trackerConfig.exceptionAutotracking(it) }
+        diagnosticAutotracking?.let { trackerConfig.diagnosticAutotracking(it) }
+        logLevel?.let {
+            when (it) {
+                "off" -> trackerConfig.logLevel(LogLevel.OFF)
+                "error" -> trackerConfig.logLevel(LogLevel.ERROR)
+                "debug" -> trackerConfig.logLevel(LogLevel.DEBUG)
+                "verbose" -> trackerConfig.logLevel(LogLevel.VERBOSE)
+            }
+        }
 
         return trackerConfig
     }
