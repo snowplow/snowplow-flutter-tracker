@@ -1,4 +1,9 @@
 
+# Unreleased
+
+* Expose `screenViewAutotracking`, `installAutotracking`, `exceptionAutotracking`, `diagnosticAutotracking` and `logLevel` in `TrackerConfiguration` (iOS/Android) (#67)
+* Add `SessionConfiguration` with foreground/background timeouts to `createTracker` (iOS/Android)
+
 # 0.11.0
 
 * Add deep link and push notification event tracking

@@ -16,6 +16,7 @@ import 'package:snowplow_tracker/configurations/network_configuration.dart';
 import 'package:snowplow_tracker/configurations/subject_configuration.dart';
 import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
 import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
+import 'package:snowplow_tracker/configurations/session_configuration.dart';
 
 /// Wraps configuration used to initialize a tracker.
 ///
@@ -43,6 +44,9 @@ class Configuration {
   /// Configuration of global contexts attached to all events.
   final GlobalContextsConfiguration? globalContextsConfig;
 
+  /// Configuration of the session context (iOS and Android only).
+  final SessionConfiguration? sessionConfig;
+
   const Configuration(
       {required this.namespace,
       required this.networkConfig,
@@ -50,7 +54,8 @@ class Configuration {
       this.subjectConfig,
       this.gdprConfig,
       this.emitterConfig,
-      this.globalContextsConfig});
+      this.globalContextsConfig,
+      this.sessionConfig});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -60,7 +65,8 @@ class Configuration {
       'subjectConfig': subjectConfig?.toMap(),
       'gdprConfig': gdprConfig?.toMap(),
       'emitterConfig': emitterConfig?.toMap(),
-      'globalContextsConfig': globalContextsConfig?.toMap()
+      'globalContextsConfig': globalContextsConfig?.toMap(),
+      'sessionConfig': sessionConfig?.toMap()
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

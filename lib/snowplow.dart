@@ -14,6 +14,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:snowplow_tracker/configurations/configuration.dart';
 import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
+import 'package:snowplow_tracker/configurations/session_configuration.dart';
 import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
 import 'package:snowplow_tracker/configurations/global_contexts_configuration.dart';
 import 'package:snowplow_tracker/configurations/media_tracking_configuration.dart';
@@ -51,7 +52,8 @@ class Snowplow {
       SubjectConfiguration? subjectConfig,
       GdprConfiguration? gdprConfig,
       EmitterConfiguration? emitterConfig,
-      GlobalContextsConfiguration? globalContextsConfig}) async {
+      GlobalContextsConfiguration? globalContextsConfig,
+      SessionConfiguration? sessionConfig}) async {
     final configuration = Configuration(
         namespace: namespace,
         networkConfig: NetworkConfiguration(
@@ -63,7 +65,8 @@ class Snowplow {
         subjectConfig: subjectConfig,
         gdprConfig: gdprConfig,
         emitterConfig: emitterConfig,
-        globalContextsConfig: globalContextsConfig);
+        globalContextsConfig: globalContextsConfig,
+        sessionConfig: sessionConfig);
     await _channel.invokeMethod('createTracker', configuration.toMap());
     return SnowplowTracker(configuration: configuration);
   }
