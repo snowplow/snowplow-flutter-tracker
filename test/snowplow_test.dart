@@ -166,6 +166,23 @@ void main() {
         }));
   });
 
+  test('rejectsEventStoreLimitsThatWouldDropAllEvents', () {
+    expect(() => const EmitterConfiguration(maxEventStoreSize: 0).toMap(),
+        throwsArgumentError);
+    expect(() => const EmitterConfiguration(maxEventStoreSize: -1).toMap(),
+        throwsArgumentError);
+    expect(
+        () => const EmitterConfiguration(
+                maxEventStoreAge: Duration(milliseconds: 500))
+            .toMap(),
+        throwsArgumentError);
+    expect(
+        () =>
+            const EmitterConfiguration(maxEventStoreAge: Duration(seconds: -5))
+                .toMap(),
+        throwsArgumentError);
+  });
+
   test('serializesMaxEventStoreAgeInWholeSeconds', () {
     const config = EmitterConfiguration(
         maxEventStoreAge: Duration(seconds: 90, milliseconds: 999));

@@ -190,10 +190,10 @@ void main() {
         isTrue);
   });
 
-  testWidgets("sends events with event store limits configured",
+  testWidgets("accepts event store limits and still sends events",
       (WidgetTester tester) async {
-    // The limits only prune unsent events, so this checks that the native
-    // readers accept the values and events are still sent.
+    // Smoke test: the limits only prune unsent events, so this only checks
+    // that the native readers accept the values without breaking sending.
     SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'event-store-limits',
         endpoint: SnowplowTests.microEndpoint,

@@ -14,7 +14,7 @@ package com.snowplowanalytics.snowplow_tracker.readers.configurations
 import com.snowplowanalytics.snowplow.configuration.EmitterConfiguration
 import kotlin.time.Duration.Companion.seconds
 
-class EmitterConfigurationReader(val values: Map<String, Any>) {
+class EmitterConfigurationReader(values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
 
     val serverAnonymisation: Boolean? by valuesDefault
