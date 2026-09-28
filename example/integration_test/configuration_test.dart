@@ -190,6 +190,23 @@ void main() {
         isTrue);
   });
 
+  testWidgets("sends events with event store limits configured",
+      (WidgetTester tester) async {
+    // The limits only prune unsent events, so this checks that the native
+    // readers accept the values and events are still sent.
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'event-store-limits',
+        endpoint: SnowplowTests.microEndpoint,
+        emitterConfig: const EmitterConfiguration(
+            maxEventStoreSize: 50, maxEventStoreAge: Duration(hours: 1)));
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'action'));
+
+    expect(await SnowplowTests.checkMicroGood((events) => events.length == 1),
+        isTrue);
+  });
+
   testWidgets("toggles userAnonymisation at runtime without recreating tracker",
       (WidgetTester tester) async {
     // setUserAnonymisation is not supported on Web (throws Unimplemented).

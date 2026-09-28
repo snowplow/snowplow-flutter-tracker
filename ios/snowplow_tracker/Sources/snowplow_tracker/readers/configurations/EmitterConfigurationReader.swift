@@ -14,6 +14,8 @@ import SnowplowTracker
 
 struct EmitterConfigurationReader: Decodable {
     let serverAnonymisation: Bool?
+    let maxEventStoreSize: Int64?
+    let maxEventStoreAge: Int?
 }
 
 extension EmitterConfigurationReader {
@@ -22,6 +24,12 @@ extension EmitterConfigurationReader {
 
         if let s = serverAnonymisation {
             emitterConfig.serverAnonymisation(s)
+        }
+        if let size = maxEventStoreSize {
+            emitterConfig.maxEventStoreSize(size)
+        }
+        if let age = maxEventStoreAge {
+            emitterConfig.maxEventStoreAge(TimeInterval(age))
         }
         
         return emitterConfig

@@ -21,10 +21,29 @@ class EmitterConfiguration {
   /// Setting serverAnonymisation also enables (and overrides) TrackerConfiguration.userAnonymisation.
   final bool? serverAnonymisation;
 
-  const EmitterConfiguration({this.serverAnonymisation});
+  /// Limit for the maximum number of unsent events to keep in the event store.
+  ///
+  /// When the limit is reached, the oldest events are removed before sending.
+  /// Defaults to 1000. Not available on Web.
+  final int? maxEventStoreSize;
+
+  /// Limit for how long unsent events are kept in the event store.
+  ///
+  /// Events older than this are removed before sending. Only whole seconds are
+  /// used. Defaults to 30 days. Not available on Web.
+  final Duration? maxEventStoreAge;
+
+  const EmitterConfiguration(
+      {this.serverAnonymisation,
+      this.maxEventStoreSize,
+      this.maxEventStoreAge});
 
   Map<String, Object?> toMap() {
-    final conf = <String, Object?>{'serverAnonymisation': serverAnonymisation};
+    final conf = <String, Object?>{
+      'serverAnonymisation': serverAnonymisation,
+      'maxEventStoreSize': maxEventStoreSize,
+      'maxEventStoreAge': maxEventStoreAge?.inSeconds
+    };
     conf.removeWhere((key, value) => value == null);
     return conf;
   }
