@@ -152,9 +152,13 @@ class Snowplow {
 
   /// Ends the current session and starts a new one for the [tracker] namespace.
   ///
-  /// The new session begins with the next tracked event. Use it, for example,
-  /// when the user logs out, together with `setUserId(null)` to also clear the
-  /// business user ID.
+  /// On iOS and Android, the new session begins with the next tracked event,
+  /// so the session getters return the old values until then. On Web, the
+  /// session changes immediately, and for all trackers, as they share the
+  /// same session. Has no effect when the session context is disabled.
+  ///
+  /// Use it, for example, when the user logs out, together with
+  /// `setUserId(null)` to also clear the business user ID.
   static Future<void> startNewSession({required String tracker}) async {
     await _channel.invokeMethod('startNewSession', {'tracker': tracker});
   }
