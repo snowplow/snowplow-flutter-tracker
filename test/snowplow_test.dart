@@ -239,6 +239,19 @@ void main() {
     expect(config.toMap(), {'foregroundTimeout': 1});
   });
 
+  test('rejectsSessionTimeoutsShorterThanOneSecond', () {
+    expect(
+        () => const SessionConfiguration(
+                foregroundTimeout: Duration(milliseconds: 500))
+            .toMap(),
+        throwsArgumentError);
+    expect(
+        () =>
+            const SessionConfiguration(backgroundTimeout: Duration(seconds: -1))
+                .toMap(),
+        throwsArgumentError);
+  });
+
   test('tracks structured event', () async {
     Event event = const Structured(category: 'c1', action: 'a1');
     await Snowplow.track(event, tracker: 'tns3');

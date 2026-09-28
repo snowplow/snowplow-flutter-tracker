@@ -20,14 +20,19 @@ class SessionConfiguration {
   /// The amount of time that can elapse before the session expires while the
   /// app is in the foreground.
   ///
-  /// Only whole seconds are used. Defaults to 30 minutes.
-  /// On Web, it sets the session cookie timeout.
+  /// Only whole seconds are used, and it must be at least 1 second.
+  /// Defaults to 30 minutes.
+  ///
+  /// On Web, it sets the session cookie timeout, which counts down regardless
+  /// of whether the page is visible. Trackers on the same page share the
+  /// session cookie, so they should use the same value.
   final Duration? foregroundTimeout;
 
   /// The amount of time that can elapse before the session expires while the
   /// app is in the background.
   ///
-  /// Only whole seconds are used. Defaults to 30 minutes. Not available on Web.
+  /// Only whole seconds are used, and it must be at least 1 second.
+  /// Defaults to 30 minutes. Not available on Web.
   final Duration? backgroundTimeout;
 
   /// Whether to resume the session persisted from a previous run of the app
@@ -42,7 +47,11 @@ class SessionConfiguration {
       this.backgroundTimeout,
       this.continueSessionOnRestart});
 
+  /// Throws an [ArgumentError] if a timeout is shorter than 1 second, which
+  /// would otherwise start a new session with every event.
   Map<String, Object?> toMap() {
+    _checkTimeout(foregroundTimeout, 'foregroundTimeout');
+    _checkTimeout(backgroundTimeout, 'backgroundTimeout');
     final conf = <String, Object?>{
       'foregroundTimeout': foregroundTimeout?.inSeconds,
       'backgroundTimeout': backgroundTimeout?.inSeconds,
@@ -50,5 +59,11 @@ class SessionConfiguration {
     };
     conf.removeWhere((key, value) => value == null);
     return conf;
+  }
+
+  static void _checkTimeout(Duration? timeout, String name) {
+    if (timeout != null && timeout.inSeconds < 1) {
+      throw ArgumentError.value(timeout, name, 'must be at least 1 second');
+    }
   }
 }
