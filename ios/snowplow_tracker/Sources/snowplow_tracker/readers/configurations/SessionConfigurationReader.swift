@@ -12,13 +12,26 @@
 import Foundation
 import SnowplowTracker
 
-struct CreateTrackerMessageReader: Decodable {
-    let namespace: String
-    let networkConfig: NetworkConfigurationReader
-    let trackerConfig: TrackerConfigurationReader?
-    let subjectConfig: SubjectConfigurationReader?
-    let gdprConfig: GdprConfigurationReader?
-    let emitterConfig: EmitterConfigurationReader?
-    let globalContextsConfig: GlobalContextsConfigurationReader?
-    let sessionConfig: SessionConfigurationReader?
+struct SessionConfigurationReader: Decodable {
+    let foregroundTimeout: Int?
+    let backgroundTimeout: Int?
+    let continueSessionOnRestart: Bool?
+}
+
+extension SessionConfigurationReader {
+    func toConfiguration() -> SessionConfiguration {
+        let sessionConfig = SessionConfiguration()
+
+        if let fg = foregroundTimeout {
+            sessionConfig.foregroundTimeoutInSeconds = fg
+        }
+        if let bg = backgroundTimeout {
+            sessionConfig.backgroundTimeoutInSeconds = bg
+        }
+        if let cs = continueSessionOnRestart {
+            sessionConfig.continueSessionOnRestart = cs
+        }
+
+        return sessionConfig
+    }
 }

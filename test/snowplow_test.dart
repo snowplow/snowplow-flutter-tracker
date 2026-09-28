@@ -209,6 +209,36 @@ void main() {
     expect(config.toMap(), {'maxEventStoreAge': 90});
   });
 
+  test('createsTrackerWithSessionConfig', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        sessionConfig: const SessionConfiguration(
+            foregroundTimeout: Duration(minutes: 10),
+            backgroundTimeout: Duration(seconds: 90),
+            continueSessionOnRestart: true));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {
+            'endpoint': 'https://snowplowanalytics.com',
+          },
+          'sessionConfig': {
+            'foregroundTimeout': 600,
+            'backgroundTimeout': 90,
+            'continueSessionOnRestart': true,
+          },
+        }));
+  });
+
+  test('omitsUnsetSessionConfigFields', () {
+    const config =
+        SessionConfiguration(foregroundTimeout: Duration(milliseconds: 1500));
+    expect(config.toMap(), {'foregroundTimeout': 1});
+  });
+
   test('tracks structured event', () async {
     Event event = const Structured(category: 'c1', action: 'a1');
     await Snowplow.track(event, tracker: 'tns3');
