@@ -31,6 +31,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
     val applicationContext: Boolean? by valuesDefault
     val lifecycleAutotracking: Boolean? by valuesDefault
     val screenEngagementAutotracking: Boolean? by valuesDefault
+    val installAutotracking: Boolean? by valuesDefault
     val platformContextProperties: Map<String, Any>? by valuesDefault
     private val platformContextRetriever: PlatformContextRetriever? by lazy {
         platformContextProperties?.let { PlatformContextPropertiesReader(it).toPlatformContextRetriever() }
@@ -60,6 +61,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
         applicationContext?.let { trackerConfig.applicationContext(it) }
         lifecycleAutotracking?.let { trackerConfig.lifecycleAutotracking(it) }
         screenEngagementAutotracking?.let { trackerConfig.screenEngagementAutotracking(it) }
+        installAutotracking?.let { trackerConfig.installAutotracking(it) }
         platformContextRetriever?.let { trackerConfig.platformContextRetriever(it) }
 
         return trackerConfig

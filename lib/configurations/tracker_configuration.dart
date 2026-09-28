@@ -85,6 +85,12 @@ class TrackerConfiguration {
   /// Defaults to true on iOS and Android. Not available on Web.
   final bool? screenEngagementAutotracking;
 
+  /// Whether to track an `application_install` event the first time the app
+  /// launches after being installed.
+  ///
+  /// Defaults to false. Not available on Web.
+  final bool? installAutotracking;
+
   /// Overrides for the values for properties of the platform context.
   /// Only available on mobile apps (Android and iOS), not on Web.
   final PlatformContextProperties? platformContextProperties;
@@ -109,6 +115,7 @@ class TrackerConfiguration {
       this.userAnonymisation,
       this.lifecycleAutotracking,
       this.screenEngagementAutotracking,
+      this.installAutotracking,
       this.platformContextProperties,
       this.jsMediaPluginURL});
 
@@ -127,6 +134,7 @@ class TrackerConfiguration {
       'userAnonymisation': userAnonymisation,
       'lifecycleAutotracking': lifecycleAutotracking,
       'screenEngagementAutotracking': screenEngagementAutotracking,
+      'installAutotracking': installAutotracking,
       'platformContextProperties': platformContextProperties?.toMap(),
       'jsMediaPluginURL': jsMediaPluginURL
     };
