@@ -118,6 +118,10 @@ class SnowplowTrackerController {
     static func sessionIndex(_ message: GetParameterMessageReader) -> Int? {
         return Snowplow.tracker(namespace: message.tracker)?.session?.sessionIndex
     }
+
+    static func startNewSession(_ message: GetParameterMessageReader) {
+        Snowplow.tracker(namespace: message.tracker)?.session?.startNewSession()
+    }
     
     static func setUserId(_ message: SetUserIdMessageReader) {
         let trackerController = Snowplow.tracker(namespace: message.tracker)

@@ -150,6 +150,15 @@ class Snowplow {
     return await _channel.invokeMethod('getSessionIndex', {'tracker': tracker});
   }
 
+  /// Ends the current session and starts a new one for the [tracker] namespace.
+  ///
+  /// The new session begins with the next tracked event. Use it, for example,
+  /// when the user logs out, together with `setUserId(null)` to also clear the
+  /// business user ID.
+  static Future<void> startNewSession({required String tracker}) async {
+    await _channel.invokeMethod('startNewSession', {'tracker': tracker});
+  }
+
   /// Starts media tracking with the given [configuration].
   static Future<MediaTracking> startMediaTracking(
       {required String tracker,

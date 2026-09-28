@@ -460,6 +460,13 @@ void main() {
     expect(sessionIndex, equals(10));
   });
 
+  test('starts new session', () async {
+    await Snowplow.startNewSession(tracker: 'tns1');
+
+    expect(methodCall,
+        isMethodCall('startNewSession', arguments: {'tracker': 'tns1'}));
+  });
+
   test('starts media tracking', () async {
     await Snowplow.startMediaTracking(
         tracker: 'tns1',

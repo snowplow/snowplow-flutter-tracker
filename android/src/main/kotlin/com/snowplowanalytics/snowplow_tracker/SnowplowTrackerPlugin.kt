@@ -55,6 +55,7 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "getSessionUserId" -> onGetSessionUserId(call, result)
             "getSessionId" -> onGetSessionId(call, result)
             "getSessionIndex" -> onGetSessionIndex(call, result)
+            "startNewSession" -> onStartNewSession(call, result)
             "startMediaTracking" -> onStartMediaTracking(call, result)
             "endMediaTracking" -> onEndMediaTracking(call, result)
             "updateMediaTracking" -> onUpdateMediaTracking(call, result)
@@ -218,6 +219,13 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             SnowplowTrackerController.getSessionIndex(GetParameterMessageReader(it))
         }
         result.success(sessionIndex)
+    }
+
+    private fun onStartNewSession(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.startNewSession(GetParameterMessageReader(it))
+        }
+        result.success(null)
     }
 
     private fun onStartMediaTracking(call: MethodCall, result: MethodChannel.Result) {
