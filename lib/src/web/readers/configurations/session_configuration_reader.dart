@@ -9,16 +9,18 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import Foundation
-import SnowplowTracker
+import 'package:snowplow_tracker/configurations/session_configuration.dart';
 
-struct CreateTrackerMessageReader: Decodable {
-    let namespace: String
-    let networkConfig: NetworkConfigurationReader
-    let trackerConfig: TrackerConfigurationReader?
-    let subjectConfig: SubjectConfigurationReader?
-    let gdprConfig: GdprConfigurationReader?
-    let emitterConfig: EmitterConfigurationReader?
-    let globalContextsConfig: GlobalContextsConfigurationReader?
-    let sessionConfig: SessionConfigurationReader?
+class SessionConfigurationReader extends SessionConfiguration {
+  SessionConfigurationReader(dynamic map)
+      : super(
+            foregroundTimeout: map['foregroundTimeout'] == null
+                ? null
+                : Duration(seconds: map['foregroundTimeout']));
+
+  void addTrackerOptions(dynamic options) {
+    if (foregroundTimeout != null) {
+      options['sessionCookieTimeout'] = foregroundTimeout?.inSeconds;
+    }
+  }
 }

@@ -43,4 +43,9 @@ class CreateTrackerMessageReader(val values: Map<String, Any>) {
             GlobalContextsConfigurationReader(it as Map<String, Any>)
         }
     }
+    val sessionConfig: SessionConfigurationReader? by lazy {
+        values.get("sessionConfig")?.let {
+            SessionConfigurationReader(it as Map<String, Any>)
+        }
+    }
 }
