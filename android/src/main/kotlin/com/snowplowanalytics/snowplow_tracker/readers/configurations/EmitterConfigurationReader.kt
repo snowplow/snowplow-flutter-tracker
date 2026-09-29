@@ -12,16 +12,25 @@
 package com.snowplowanalytics.snowplow_tracker.readers.configurations
 
 import com.snowplowanalytics.snowplow.configuration.EmitterConfiguration
+import kotlin.time.Duration.Companion.seconds
 
 class EmitterConfigurationReader(values: Map<String, Any>) {
     private val valuesDefault = values.withDefault { null }
 
     val serverAnonymisation: Boolean? by valuesDefault
+    val maxEventStoreSize: Long? by lazy {
+        (values["maxEventStoreSize"] as? Number)?.toLong()
+    }
+    val maxEventStoreAge: Long? by lazy {
+        (values["maxEventStoreAge"] as? Number)?.toLong()
+    }
 
     fun toConfiguration(): EmitterConfiguration {
         val emitterConfig = EmitterConfiguration()
 
         serverAnonymisation?.let { emitterConfig.serverAnonymisation(it) }
+        maxEventStoreSize?.let { emitterConfig.maxEventStoreSize(it) }
+        maxEventStoreAge?.let { emitterConfig.maxEventStoreAge(it.seconds) }
 
         return emitterConfig
     }

@@ -165,6 +165,50 @@ void main() {
         }));
   });
 
+  test('createsTrackerWithEventStoreLimits', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        emitterConfig: const EmitterConfiguration(
+            maxEventStoreSize: 500, maxEventStoreAge: Duration(days: 2)));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {
+            'endpoint': 'https://snowplowanalytics.com',
+          },
+          'emitterConfig': {
+            'maxEventStoreSize': 500,
+            'maxEventStoreAge': 172800,
+          },
+        }));
+  });
+
+  test('rejectsEventStoreLimitsThatWouldDropAllEvents', () {
+    expect(() => const EmitterConfiguration(maxEventStoreSize: 0).toMap(),
+        throwsArgumentError);
+    expect(() => const EmitterConfiguration(maxEventStoreSize: -1).toMap(),
+        throwsArgumentError);
+    expect(
+        () => const EmitterConfiguration(
+                maxEventStoreAge: Duration(milliseconds: 500))
+            .toMap(),
+        throwsArgumentError);
+    expect(
+        () =>
+            const EmitterConfiguration(maxEventStoreAge: Duration(seconds: -5))
+                .toMap(),
+        throwsArgumentError);
+  });
+
+  test('serializesMaxEventStoreAgeInWholeSeconds', () {
+    const config = EmitterConfiguration(
+        maxEventStoreAge: Duration(seconds: 90, milliseconds: 999));
+    expect(config.toMap(), {'maxEventStoreAge': 90});
+  });
+
   test('tracks structured event', () async {
     Event event = const Structured(category: 'c1', action: 'a1');
     await Snowplow.track(event, tracker: 'tns3');
