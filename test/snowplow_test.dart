@@ -128,6 +128,26 @@ void main() {
         }));
   });
 
+  test('createsTrackerWithInstallAutotracking', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        trackerConfig: const TrackerConfiguration(installAutotracking: true));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {'endpoint': 'https://snowplowanalytics.com'},
+          'trackerConfig': {'installAutotracking': true},
+        }));
+  });
+
+  test('omitsInstallAutotrackingWhenNotSet', () {
+    expect(const TrackerConfiguration().toMap(),
+        isNot(contains('installAutotracking')));
+  });
+
   test('createsTrackerWithEmitterConfig', () async {
     await Snowplow.createTracker(
         namespace: 'tns1',
@@ -143,6 +163,93 @@ void main() {
           },
           'emitterConfig': {'serverAnonymisation': true},
         }));
+  });
+
+  test('createsTrackerWithEventStoreLimits', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        emitterConfig: const EmitterConfiguration(
+            maxEventStoreSize: 500, maxEventStoreAge: Duration(days: 2)));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {
+            'endpoint': 'https://snowplowanalytics.com',
+          },
+          'emitterConfig': {
+            'maxEventStoreSize': 500,
+            'maxEventStoreAge': 172800,
+          },
+        }));
+  });
+
+  test('rejectsEventStoreLimitsThatWouldDropAllEvents', () {
+    expect(() => const EmitterConfiguration(maxEventStoreSize: 0).toMap(),
+        throwsArgumentError);
+    expect(() => const EmitterConfiguration(maxEventStoreSize: -1).toMap(),
+        throwsArgumentError);
+    expect(
+        () => const EmitterConfiguration(
+                maxEventStoreAge: Duration(milliseconds: 500))
+            .toMap(),
+        throwsArgumentError);
+    expect(
+        () =>
+            const EmitterConfiguration(maxEventStoreAge: Duration(seconds: -5))
+                .toMap(),
+        throwsArgumentError);
+  });
+
+  test('serializesMaxEventStoreAgeInWholeSeconds', () {
+    const config = EmitterConfiguration(
+        maxEventStoreAge: Duration(seconds: 90, milliseconds: 999));
+    expect(config.toMap(), {'maxEventStoreAge': 90});
+  });
+
+  test('createsTrackerWithSessionConfig', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        sessionConfig: const SessionConfiguration(
+            foregroundTimeout: Duration(minutes: 10),
+            backgroundTimeout: Duration(seconds: 90),
+            continueSessionOnRestart: true));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {
+            'endpoint': 'https://snowplowanalytics.com',
+          },
+          'sessionConfig': {
+            'foregroundTimeout': 600,
+            'backgroundTimeout': 90,
+            'continueSessionOnRestart': true,
+          },
+        }));
+  });
+
+  test('omitsUnsetSessionConfigFields', () {
+    const config =
+        SessionConfiguration(foregroundTimeout: Duration(milliseconds: 1500));
+    expect(config.toMap(), {'foregroundTimeout': 1});
+  });
+
+  test('rejectsSessionTimeoutsShorterThanOneSecond', () {
+    expect(
+        () => const SessionConfiguration(
+                foregroundTimeout: Duration(milliseconds: 500))
+            .toMap(),
+        throwsArgumentError);
+    expect(
+        () =>
+            const SessionConfiguration(backgroundTimeout: Duration(seconds: -1))
+                .toMap(),
+        throwsArgumentError);
   });
 
   test('tracks structured event', () async {
@@ -351,6 +458,13 @@ void main() {
           'tracker': 'tns1',
         }));
     expect(sessionIndex, equals(10));
+  });
+
+  test('starts new session', () async {
+    await Snowplow.startNewSession(tracker: 'tns1');
+
+    expect(methodCall,
+        isMethodCall('startNewSession', arguments: {'tracker': 'tns1'}));
   });
 
   test('starts media tracking', () async {

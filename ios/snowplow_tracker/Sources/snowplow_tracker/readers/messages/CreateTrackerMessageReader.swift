@@ -20,4 +20,5 @@ struct CreateTrackerMessageReader: Decodable {
     let gdprConfig: GdprConfigurationReader?
     let emitterConfig: EmitterConfigurationReader?
     let globalContextsConfig: GlobalContextsConfigurationReader?
+    let sessionConfig: SessionConfigurationReader?
 }

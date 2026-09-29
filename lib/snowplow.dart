@@ -18,6 +18,7 @@ import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
 import 'package:snowplow_tracker/configurations/global_contexts_configuration.dart';
 import 'package:snowplow_tracker/configurations/media_tracking_configuration.dart';
 import 'package:snowplow_tracker/configurations/network_configuration.dart';
+import 'package:snowplow_tracker/configurations/session_configuration.dart';
 import 'package:snowplow_tracker/configurations/subject_configuration.dart';
 import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
 import 'package:snowplow_tracker/entities/media_ad_break_entity.dart';
@@ -51,7 +52,8 @@ class Snowplow {
       SubjectConfiguration? subjectConfig,
       GdprConfiguration? gdprConfig,
       EmitterConfiguration? emitterConfig,
-      GlobalContextsConfiguration? globalContextsConfig}) async {
+      GlobalContextsConfiguration? globalContextsConfig,
+      SessionConfiguration? sessionConfig}) async {
     final configuration = Configuration(
         namespace: namespace,
         networkConfig: NetworkConfiguration(
@@ -63,7 +65,8 @@ class Snowplow {
         subjectConfig: subjectConfig,
         gdprConfig: gdprConfig,
         emitterConfig: emitterConfig,
-        globalContextsConfig: globalContextsConfig);
+        globalContextsConfig: globalContextsConfig,
+        sessionConfig: sessionConfig);
     await _channel.invokeMethod('createTracker', configuration.toMap());
     return SnowplowTracker(configuration: configuration);
   }
@@ -145,6 +148,20 @@ class Snowplow {
   /// The [tracker] namespace is required but ignored on Web where all trackers share the same session.
   static Future<int?> getSessionIndex({required String tracker}) async {
     return await _channel.invokeMethod('getSessionIndex', {'tracker': tracker});
+  }
+
+  /// Ends the current session and starts a new one for the [tracker] namespace.
+  ///
+  /// On iOS and Android, the new session begins with the next tracked event,
+  /// so the session getters return the old values until then, and the call
+  /// has no effect when the session context is disabled. On Web, the session
+  /// cookie is rotated immediately, and for all trackers, as they share the
+  /// same session. This happens even if the session context is disabled.
+  ///
+  /// Use it, for example, when the user logs out, together with
+  /// `setUserId(null)` to also clear the business user ID.
+  static Future<void> startNewSession({required String tracker}) async {
+    await _channel.invokeMethod('startNewSession', {'tracker': tracker});
   }
 
   /// Starts media tracking with the given [configuration].

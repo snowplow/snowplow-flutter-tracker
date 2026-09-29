@@ -15,6 +15,7 @@ import 'network_configuration_reader.dart';
 import 'subject_configuration_reader.dart';
 import 'tracker_configuration_reader.dart';
 import 'emitter_configuration_reader.dart';
+import 'session_configuration_reader.dart';
 
 class ConfigurationReader extends Configuration {
   ConfigurationReader(dynamic map)
@@ -31,6 +32,9 @@ class ConfigurationReader extends Configuration {
                 : null,
             emitterConfig: map['emitterConfig'] != null
                 ? EmitterConfigurationReader(map['emitterConfig'])
+                : null,
+            sessionConfig: map['sessionConfig'] != null
+                ? SessionConfigurationReader(map['sessionConfig'])
                 : null);
 
   dynamic getTrackerOptions() {
@@ -42,6 +46,9 @@ class ConfigurationReader extends Configuration {
     }
     if (emitterConfig != null) {
       (emitterConfig as EmitterConfigurationReader).addTrackerOptions(options);
+    }
+    if (sessionConfig != null) {
+      (sessionConfig as SessionConfigurationReader).addTrackerOptions(options);
     }
 
     return options;

@@ -9,29 +9,18 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import Foundation
-import SnowplowTracker
+import 'package:snowplow_tracker/configurations/session_configuration.dart';
 
-struct EmitterConfigurationReader: Decodable {
-    let serverAnonymisation: Bool?
-    let maxEventStoreSize: Int64?
-    let maxEventStoreAge: TimeInterval?
-}
+class SessionConfigurationReader extends SessionConfiguration {
+  SessionConfigurationReader(dynamic map)
+      : super(
+            foregroundTimeout: map['foregroundTimeout'] == null
+                ? null
+                : Duration(seconds: map['foregroundTimeout']));
 
-extension EmitterConfigurationReader {
-    func toConfiguration() -> EmitterConfiguration {
-        let emitterConfig = EmitterConfiguration()
-
-        if let s = serverAnonymisation {
-            emitterConfig.serverAnonymisation(s)
-        }
-        if let size = maxEventStoreSize {
-            emitterConfig.maxEventStoreSize(size)
-        }
-        if let age = maxEventStoreAge {
-            emitterConfig.maxEventStoreAge(age)
-        }
-        
-        return emitterConfig
+  void addTrackerOptions(dynamic options) {
+    if (foregroundTimeout != null) {
+      options['sessionCookieTimeout'] = foregroundTimeout?.inSeconds;
     }
+  }
 }

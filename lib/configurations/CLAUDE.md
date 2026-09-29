@@ -299,6 +299,7 @@ test('configuration serialization', () {
 | platformContext | ✅ | ✅ | ❌ |
 | webPageContext | ❌ | ❌ | ✅ |
 | lifecycleAutotracking | ✅ | ✅ | ❌ |
+| installAutotracking | ✅ | ✅ | ❌ |
 | webActivityTracking | ❌ | ❌ | ✅ |
 | screenContext | ✅ | ✅ | ❌ |
 | applicationContext | ✅ | ✅ | ❌ |
@@ -309,6 +310,7 @@ test('configuration serialization', () {
 - `method`: Method.post
 - `devicePlatform`: "mob" (mobile), "web" (web)
 - `platformContext`: true (mobile only)
+- `installAutotracking`: false (mobile only)
 
 ## Contributing to CLAUDE.md
 

@@ -12,26 +12,26 @@
 import Foundation
 import SnowplowTracker
 
-struct EmitterConfigurationReader: Decodable {
-    let serverAnonymisation: Bool?
-    let maxEventStoreSize: Int64?
-    let maxEventStoreAge: TimeInterval?
+struct SessionConfigurationReader: Decodable {
+    let foregroundTimeout: Int?
+    let backgroundTimeout: Int?
+    let continueSessionOnRestart: Bool?
 }
 
-extension EmitterConfigurationReader {
-    func toConfiguration() -> EmitterConfiguration {
-        let emitterConfig = EmitterConfiguration()
+extension SessionConfigurationReader {
+    func toConfiguration() -> SessionConfiguration {
+        let sessionConfig = SessionConfiguration()
 
-        if let s = serverAnonymisation {
-            emitterConfig.serverAnonymisation(s)
+        if let fg = foregroundTimeout {
+            sessionConfig.foregroundTimeoutInSeconds = fg
         }
-        if let size = maxEventStoreSize {
-            emitterConfig.maxEventStoreSize(size)
+        if let bg = backgroundTimeout {
+            sessionConfig.backgroundTimeoutInSeconds = bg
         }
-        if let age = maxEventStoreAge {
-            emitterConfig.maxEventStoreAge(age)
+        if let cs = continueSessionOnRestart {
+            sessionConfig.continueSessionOnRestart = cs
         }
-        
-        return emitterConfig
+
+        return sessionConfig
     }
 }

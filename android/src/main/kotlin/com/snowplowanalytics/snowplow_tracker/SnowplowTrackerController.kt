@@ -49,6 +49,9 @@ object SnowplowTrackerController {
         val globalContextsConfigReader = messageReader.globalContextsConfig
         globalContextsConfigReader?.let { controllers.add(it.toConfiguration()) }
 
+        val sessionConfigReader = messageReader.sessionConfig
+        sessionConfigReader?.let { controllers.add(it.toConfiguration()) }
+
         Snowplow.createTracker(
                 context,
                 messageReader.namespace,
@@ -146,6 +149,12 @@ object SnowplowTrackerController {
         val trackerController = Snowplow.getTracker(messageReader.tracker)
 
         return trackerController?.session?.sessionIndex
+    }
+
+    fun startNewSession(messageReader: GetParameterMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+
+        trackerController?.session?.startNewSession()
     }
 
     fun startMediaTracking(messageReader: StartMediaTrackingMessageReader) {

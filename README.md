@@ -33,6 +33,7 @@ It is build on top of Snowplow's native [iOS](https://github.com/snowplow/snowpl
 | Web page context entity                                                                                      |   |   | ✔      |
 | Configurable GDPR context entity                                                                             | ✔ | ✔ | ✔      |
 | Lifecycle autotracking                                                                                       | ✔ | ✔ |        |
+| Install autotracking                                                                                         | ✔ | ✔ |        |
 | Engagement tracking (activity tracking on Web, mobile screen engagement on mobile)                           | ✔ | ✔ | ✔      |
 | Media playback tracking                                                                                      | ✔ | ✔ | ✔      |
 
@@ -50,7 +51,7 @@ This will add a line with the dependency like this to your `pubspec.yaml`:
 
 ```yml
 dependencies:
-    snowplow_tracker: ^0.11.0
+    snowplow_tracker: ^0.11.1
 ```
 
 Import the package into your Dart code:

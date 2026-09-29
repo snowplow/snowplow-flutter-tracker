@@ -45,6 +45,8 @@ public class SnowplowTrackerPlugin: NSObject, FlutterPlugin {
             onGetSessionId(call, result: result)
         case "getSessionIndex":
             onGetSessionIndex(call, result: result)
+        case "startNewSession":
+            onStartNewSession(call, result: result)
         case "setUserId":
             onSetUserId(call, result: result)
         case "addGlobalContexts":
@@ -219,6 +221,13 @@ public class SnowplowTrackerPlugin: NSObject, FlutterPlugin {
         }
     }
     
+    private func onStartNewSession(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, _): (GetParameterMessageReader, Any) = decodeCall(call) {
+            SnowplowTrackerController.startNewSession(message)
+        }
+        result(nil)
+    }
+
     private func onSetUserId(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if let (message, _): (SetUserIdMessageReader, Any) = decodeCall(call) {
             SnowplowTrackerController.setUserId(message)
