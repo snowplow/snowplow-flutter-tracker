@@ -128,6 +128,26 @@ void main() {
         }));
   });
 
+  test('createsTrackerWithInstallAutotracking', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        trackerConfig: const TrackerConfiguration(installAutotracking: true));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {'endpoint': 'https://snowplowanalytics.com'},
+          'trackerConfig': {'installAutotracking': true},
+        }));
+  });
+
+  test('omitsInstallAutotrackingWhenNotSet', () {
+    expect(const TrackerConfiguration().toMap(),
+        isNot(contains('installAutotracking')));
+  });
+
   test('createsTrackerWithEmitterConfig', () async {
     await Snowplow.createTracker(
         namespace: 'tns1',

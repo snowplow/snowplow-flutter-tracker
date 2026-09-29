@@ -85,6 +85,17 @@ class TrackerConfiguration {
   /// Defaults to true on iOS and Android. Not available on Web.
   final bool? screenEngagementAutotracking;
 
+  /// Whether to track an `application_install` event.
+  ///
+  /// The event is tracked once per device, the first time a tracker is created
+  /// with this option enabled. The native trackers only remember that the event
+  /// was sent while the option is on, so enabling it in an app that is already
+  /// released also sends one install event from each existing user after they
+  /// update.
+  ///
+  /// Defaults to false. Not available on Web.
+  final bool? installAutotracking;
+
   /// Overrides for the values for properties of the platform context.
   /// Only available on mobile apps (Android and iOS), not on Web.
   final PlatformContextProperties? platformContextProperties;
@@ -109,6 +120,7 @@ class TrackerConfiguration {
       this.userAnonymisation,
       this.lifecycleAutotracking,
       this.screenEngagementAutotracking,
+      this.installAutotracking,
       this.platformContextProperties,
       this.jsMediaPluginURL});
 
@@ -127,6 +139,7 @@ class TrackerConfiguration {
       'userAnonymisation': userAnonymisation,
       'lifecycleAutotracking': lifecycleAutotracking,
       'screenEngagementAutotracking': screenEngagementAutotracking,
+      'installAutotracking': installAutotracking,
       'platformContextProperties': platformContextProperties?.toMap(),
       'jsMediaPluginURL': jsMediaPluginURL
     };
