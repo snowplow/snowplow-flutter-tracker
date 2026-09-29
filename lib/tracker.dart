@@ -72,9 +72,10 @@ class SnowplowTracker {
   /// Ends the current session and starts a new one.
   ///
   /// On iOS and Android, the new session begins with the next tracked event,
-  /// so the session getters return the old values until then. On Web, the
-  /// session changes immediately, and for all trackers, as they share the
-  /// same session. Has no effect when the session context is disabled.
+  /// so the session getters return the old values until then, and the call
+  /// has no effect when the session context is disabled. On Web, the session
+  /// cookie is rotated immediately, and for all trackers, as they share the
+  /// same session. This happens even if the session context is disabled.
   ///
   /// Use it, for example, when the user logs out, together with
   /// `setUserId(null)` to also clear the business user ID.
