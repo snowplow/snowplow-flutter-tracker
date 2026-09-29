@@ -66,6 +66,8 @@ class SnowplowTrackerPluginWeb {
         return onGetSessionId(call);
       case "getSessionIndex":
         return onGetSessionIndex(call);
+      case "startNewSession":
+        return onStartNewSession(call);
       case "startMediaTracking":
         return onStartMediaTracking(call);
       case "endMediaTracking":
@@ -200,6 +202,10 @@ class SnowplowTrackerPluginWeb {
 
   int? onGetSessionIndex(MethodCall call) {
     return SnowplowTrackerController.getSessionIndex();
+  }
+
+  void onStartNewSession(MethodCall call) {
+    SnowplowTrackerController.startNewSession(call.arguments['tracker']);
   }
 
   void onStartMediaTracking(MethodCall call) {

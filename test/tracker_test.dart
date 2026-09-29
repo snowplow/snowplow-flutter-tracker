@@ -61,6 +61,13 @@ void main() {
     expect(arguments['userId'], equals('XYZ'));
   });
 
+  test('starts new session', () async {
+    await tracker?.startNewSession();
+
+    expect(method, equals('startNewSession'));
+    expect(arguments['tracker'], equals('ns1'));
+  });
+
   test('gets session ID', () async {
     returnValue = '1234';
     String? sessionId = await tracker?.sessionId;

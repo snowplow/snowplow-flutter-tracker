@@ -83,6 +83,10 @@ class SnowplowTrackerController {
     return null;
   }
 
+  static void startNewSession(String tracker) {
+    snowplow('newSession:$tracker');
+  }
+
   static void startMediaTracking(StartMediaTrackingMessageReader message) {
     snowplow('startMediaTracking:${message.tracker}',
         message.configuration.toTrackerOptions().jsify());

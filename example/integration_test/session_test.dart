@@ -136,6 +136,39 @@ void main() {
         isTrue);
   });
 
+  testWidgets("starts a new session on demand", (WidgetTester tester) async {
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'test-new-session', endpoint: SnowplowTests.microEndpoint);
+
+    await tracker
+        .track(const Structured(category: 'category', action: 'first'));
+    await tracker.startNewSession();
+    await tracker
+        .track(const Structured(category: 'category', action: 'second'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 2) {
+            return false;
+          }
+          final sessions = {
+            for (var e in events)
+              e['event']['se_action']: e['event']['contexts']['data']
+                  .firstWhere(
+                      (x) => x['schema'].toString().contains('client_session'),
+                      orElse: () => null)?['data']
+          };
+          final first = sessions['first'];
+          final second = sessions['second'];
+          return first != null &&
+              second != null &&
+              first['sessionId'] != second['sessionId'] &&
+              second['previousSessionId'] == first['sessionId'] &&
+              second['sessionIndex'] == first['sessionIndex'] + 1;
+        }),
+        isTrue);
+  });
+
   // Keep this test last: on Web all trackers share the session cookie, so the
   // short timeout set here also affects the session of the other trackers.
   testWidgets("starts a new session after the configured foreground timeout",

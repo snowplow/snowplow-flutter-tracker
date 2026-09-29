@@ -150,6 +150,20 @@ class Snowplow {
     return await _channel.invokeMethod('getSessionIndex', {'tracker': tracker});
   }
 
+  /// Ends the current session and starts a new one for the [tracker] namespace.
+  ///
+  /// On iOS and Android, the new session begins with the next tracked event,
+  /// so the session getters return the old values until then, and the call
+  /// has no effect when the session context is disabled. On Web, the session
+  /// cookie is rotated immediately, and for all trackers, as they share the
+  /// same session. This happens even if the session context is disabled.
+  ///
+  /// Use it, for example, when the user logs out, together with
+  /// `setUserId(null)` to also clear the business user ID.
+  static Future<void> startNewSession({required String tracker}) async {
+    await _channel.invokeMethod('startNewSession', {'tracker': tracker});
+  }
+
   /// Starts media tracking with the given [configuration].
   static Future<MediaTracking> startMediaTracking(
       {required String tracker,

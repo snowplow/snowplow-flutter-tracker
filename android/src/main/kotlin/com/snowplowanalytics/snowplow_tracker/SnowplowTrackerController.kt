@@ -151,6 +151,12 @@ object SnowplowTrackerController {
         return trackerController?.session?.sessionIndex
     }
 
+    fun startNewSession(messageReader: GetParameterMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+
+        trackerController?.session?.startNewSession()
+    }
+
     fun startMediaTracking(messageReader: StartMediaTrackingMessageReader) {
         val trackerController = Snowplow.getTracker(messageReader.tracker)
         trackerController?.media?.startMediaTracking(
