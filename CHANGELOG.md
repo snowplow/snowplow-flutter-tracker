@@ -5,8 +5,7 @@
 * Add SessionConfiguration for session timeouts (AISP-1720) (#97)
 * Expose event store limits in EmitterConfiguration (AISP-1719) (#96)
 * Expose installAutotracking in TrackerConfiguration (AISP-1717) (#95)
-* Loop: implement snowplow-flutter-tracker (loop/gh-snowplow-incubator-refine-agent-141-snowplow-flutter-tracker)
-* Loop: implement snowplow-flutter-tracker (loop/gh-snowplow-incubator-refine-agent-141-snowplow-flutter-tracker)
+
 # 0.11.0
 
 * Add deep link and push notification event tracking
