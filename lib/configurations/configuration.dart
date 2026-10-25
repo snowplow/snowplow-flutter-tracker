@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart';
 import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
 import 'package:snowplow_tracker/configurations/global_contexts_configuration.dart';
 import 'package:snowplow_tracker/configurations/network_configuration.dart';
+import 'package:snowplow_tracker/configurations/plugin_configuration.dart';
 import 'package:snowplow_tracker/configurations/session_configuration.dart';
 import 'package:snowplow_tracker/configurations/subject_configuration.dart';
 import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
@@ -47,6 +48,9 @@ class Configuration {
   /// Configuration of session tracking.
   final SessionConfiguration? sessionConfig;
 
+  /// Plugins that observe tracked events.
+  final List<PluginConfiguration>? plugins;
+
   const Configuration(
       {required this.namespace,
       required this.networkConfig,
@@ -55,7 +59,8 @@ class Configuration {
       this.gdprConfig,
       this.emitterConfig,
       this.globalContextsConfig,
-      this.sessionConfig});
+      this.sessionConfig,
+      this.plugins});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
@@ -66,7 +71,8 @@ class Configuration {
       'gdprConfig': gdprConfig?.toMap(),
       'emitterConfig': emitterConfig?.toMap(),
       'globalContextsConfig': globalContextsConfig?.toMap(),
-      'sessionConfig': sessionConfig?.toMap()
+      'sessionConfig': sessionConfig?.toMap(),
+      'plugins': plugins?.map((p) => p.toMap()).toList()
     };
     conf.removeWhere((key, value) => value == null);
     return conf;

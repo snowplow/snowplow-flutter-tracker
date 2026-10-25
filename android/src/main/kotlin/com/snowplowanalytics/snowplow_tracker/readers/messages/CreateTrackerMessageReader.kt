@@ -48,4 +48,9 @@ class CreateTrackerMessageReader(val values: Map<String, Any>) {
             SessionConfigurationReader(it as Map<String, Any>)
         }
     }
+    val plugins: List<PluginConfigurationReader> by lazy {
+        (values.get("plugins") as? List<Map<String, Any>>)?.map {
+            PluginConfigurationReader(it)
+        } ?: emptyList()
+    }
 }

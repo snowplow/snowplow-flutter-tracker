@@ -10,6 +10,7 @@
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 import 'package:web/web.dart' show document;
 
 import 'readers/messages/end_media_tracking_message_reader.dart';
@@ -17,11 +18,18 @@ import 'readers/messages/start_media_tracking_message_reader.dart';
 import 'readers/messages/update_media_tracking_message_reader.dart';
 
 import 'readers/configurations/configuration_reader.dart';
+import 'readers/events/inspectable_event_reader.dart';
 import 'readers/messages/event_message_reader.dart';
 import 'readers/messages/set_user_id_message_reader.dart';
 import 'sp.dart';
 
 class SnowplowTrackerController {
+  /// Plugins already added to the JavaScript tracker by tracker namespace.
+  ///
+  /// The JavaScript tracker can't remove plugins, so they are added once and
+  /// the Dart side decides which callback, if any, to call.
+  static final Map<String, Set<String>> _addedPlugins = {};
+
   static void createTracker(ConfigurationReader configuration) {
     dynamic options = configuration.getTrackerOptions();
     snowplow('newTracker', configuration.namespace.toJS,
@@ -52,6 +60,26 @@ class SnowplowTrackerController {
       snowplow('addPlugin', configuration.trackerConfig?.jsMediaPluginURL?.toJS,
           ['snowplowMedia', 'SnowplowMediaPlugin'].jsify());
     }
+  }
+
+  /// Adds a JavaScript plugin that sends the arguments of its afterTrack
+  /// callbacks to [afterTrackListener].
+  static void addPlugin(String tracker, String identifier,
+      void Function(Map<String, Object?>) afterTrackListener) {
+    if (!_addedPlugins.putIfAbsent(tracker, () => {}).add(identifier)) {
+      return;
+    }
+
+    final plugin = JSObject();
+    plugin['afterTrack'] = ((JSAny? payload) {
+      final event = InspectableEventReader.fromPayload(
+          payload.dartify() as Map<Object?, Object?>? ?? const {});
+      afterTrackListener(
+          {'tracker': tracker, 'plugin': identifier, 'event': event});
+    }).toJS;
+    final pluginFactory = JSObject();
+    pluginFactory['create'] = (() => plugin).toJS;
+    snowplow('addPlugin:$tracker', pluginFactory, 'create'.toJS);
   }
 
   static void trackEvent(EventMessageReader message) {
