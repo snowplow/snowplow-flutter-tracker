@@ -21,8 +21,12 @@ import com.snowplowanalytics.snowplow_tracker.readers.configurations.DefaultTrac
 import com.snowplowanalytics.snowplow_tracker.readers.messages.*
 import com.snowplowanalytics.snowplow_tracker.readers.events.SelfDescribingJsonReader
 import com.snowplowanalytics.snowplow.globalcontexts.GlobalContext
+import com.snowplowanalytics.snowplow.tracker.InspectableEvent
 
 object SnowplowTrackerController {
+
+    /// Receives the arguments of the afterTrack callbacks to send to Dart
+    var afterTrackListener: ((Map<String, Any?>) -> Unit)? = null
 
     fun createTracker(messageReader: CreateTrackerMessageReader, context: Context) {
         val controllers: MutableList<Configuration> = mutableListOf()
@@ -51,6 +55,10 @@ object SnowplowTrackerController {
 
         val sessionConfigReader = messageReader.sessionConfig
         sessionConfigReader?.let { controllers.add(it.toConfiguration()) }
+
+        messageReader.plugins.forEach {
+            controllers.add(it.toConfiguration(afterTrackCallback(messageReader.namespace)))
+        }
 
         Snowplow.createTracker(
                 context,
@@ -119,6 +127,47 @@ object SnowplowTrackerController {
         val trackerController = Snowplow.getTracker(messageReader.tracker)
 
         trackerController?.globalContexts?.remove(messageReader.tag)
+    }
+
+    fun addPlugin(messageReader: AddPluginMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+
+        trackerController?.plugins?.addPlugin(
+            messageReader.plugin.toConfiguration(afterTrackCallback(messageReader.tracker))
+        )
+    }
+
+    fun removePlugin(messageReader: RemovePluginMessageReader) {
+        val trackerController = Snowplow.getTracker(messageReader.tracker)
+
+        trackerController?.plugins?.removePlugin(messageReader.identifier)
+    }
+
+    private fun afterTrackCallback(namespace: String): (String, InspectableEvent) -> Unit {
+        return { identifier, event ->
+            afterTrackListener?.invoke(mapOf(
+                "tracker" to namespace,
+                "plugin" to identifier,
+                "event" to mapOf(
+                    "schema" to event.schema,
+                    "name" to event.name,
+                    "payload" to toChannelValue(event.payload),
+                    "entities" to event.entities.map { toChannelValue(it.map) }
+                )
+            ))
+        }
+    }
+
+    /// Converts the value to types supported by the Flutter standard message codec
+    private fun toChannelValue(value: Any?): Any? {
+        return when (value) {
+            null, is String, is Boolean, is Int, is Long, is Double -> value
+            is Number -> value.toDouble()
+            is Map<*, *> -> value.entries.associate { it.key.toString() to toChannelValue(it.value) }
+            is Collection<*> -> value.map { toChannelValue(it) }
+            is Array<*> -> value.map { toChannelValue(it) }
+            else -> value.toString()
+        }
     }
 
     fun setUserAnonymisation(messageReader: SetUserAnonymisationMessageReader) {

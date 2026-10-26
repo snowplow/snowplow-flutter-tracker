@@ -155,8 +155,8 @@ class EventMessageReader {
             ? MediaAdBreakEntityReader(map['adBreak'])
             : null;
 
-  dynamic eventData() {
-    dynamic data = event.eventData();
+  Map eventData() {
+    Map data = event.eventData();
     if (contexts != null) {
       data['context'] =
           contexts?.selfDescribingJsons.map((e) => e.json()).toList();

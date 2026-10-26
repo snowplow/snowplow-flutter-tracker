@@ -11,6 +11,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:snowplow_tracker/configurations/configuration.dart';
 import 'package:snowplow_tracker/configurations/emitter_configuration.dart';
@@ -18,6 +19,7 @@ import 'package:snowplow_tracker/configurations/gdpr_configuration.dart';
 import 'package:snowplow_tracker/configurations/global_contexts_configuration.dart';
 import 'package:snowplow_tracker/configurations/media_tracking_configuration.dart';
 import 'package:snowplow_tracker/configurations/network_configuration.dart';
+import 'package:snowplow_tracker/configurations/plugin_configuration.dart';
 import 'package:snowplow_tracker/configurations/session_configuration.dart';
 import 'package:snowplow_tracker/configurations/subject_configuration.dart';
 import 'package:snowplow_tracker/configurations/tracker_configuration.dart';
@@ -36,12 +38,18 @@ import 'package:snowplow_tracker/tracker.dart';
 class Snowplow {
   static const MethodChannel _channel = MethodChannel('snowplow_tracker');
 
+  /// After track callbacks of plugins by tracker namespace and plugin identifier.
+  static final Map<String, Map<String, AfterTrackCallback>>
+      _afterTrackCallbacks = {};
+
   /// Creates a new tracker instance with the given unique [namespace].
   ///
   /// [endpoint] refers to the Snowplow collector endpoint.
   /// [method] is the HTTP method used to send events to collector and it defaults to POST.
   /// [customPostPath] is an optional string for custom POST collector paths.
   /// [requestHeaders] is an optional map of custom HTTP headers to add to requests to the collector.
+  /// [plugins] observe tracked events from the start, including the events
+  /// tracked while the tracker is being created.
   static Future<SnowplowTracker> createTracker(
       {required String namespace,
       required String endpoint,
@@ -53,7 +61,8 @@ class Snowplow {
       GdprConfiguration? gdprConfig,
       EmitterConfiguration? emitterConfig,
       GlobalContextsConfiguration? globalContextsConfig,
-      SessionConfiguration? sessionConfig}) async {
+      SessionConfiguration? sessionConfig,
+      List<PluginConfiguration>? plugins}) async {
     final configuration = Configuration(
         namespace: namespace,
         networkConfig: NetworkConfiguration(
@@ -66,7 +75,10 @@ class Snowplow {
         gdprConfig: gdprConfig,
         emitterConfig: emitterConfig,
         globalContextsConfig: globalContextsConfig,
-        sessionConfig: sessionConfig);
+        sessionConfig: sessionConfig,
+        plugins: plugins);
+    _afterTrackCallbacks.remove(namespace);
+    plugins?.forEach((plugin) => _registerPlugin(plugin, tracker: namespace));
     await _channel.invokeMethod('createTracker', configuration.toMap());
     return SnowplowTracker(configuration: configuration);
   }
@@ -105,6 +117,60 @@ class Snowplow {
       {required String tracker}) async {
     await _channel
         .invokeMethod('removeGlobalContexts', {'tracker': tracker, 'tag': tag});
+  }
+
+  /// Adds a [plugin] to the [tracker] namespace, replacing any plugin with the same identifier.
+  ///
+  /// The plugin only sees events tracked after it is added. To also see the
+  /// events tracked while the tracker is being created, pass the plugin to
+  /// [createTracker] instead.
+  static Future<void> addPlugin(PluginConfiguration plugin,
+      {required String tracker}) async {
+    _registerPlugin(plugin, tracker: tracker);
+    await _channel.invokeMethod(
+        'addPlugin', {'tracker': tracker, 'plugin': plugin.toMap()});
+  }
+
+  /// Removes the plugin with the given [identifier] from the [tracker] namespace.
+  static Future<void> removePlugin(String identifier,
+      {required String tracker}) async {
+    _afterTrackCallbacks[tracker]?.remove(identifier);
+    await _channel.invokeMethod(
+        'removePlugin', {'tracker': tracker, 'identifier': identifier});
+  }
+
+  static void _registerPlugin(PluginConfiguration plugin,
+      {required String tracker}) {
+    final callbacks = _afterTrackCallbacks.putIfAbsent(tracker, () => {});
+    final afterTrack = plugin.afterTrack;
+    if (afterTrack == null) {
+      callbacks.remove(plugin.identifier);
+    } else {
+      callbacks[plugin.identifier] = afterTrack;
+    }
+    _channel.setMethodCallHandler(_handlePlatformCall);
+  }
+
+  static Future<void> _handlePlatformCall(MethodCall call) async {
+    if (call.method != 'afterTrack') {
+      return;
+    }
+    final arguments = call.arguments as Map<Object?, Object?>;
+    final callback =
+        _afterTrackCallbacks[arguments['tracker']]?[arguments['plugin']];
+    if (callback == null) {
+      return;
+    }
+    try {
+      callback(InspectableEvent.fromMap(
+          arguments['event'] as Map<Object?, Object?>));
+    } catch (exception, stack) {
+      FlutterError.reportError(FlutterErrorDetails(
+          exception: exception,
+          stack: stack,
+          library: 'snowplow_tracker',
+          context: ErrorDescription('while calling the afterTrack callback')));
+    }
   }
 
   /// Sets whether client-side user anonymisation is enabled for the [tracker] namespace.

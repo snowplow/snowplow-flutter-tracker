@@ -37,7 +37,7 @@ class ConfigurationReader extends Configuration {
                 ? SessionConfigurationReader(map['sessionConfig'])
                 : null);
 
-  dynamic getTrackerOptions() {
+  Map getTrackerOptions() {
     var options = {};
 
     (networkConfig as NetworkConfigurationReader).addTrackerOptions(options);

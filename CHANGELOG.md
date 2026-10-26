@@ -1,4 +1,8 @@
 
+# 0.11.2
+
+* Expose afterTrack plugin callbacks to Dart (#100)
+* Type Web tracker options and event data as Map so jsify resolves
 # 0.11.1
 
 * Add startNewSession to reset the session on demand (AISP-1721) (#98)

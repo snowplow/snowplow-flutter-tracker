@@ -32,9 +32,13 @@ class SnowplowTrackerPluginWeb {
       registrar,
     );
 
-    final pluginInstance = SnowplowTrackerPluginWeb();
+    final pluginInstance = SnowplowTrackerPluginWeb(channel);
     channel.setMethodCallHandler(pluginInstance.handleMethodCall);
   }
+
+  final MethodChannel _channel;
+
+  SnowplowTrackerPluginWeb(this._channel);
 
   Future<dynamic> handleMethodCall(MethodCall call) async {
     switch (call.method) {
@@ -60,6 +64,12 @@ class SnowplowTrackerPluginWeb {
         return onTrackPageView(call);
       case 'setUserId':
         return onSetUserId(call);
+      case 'addPlugin':
+        return onAddPlugin(call);
+      case 'removePlugin':
+        // The JavaScript tracker can't remove plugins, the Dart side stops
+        // calling the removed plugin's callback instead.
+        return null;
       case "getSessionUserId":
         return onGetSessionUserId(call);
       case "getSessionId":
@@ -140,6 +150,20 @@ class SnowplowTrackerPluginWeb {
   void onCreateTracker(MethodCall call) {
     var configuration = ConfigurationReader(call.arguments);
     SnowplowTrackerController.createTracker(configuration);
+    for (final plugin in call.arguments['plugins'] ?? []) {
+      _addPlugin(configuration.namespace, plugin);
+    }
+  }
+
+  void onAddPlugin(MethodCall call) {
+    _addPlugin(call.arguments['tracker'], call.arguments['plugin']);
+  }
+
+  void _addPlugin(String tracker, dynamic plugin) {
+    if (plugin['afterTrack'] == true) {
+      SnowplowTrackerController.addPlugin(tracker, plugin['identifier'],
+          (arguments) => _channel.invokeMethod('afterTrack', arguments));
+    }
   }
 
   void onTrackStructured(MethodCall call) {

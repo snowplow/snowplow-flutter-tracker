@@ -17,6 +17,13 @@ public class SnowplowTrackerPlugin: NSObject, FlutterPlugin {
         let channel = FlutterMethodChannel(name: "snowplow_tracker", binaryMessenger: registrar.messenger())
         let instance = SnowplowTrackerPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+
+        // afterTrack callbacks run on a background queue but the channel must be used on the main thread
+        SnowplowTrackerController.afterTrackListener = { arguments in
+            DispatchQueue.main.async {
+                channel.invokeMethod("afterTrack", arguments: arguments)
+            }
+        }
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -53,6 +60,10 @@ public class SnowplowTrackerPlugin: NSObject, FlutterPlugin {
             onAddGlobalContexts(call, result: result)
         case "removeGlobalContexts":
             onRemoveGlobalContexts(call, result: result)
+        case "addPlugin":
+            onAddPlugin(call, result: result)
+        case "removePlugin":
+            onRemovePlugin(call, result: result)
         case "setUserAnonymisation":
             onSetUserAnonymisation(call, result: result)
         case "setServerAnonymisation":
@@ -245,6 +256,20 @@ public class SnowplowTrackerPlugin: NSObject, FlutterPlugin {
     private func onRemoveGlobalContexts(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if let (message, _): (RemoveGlobalContextsMessageReader, Any) = decodeCall(call) {
             SnowplowTrackerController.removeGlobalContexts(message)
+        }
+        result(nil)
+    }
+
+    private func onAddPlugin(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, _): (AddPluginMessageReader, [String: Any]) = decodeCall(call) {
+            SnowplowTrackerController.addPlugin(message)
+        }
+        result(nil)
+    }
+
+    private func onRemovePlugin(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, _): (RemovePluginMessageReader, [String: Any]) = decodeCall(call) {
+            SnowplowTrackerController.removePlugin(message)
         }
         result(nil)
     }

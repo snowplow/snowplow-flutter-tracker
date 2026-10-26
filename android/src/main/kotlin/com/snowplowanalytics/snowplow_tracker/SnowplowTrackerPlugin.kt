@@ -14,6 +14,8 @@ package com.snowplowanalytics.snowplow_tracker
 import androidx.annotation.NonNull
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.snowplowanalytics.snowplow_tracker.readers.messages.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -34,6 +36,12 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "snowplow_tracker")
         channel.setMethodCallHandler(this)
         context = flutterPluginBinding.applicationContext
+
+        // afterTrack callbacks run on a background thread but the channel must be used on the main thread
+        val mainHandler = Handler(Looper.getMainLooper())
+        SnowplowTrackerController.afterTrackListener = { arguments ->
+            mainHandler.post { channel.invokeMethod("afterTrack", arguments) }
+        }
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -50,6 +58,8 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "setUserId" -> onSetUserId(call, result)
             "addGlobalContexts" -> onAddGlobalContexts(call, result)
             "removeGlobalContexts" -> onRemoveGlobalContexts(call, result)
+            "addPlugin" -> onAddPlugin(call, result)
+            "removePlugin" -> onRemovePlugin(call, result)
             "setUserAnonymisation" -> onSetUserAnonymisation(call, result)
             "setServerAnonymisation" -> onSetServerAnonymisation(call, result)
             "getSessionUserId" -> onGetSessionUserId(call, result)
@@ -97,6 +107,7 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+        SnowplowTrackerController.afterTrackListener = null
         context = null
     }
 
@@ -182,6 +193,20 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
     private fun onRemoveGlobalContexts(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
             SnowplowTrackerController.removeGlobalContexts(RemoveGlobalContextsMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onAddPlugin(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.addPlugin(AddPluginMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onRemovePlugin(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.removePlugin(RemovePluginMessageReader(it))
         }
         result.success(null)
     }
