@@ -23,7 +23,7 @@ import 'sp.dart';
 
 class SnowplowTrackerController {
   static void createTracker(ConfigurationReader configuration) {
-    dynamic options = configuration.getTrackerOptions();
+    final options = configuration.getTrackerOptions();
     snowplow('newTracker', configuration.namespace.toJS,
         configuration.networkConfig.endpoint.toJS, options.jsify());
 
