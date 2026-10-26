@@ -14,6 +14,9 @@ import SnowplowTracker
 
 class SnowplowTrackerController {
 
+    /// Receives the arguments of the afterTrack callbacks to send to Dart
+    static var afterTrackListener: (([String: Any]) -> Void)?
+
     static func createTracker(_ message: CreateTrackerMessageReader, arguments: [String: Any]) {
         var controllers: [ConfigurationProtocol] = []
         
@@ -37,6 +40,9 @@ class SnowplowTrackerController {
         }
         if let sessionConfig = message.sessionConfig {
             controllers.append(sessionConfig.toConfiguration())
+        }
+        for plugin in message.plugins ?? [] {
+            controllers.append(plugin.toConfiguration(afterTrackCallback: afterTrackCallback(namespace: message.namespace)))
         }
 
         _ = Snowplow.createTracker(
@@ -146,6 +152,52 @@ class SnowplowTrackerController {
         let trackerController = Snowplow.tracker(namespace: message.tracker)
         if let globalContexts = trackerController?.globalContexts {
             globalContexts.remove(tag: message.tag)
+        }
+    }
+
+    static func addPlugin(_ message: AddPluginMessageReader) {
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        trackerController?.plugins.add(
+            plugin: message.plugin.toConfiguration(afterTrackCallback: afterTrackCallback(namespace: message.tracker))
+        )
+    }
+
+    static func removePlugin(_ message: RemovePluginMessageReader) {
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        trackerController?.plugins.remove(identifier: message.identifier)
+    }
+
+    private static func afterTrackCallback(namespace: String) -> (String, InspectableEvent) -> Void {
+        return { identifier, event in
+            var eventArguments: [String: Any] = [
+                "payload": toChannelValue(event.payload),
+                "entities": event.entities.map { toChannelValue($0.dictionary) }
+            ]
+            if let schema = event.schema {
+                eventArguments["schema"] = schema
+            }
+            if let name = event.eventName {
+                eventArguments["name"] = name
+            }
+            afterTrackListener?([
+                "tracker": namespace,
+                "plugin": identifier,
+                "event": eventArguments
+            ])
+        }
+    }
+
+    /// Converts the value to types supported by the Flutter standard message codec
+    private static func toChannelValue(_ value: Any) -> Any {
+        switch value {
+        case let dictionary as [String: Any]:
+            return dictionary.mapValues { toChannelValue($0) }
+        case let array as [Any]:
+            return array.map { toChannelValue($0) }
+        case is String, is NSNumber, is NSNull:
+            return value
+        default:
+            return String(describing: value)
         }
     }
 

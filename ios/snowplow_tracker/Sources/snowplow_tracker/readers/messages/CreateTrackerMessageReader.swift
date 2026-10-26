@@ -21,4 +21,5 @@ struct CreateTrackerMessageReader: Decodable {
     let emitterConfig: EmitterConfigurationReader?
     let globalContextsConfig: GlobalContextsConfigurationReader?
     let sessionConfig: SessionConfigurationReader?
+    let plugins: [PluginConfigurationReader]?
 }
