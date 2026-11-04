@@ -15,7 +15,8 @@ import 'package:snowplow_tracker/events/self_describing.dart';
 /// Called with each event after it is tracked.
 typedef AfterTrackCallback = void Function(InspectableEvent event);
 
-/// Configuration of a plugin that observes events tracked by a tracker.
+/// Configuration of a plugin that observes events tracked by a tracker and
+/// adds context entities to them.
 ///
 /// The plugin sees every event the tracker tracks, including events tracked
 /// automatically, such as screen views from the [SnowplowObserver], lifecycle,
@@ -36,12 +37,24 @@ class PluginConfiguration {
   /// asynchronously, so it may be called after the next event is tracked.
   final AfterTrackCallback? afterTrack;
 
-  const PluginConfiguration({required this.identifier, this.afterTrack});
+  /// Context entities attached to every event the tracker tracks.
+  ///
+  /// Use [Snowplow.setPluginEntities] to replace them later in a single step,
+  /// for example when the user signs in. Each event gets the entities that
+  /// were set when it was tracked.
+  ///
+  /// [Snowplow.setPluginEntities] only works for plugins created with
+  /// entities. Pass an empty list to start with none.
+  final List<SelfDescribing>? entities;
+
+  const PluginConfiguration(
+      {required this.identifier, this.afterTrack, this.entities});
 
   Map<String, Object?> toMap() {
     final conf = <String, Object?>{
       'identifier': identifier,
-      'afterTrack': afterTrack != null ? true : null
+      'afterTrack': afterTrack != null ? true : null,
+      'entities': entities?.map((e) => e.toMap()).toList()
     };
     conf.removeWhere((key, value) => value == null);
     return conf;
