@@ -62,6 +62,8 @@ public class SnowplowTrackerPlugin: NSObject, FlutterPlugin {
             onRemoveGlobalContexts(call, result: result)
         case "addPlugin":
             onAddPlugin(call, result: result)
+        case "setPluginEntities":
+            onSetPluginEntities(call, result: result)
         case "removePlugin":
             onRemovePlugin(call, result: result)
         case "setUserAnonymisation":
@@ -261,8 +263,15 @@ public class SnowplowTrackerPlugin: NSObject, FlutterPlugin {
     }
 
     private func onAddPlugin(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if let (message, _): (AddPluginMessageReader, [String: Any]) = decodeCall(call) {
-            SnowplowTrackerController.addPlugin(message)
+        if let (message, arguments): (AddPluginMessageReader, [String: Any]) = decodeCall(call) {
+            SnowplowTrackerController.addPlugin(message, arguments: arguments)
+        }
+        result(nil)
+    }
+
+    private func onSetPluginEntities(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let (message, arguments): (SetPluginEntitiesMessageReader, [String: Any]) = decodeCall(call) {
+            SnowplowTrackerController.setPluginEntities(message, arguments: arguments)
         }
         result(nil)
     }

@@ -17,6 +17,9 @@ class SnowplowTrackerController {
     /// Receives the arguments of the afterTrack callbacks to send to Dart
     static var afterTrackListener: (([String: Any]) -> Void)?
 
+    /// Plugins with entities by tracker namespace and plugin identifier, to add them again with new entities
+    private static var pluginsWithEntities: [String: [String: (plugin: PluginConfigurationReader, entities: [SelfDescribingJson])]] = [:]
+
     static func createTracker(_ message: CreateTrackerMessageReader, arguments: [String: Any]) {
         var controllers: [ConfigurationProtocol] = []
         
@@ -41,8 +44,13 @@ class SnowplowTrackerController {
         if let sessionConfig = message.sessionConfig {
             controllers.append(sessionConfig.toConfiguration())
         }
-        for plugin in message.plugins ?? [] {
-            controllers.append(plugin.toConfiguration(afterTrackCallback: afterTrackCallback(namespace: message.namespace)))
+        pluginsWithEntities[message.namespace] = nil
+        let pluginsArgs = arguments["plugins"] as? [[String: Any]] ?? []
+        for (plugin, pluginArgs) in zip(message.plugins ?? [], pluginsArgs) {
+            let entities = storePluginEntities(plugin, arguments: pluginArgs, namespace: message.namespace)
+            controllers.append(plugin.toConfiguration(
+                afterTrackCallback: afterTrackCallback(namespace: message.namespace),
+                entities: entities))
         }
 
         _ = Snowplow.createTracker(
@@ -155,16 +163,54 @@ class SnowplowTrackerController {
         }
     }
 
-    static func addPlugin(_ message: AddPluginMessageReader) {
+    static func addPlugin(_ message: AddPluginMessageReader, arguments: [String: Any]) {
+        let trackerController = Snowplow.tracker(namespace: message.tracker)
+        let pluginArgs = arguments["plugin"] as? [String: Any] ?? [:]
+        let entities = storePluginEntities(message.plugin, arguments: pluginArgs, namespace: message.tracker)
+        trackerController?.plugins.add(
+            plugin: message.plugin.toConfiguration(
+                afterTrackCallback: afterTrackCallback(namespace: message.tracker),
+                entities: entities)
+        )
+    }
+
+    /// Adds the plugin again with the new entities.
+    ///
+    /// The tracker adds plugins and tracks events on the same serial queue, so
+    /// events tracked before this call keep the previous entities. Adding the
+    /// plugin waits on the calling thread until the events already queued are
+    /// processed, so frequent calls while the queue is busy can briefly block
+    /// the main thread, as `addPlugin` does.
+    static func setPluginEntities(_ message: SetPluginEntitiesMessageReader, arguments: [String: Any]) {
+        guard let stored = pluginsWithEntities[message.tracker]?[message.identifier] else {
+            NSLog("SnowplowTracker: setPluginEntities: no plugin '%@' with entities in tracker '%@', ignoring",
+                  message.identifier, message.tracker)
+            return
+        }
+        let entities = PluginConfigurationReader.entities(arguments: arguments) ?? []
+        pluginsWithEntities[message.tracker]?[message.identifier] = (stored.plugin, entities)
         let trackerController = Snowplow.tracker(namespace: message.tracker)
         trackerController?.plugins.add(
-            plugin: message.plugin.toConfiguration(afterTrackCallback: afterTrackCallback(namespace: message.tracker))
+            plugin: stored.plugin.toConfiguration(
+                afterTrackCallback: afterTrackCallback(namespace: message.tracker),
+                entities: entities)
         )
     }
 
     static func removePlugin(_ message: RemovePluginMessageReader) {
         let trackerController = Snowplow.tracker(namespace: message.tracker)
+        pluginsWithEntities[message.tracker]?[message.identifier] = nil
         trackerController?.plugins.remove(identifier: message.identifier)
+    }
+
+    private static func storePluginEntities(_ plugin: PluginConfigurationReader, arguments: [String: Any], namespace: String) -> [SelfDescribingJson]? {
+        let entities = PluginConfigurationReader.entities(arguments: arguments)
+        if let entities = entities {
+            pluginsWithEntities[namespace, default: [:]][plugin.identifier] = (plugin, entities)
+        } else {
+            pluginsWithEntities[namespace]?[plugin.identifier] = nil
+        }
+        return entities
     }
 
     private static func afterTrackCallback(namespace: String) -> (String, InspectableEvent) -> Void {

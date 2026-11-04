@@ -17,12 +17,32 @@ struct PluginConfigurationReader: Decodable {
 }
 
 extension PluginConfigurationReader {
-    func toConfiguration(afterTrackCallback: @escaping (String, InspectableEvent) -> Void) -> PluginConfiguration {
+    func toConfiguration(afterTrackCallback: @escaping (String, InspectableEvent) -> Void,
+                         entities: [SelfDescribingJson]?) -> PluginConfiguration {
         let plugin = PluginConfiguration(identifier: identifier)
         if afterTrack == true {
             let identifier = self.identifier
             _ = plugin.afterTrack { event in afterTrackCallback(identifier, event) }
         }
+        if let entities = entities {
+            _ = plugin.entities { _ in entities }
+        }
         return plugin
+    }
+
+    /// Reads the entities from the plugin arguments, as `Decodable` can't decode their data
+    static func entities(arguments: [String: Any]) -> [SelfDescribingJson]? {
+        guard let entitiesArgs = arguments["entities"] as? [[String: Any]] else {
+            return nil
+        }
+        return entitiesArgs.compactMap { entityArgs in
+            let entity = (entityArgs["schema"] as? String).flatMap { schema in
+                SelfDescribingJsonReader(schema: schema).toSelfDescribingJson(arguments: entityArgs)
+            }
+            if entity == nil {
+                NSLog("SnowplowTracker: skipping plugin entity without a schema or data map: %@", "\(entityArgs)")
+            }
+            return entity
+        }
     }
 }
