@@ -25,9 +25,6 @@ import com.snowplowanalytics.snowplow.tracker.InspectableEvent
 
 object SnowplowTrackerController {
 
-    /// Receives the arguments of the afterTrack callbacks to send to Dart
-    var afterTrackListener: ((Map<String, Any?>) -> Unit)? = null
-
     fun createTracker(messageReader: CreateTrackerMessageReader, context: Context) {
         val controllers: MutableList<Configuration> = mutableListOf()
 
@@ -145,7 +142,7 @@ object SnowplowTrackerController {
 
     private fun afterTrackCallback(namespace: String): (String, InspectableEvent) -> Unit {
         return { identifier, event ->
-            afterTrackListener?.invoke(mapOf(
+            SnowplowTrackerPlugin.dispatchAfterTrack(mapOf(
                 "tracker" to namespace,
                 "plugin" to identifier,
                 "event" to mapOf(
