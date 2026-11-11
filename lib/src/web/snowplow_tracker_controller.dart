@@ -88,7 +88,10 @@ class SnowplowTrackerController {
 
   /// JavaScript tracker command that applies a change in [_pendingUpdates].
   ///
-  /// It's registered by the first plugin added, as plugins can add commands.
+  /// It's registered by the first plugin added: the JavaScript tracker adds
+  /// the other functions of a plugin factory as commands and calls them with
+  /// the command argument and the tracker identifiers. See `addPlugin` in
+  /// https://github.com/snowplow/snowplow-javascript-tracker/blob/master/trackers/javascript-tracker/src/in_queue.ts
   static const _applyUpdateCommand = 'snowplowFlutterApplyPluginUpdate';
   static bool _applyUpdateCommandRegistered = false;
   static final Map<int, void Function()> _pendingUpdates = {};

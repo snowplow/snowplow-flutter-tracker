@@ -139,6 +139,10 @@ class Snowplow {
   /// on its own. The plugin must have been added with
   /// [PluginConfiguration.entities], otherwise nothing happens and a warning
   /// is logged.
+  ///
+  /// On iOS, the call waits until the tracker has processed the events
+  /// already tracked, so calling it often while many events are being
+  /// tracked can briefly block the main thread.
   static Future<void> setPluginEntities(
       String identifier, List<SelfDescribing> entities,
       {required String tracker}) async {
