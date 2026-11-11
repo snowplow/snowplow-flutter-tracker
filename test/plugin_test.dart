@@ -163,4 +163,100 @@ void main() {
 
     expect(count, equals(0));
   });
+
+  test('passes plugin entities to createTracker', () async {
+    await Snowplow.createTracker(namespace: 'ns8', endpoint: 'e1', plugins: [
+      const PluginConfiguration(identifier: 'p1', entities: [
+        SelfDescribing(
+            schema: 'iglu:com.acme/guest/jsonschema/1-0-0', data: {'id': 'a'})
+      ]),
+      const PluginConfiguration(identifier: 'p2', entities: []),
+    ]);
+
+    expect(
+        calls.single,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'ns8',
+          'networkConfig': {'endpoint': 'e1'},
+          'plugins': [
+            {
+              'identifier': 'p1',
+              'entities': [
+                {
+                  'schema': 'iglu:com.acme/guest/jsonschema/1-0-0',
+                  'data': {'id': 'a'}
+                }
+              ]
+            },
+            {'identifier': 'p2', 'entities': []},
+          ]
+        }));
+  });
+
+  test('adds plugin with entities and afterTrack at runtime', () async {
+    final tracker =
+        await Snowplow.createTracker(namespace: 'ns9', endpoint: 'e1');
+
+    await tracker.addPlugin(PluginConfiguration(
+        identifier: 'p1',
+        afterTrack: (_) {},
+        entities: const [
+          SelfDescribing(
+              schema: 'iglu:com.acme/guest/jsonschema/1-0-0', data: {'id': 'a'})
+        ]));
+
+    expect(
+        calls.last,
+        isMethodCall('addPlugin', arguments: {
+          'tracker': 'ns9',
+          'plugin': {
+            'identifier': 'p1',
+            'afterTrack': true,
+            'entities': [
+              {
+                'schema': 'iglu:com.acme/guest/jsonschema/1-0-0',
+                'data': {'id': 'a'}
+              }
+            ]
+          }
+        }));
+  });
+
+  test('sets plugin entities in a single call', () async {
+    final tracker =
+        await Snowplow.createTracker(namespace: 'ns10', endpoint: 'e1');
+
+    await tracker.setPluginEntities('p1', const [
+      SelfDescribing(
+          schema: 'iglu:com.acme/guest/jsonschema/1-0-0', data: {'id': 'b'})
+    ]);
+
+    expect(
+        calls.last,
+        isMethodCall('setPluginEntities', arguments: {
+          'tracker': 'ns10',
+          'identifier': 'p1',
+          'entities': [
+            {
+              'schema': 'iglu:com.acme/guest/jsonschema/1-0-0',
+              'data': {'id': 'b'}
+            }
+          ]
+        }));
+  });
+
+  test('sets empty plugin entities', () async {
+    final tracker =
+        await Snowplow.createTracker(namespace: 'ns11', endpoint: 'e1');
+
+    await tracker.setPluginEntities('p1', const []);
+
+    expect(
+        calls.last,
+        isMethodCall('setPluginEntities', arguments: {
+          'tracker': 'ns11',
+          'identifier': 'p1',
+          'entities': []
+        }));
+  });
 }

@@ -66,10 +66,12 @@ class SnowplowTrackerPluginWeb {
         return onSetUserId(call);
       case 'addPlugin':
         return onAddPlugin(call);
+      case 'setPluginEntities':
+        return onSetPluginEntities(call);
       case 'removePlugin':
-        // The JavaScript tracker can't remove plugins, the Dart side stops
-        // calling the removed plugin's callback instead.
-        return null;
+        // The JavaScript tracker can't remove plugins, so the controller stops
+        // calling the plugin's afterTrack listener and adding its entities.
+        return onRemovePlugin(call);
       case "getSessionUserId":
         return onGetSessionUserId(call);
       case "getSessionId":
@@ -159,11 +161,28 @@ class SnowplowTrackerPluginWeb {
     _addPlugin(call.arguments['tracker'], call.arguments['plugin']);
   }
 
+  void onSetPluginEntities(MethodCall call) {
+    SnowplowTrackerController.setPluginEntities(call.arguments['tracker'],
+        call.arguments['identifier'], call.arguments['entities'] ?? []);
+  }
+
+  void onRemovePlugin(MethodCall call) {
+    SnowplowTrackerController.removePlugin(
+        call.arguments['tracker'], call.arguments['identifier']);
+  }
+
   void _addPlugin(String tracker, dynamic plugin) {
-    if (plugin['afterTrack'] == true) {
-      SnowplowTrackerController.addPlugin(tracker, plugin['identifier'],
-          (arguments) => _channel.invokeMethod('afterTrack', arguments));
+    final afterTrack = plugin['afterTrack'] == true;
+    final List<Object?>? entities = plugin['entities'];
+    if (!afterTrack && entities == null) {
+      SnowplowTrackerController.removePlugin(tracker, plugin['identifier']);
+      return;
     }
+    SnowplowTrackerController.addPlugin(tracker, plugin['identifier'],
+        afterTrackListener: afterTrack
+            ? (arguments) => _channel.invokeMethod('afterTrack', arguments)
+            : null,
+        entities: entities);
   }
 
   void onTrackStructured(MethodCall call) {
