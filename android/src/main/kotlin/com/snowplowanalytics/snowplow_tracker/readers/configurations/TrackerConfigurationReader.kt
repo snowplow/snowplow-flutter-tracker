@@ -28,6 +28,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
     val sessionContext: Boolean? by valuesDefault
     val userAnonymisation: Boolean? by valuesDefault
     val screenContext: Boolean? by valuesDefault
+    val screenContextFromEvent: Boolean? by valuesDefault
     val applicationContext: Boolean? by valuesDefault
     val lifecycleAutotracking: Boolean? by valuesDefault
     val screenEngagementAutotracking: Boolean? by valuesDefault
@@ -58,6 +59,7 @@ class TrackerConfigurationReader(values: Map<String, Any>) {
         sessionContext?.let { trackerConfig.sessionContext(it) }
         userAnonymisation?.let { trackerConfig.userAnonymisation(it) }
         screenContext?.let { trackerConfig.screenContext(it) }
+        screenContextFromEvent?.let { trackerConfig.screenContextFromEvent(it) }
         applicationContext?.let { trackerConfig.applicationContext(it) }
         lifecycleAutotracking?.let { trackerConfig.lifecycleAutotracking(it) }
         screenEngagementAutotracking?.let { trackerConfig.screenEngagementAutotracking(it) }

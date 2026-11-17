@@ -302,6 +302,7 @@ test('configuration serialization', () {
 | installAutotracking | ✅ | ✅ | ❌ |
 | webActivityTracking | ❌ | ❌ | ✅ |
 | screenContext | ✅ | ✅ | ❌ |
+| screenContextFromEvent | ✅ | ✅ | ❌ |
 | applicationContext | ✅ | ✅ | ❌ |
 
 ### Default Values
