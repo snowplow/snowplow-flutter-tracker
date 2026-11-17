@@ -55,6 +55,7 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "addGlobalContexts" -> onAddGlobalContexts(call, result)
             "removeGlobalContexts" -> onRemoveGlobalContexts(call, result)
             "addPlugin" -> onAddPlugin(call, result)
+            "setPluginEntities" -> onSetPluginEntities(call, result)
             "removePlugin" -> onRemovePlugin(call, result)
             "setUserAnonymisation" -> onSetUserAnonymisation(call, result)
             "setServerAnonymisation" -> onSetServerAnonymisation(call, result)
@@ -196,6 +197,13 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
     private fun onAddPlugin(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
             SnowplowTrackerController.addPlugin(AddPluginMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onSetPluginEntities(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.setPluginEntities(SetPluginEntitiesMessageReader(it))
         }
         result.success(null)
     }
