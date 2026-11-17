@@ -1,4 +1,9 @@
 
+# 0.11.3
+
+* Add screenContextFromEvent option and update native trackers (#108)
+* Add entities to plugins with runtime updates (closes #103)
+* Deliver afterTrack callbacks to every attached Flutter engine (closes #104)
 # 0.11.2
 
 * Expose afterTrack plugin callbacks to Dart (#100)

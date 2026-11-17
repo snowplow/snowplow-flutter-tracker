@@ -22,6 +22,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import java.util.concurrent.CopyOnWriteArraySet
 
 /** SnowplowTrackerPlugin */
 class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
@@ -36,12 +37,7 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "snowplow_tracker")
         channel.setMethodCallHandler(this)
         context = flutterPluginBinding.applicationContext
-
-        // afterTrack callbacks run on a background thread but the channel must be used on the main thread
-        val mainHandler = Handler(Looper.getMainLooper())
-        SnowplowTrackerController.afterTrackListener = { arguments ->
-            mainHandler.post { channel.invokeMethod("afterTrack", arguments) }
-        }
+        channels.add(channel)
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -59,6 +55,7 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
             "addGlobalContexts" -> onAddGlobalContexts(call, result)
             "removeGlobalContexts" -> onRemoveGlobalContexts(call, result)
             "addPlugin" -> onAddPlugin(call, result)
+            "setPluginEntities" -> onSetPluginEntities(call, result)
             "removePlugin" -> onRemovePlugin(call, result)
             "setUserAnonymisation" -> onSetUserAnonymisation(call, result)
             "setServerAnonymisation" -> onSetServerAnonymisation(call, result)
@@ -107,7 +104,7 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
-        SnowplowTrackerController.afterTrackListener = null
+        channels.remove(channel)
         context = null
     }
 
@@ -200,6 +197,13 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
     private fun onAddPlugin(call: MethodCall, result: MethodChannel.Result) {
         (call.arguments as? Map<String, Any>)?.let {
             SnowplowTrackerController.addPlugin(AddPluginMessageReader(it))
+        }
+        result.success(null)
+    }
+
+    private fun onSetPluginEntities(call: MethodCall, result: MethodChannel.Result) {
+        (call.arguments as? Map<String, Any>)?.let {
+            SnowplowTrackerController.setPluginEntities(SetPluginEntitiesMessageReader(it))
         }
         result.success(null)
     }
@@ -483,4 +487,16 @@ class SnowplowTrackerPlugin: FlutterPlugin, MethodCallHandler {
         result.success(null)
     }
 
+    companion object {
+        /// The channels of every attached engine, each of which receives the afterTrack callbacks
+        private val channels = CopyOnWriteArraySet<MethodChannel>()
+        private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
+
+        /// Sends afterTrack callback arguments to Dart in every attached engine.
+        ///
+        /// afterTrack callbacks run on a background thread but the channels must be used on the main thread
+        internal fun dispatchAfterTrack(arguments: Map<String, Any?>) {
+            mainHandler.post { channels.forEach { it.invokeMethod("afterTrack", arguments) } }
+        }
+    }
 }
