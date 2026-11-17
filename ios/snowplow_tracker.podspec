@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'snowplow_tracker'
-  s.version          = '0.11.2'
+  s.version          = '0.11.3'
   s.summary          = 'A package for tracking Snowplow events in Flutter apps.'
   s.description      = <<-DESC
 A package for tracking Snowplow events in Flutter apps.
