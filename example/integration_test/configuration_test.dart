@@ -351,6 +351,67 @@ void main() {
     });
   });
 
+  testWidgets("keeps the event's own screen entity with screenContextFromEvent",
+      (WidgetTester tester) async {
+    // screenContext is not available on web
+    if (kIsWeb) {
+      return;
+    }
+
+    SnowplowTracker tracker = await Snowplow.createTracker(
+        namespace: 'screen-from-event',
+        endpoint: SnowplowTests.microEndpoint,
+        trackerConfig: const TrackerConfiguration(
+            screenContextFromEvent: true,
+            screenEngagementAutotracking: false,
+            lifecycleAutotracking: false));
+
+    const screenSchema =
+        'iglu:com.snowplowanalytics.mobile/screen/jsonschema/1-0-0';
+    String firstId = const Uuid().v4();
+    String secondId = const Uuid().v4();
+    await tracker.track(ScreenView(id: firstId, name: 'first'));
+    await tracker.track(ScreenView(id: secondId, name: 'second'));
+
+    // tracked late, e.g. after async work started on the first screen
+    await tracker.track(
+        const Structured(category: 'category', action: 'with-screen'),
+        contexts: [
+          SelfDescribing(
+              schema: screenSchema, data: {'id': firstId, 'name': 'first'})
+        ]);
+    await tracker
+        .track(const Structured(category: 'category', action: 'no-screen'));
+
+    Iterable screenEntities(dynamic event) =>
+        event['event']['contexts']['data'].where((x) => x['schema']
+            .toString()
+            .startsWith('iglu:com.snowplowanalytics.mobile/screen/'));
+
+    expect(
+        await SnowplowTests.checkMicroGood((dynamic events) {
+          if (events.length != 4) {
+            return false;
+          }
+          final withScreen = events
+              .firstWhere((e) => e['event']['se_action'] == 'with-screen');
+          final noScreen =
+              events.firstWhere((e) => e['event']['se_action'] == 'no-screen');
+
+          final ownScreens = screenEntities(withScreen).toList();
+          expect(ownScreens.length, equals(1));
+          expect(ownScreens[0]['data']['id'], equals(firstId));
+          expect(ownScreens[0]['data']['name'], equals('first'));
+
+          final currentScreens = screenEntities(noScreen).toList();
+          expect(currentScreens.length, equals(1));
+          // iOS writes the tracker-added screen id in uppercase
+          expect(currentScreens[0]['data']['id'], equalsIgnoringCase(secondId));
+          return true;
+        }),
+        isTrue);
+  });
+
   testWidgets("sets custom request headers", (WidgetTester tester) async {
     SnowplowTracker tracker = await Snowplow.createTracker(
         namespace: 'custom-headers',

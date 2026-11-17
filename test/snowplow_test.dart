@@ -70,6 +70,31 @@ void main() {
         }));
   });
 
+  test('createsTrackerWithScreenContextFromEvent', () async {
+    await Snowplow.createTracker(
+        namespace: 'tns1',
+        endpoint: 'https://snowplowanalytics.com',
+        trackerConfig: const TrackerConfiguration(
+            screenContext: true, screenContextFromEvent: true));
+
+    expect(
+        methodCall,
+        isMethodCall('createTracker', arguments: {
+          'namespace': 'tns1',
+          'networkConfig': {'endpoint': 'https://snowplowanalytics.com'},
+          'trackerConfig': {
+            'screenContext': true,
+            'screenContextFromEvent': true
+          }
+        }));
+  });
+
+  test('omits screenContextFromEvent from trackerConfig when not set', () {
+    expect(const TrackerConfiguration().toMap(), isEmpty);
+    expect(const TrackerConfiguration(screenContextFromEvent: false).toMap(),
+        equals({'screenContextFromEvent': false}));
+  });
+
   test('createsTrackerWithCustomPostPath', () async {
     await Snowplow.createTracker(
         namespace: 'tns1',

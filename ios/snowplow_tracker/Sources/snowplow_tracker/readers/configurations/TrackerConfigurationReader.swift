@@ -21,6 +21,7 @@ struct TrackerConfigurationReader: Decodable {
     let sessionContext: Bool?
     let userAnonymisation: Bool?
     let screenContext: Bool?
+    let screenContextFromEvent: Bool?
     let applicationContext: Bool?
     let lifecycleAutotracking: Bool?
     let screenEngagementAutotracking: Bool?
@@ -79,6 +80,7 @@ extension TrackerConfigurationReader {
         if let sc = self.sessionContext { trackerConfig.sessionContext(sc) }
         if let ua = self.userAnonymisation { trackerConfig.userAnonymisation(ua) }
         if let scr = self.screenContext { trackerConfig.screenContext(scr) }
+        if let scfe = self.screenContextFromEvent { trackerConfig.screenContextFromEvent(scfe) }
         if let ac = self.applicationContext { trackerConfig.applicationContext(ac) }
         if let lc = self.lifecycleAutotracking { trackerConfig.lifecycleAutotracking(lc) }
         if let se = self.screenEngagementAutotracking { trackerConfig.screenEngagementAutotracking(se) }

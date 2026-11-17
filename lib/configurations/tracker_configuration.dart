@@ -62,6 +62,22 @@ class TrackerConfiguration {
   /// Defaults to true on iOS and Android. Not available on Web.
   final bool? screenContext;
 
+  /// Whether events tracked with their own screen entity keep it instead of
+  /// getting the current screen entity.
+  ///
+  /// Only applies when [screenContext] is enabled. An event that carries an
+  /// entity with the `iglu:com.snowplowanalytics.mobile/screen/jsonschema/1-x-x`
+  /// schema in its `contexts` keeps that entity and the tracker doesn't add the
+  /// current screen. Use it for events tracked after async work, so they
+  /// describe the screen the user was on when the action started.
+  ///
+  /// Only entities attached to the event are checked, not those added by
+  /// global contexts or plugins. Screen view and screen end events always get
+  /// the screen they describe.
+  ///
+  /// Defaults to false on iOS and Android. Not available on Web (ignored).
+  final bool? screenContextFromEvent;
+
   /// Indicates whether application context should be attached to tracked events.
   ///
   /// Defaults to true on iOS and Android. Not available on Web.
@@ -115,6 +131,7 @@ class TrackerConfiguration {
       this.sessionContext,
       this.webPageContext,
       this.screenContext,
+      this.screenContextFromEvent,
       this.applicationContext,
       this.webActivityTracking,
       this.userAnonymisation,
@@ -134,6 +151,7 @@ class TrackerConfiguration {
       'sessionContext': sessionContext,
       'webPageContext': webPageContext,
       'screenContext': screenContext,
+      'screenContextFromEvent': screenContextFromEvent,
       'applicationContext': applicationContext,
       'webActivityTracking': webActivityTracking?.toMap(),
       'userAnonymisation': userAnonymisation,
